@@ -159,37 +159,6 @@ void PlanMasterController::_activeVehicleChanged(Vehicle* activeVehicle)
             qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Fly View - New active vehicle, loading new plan from manager vehicle";
             _showPlanFromManagerVehicle();
         }
-    } else {
-        // We are in the Plan view.
-        if (containsItems()) {
-            // The plan view has a stale plan in it
-            if (dirty()) {
-                // Plan is dirty, the user must decide what to do in all cases
-                qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Plan View - Previous dirty plan exists, no new active vehicle, sending promptForPlanUsageOnVehicleChange signal";
-                emit promptForPlanUsageOnVehicleChange();
-            } else {
-                // Plan is not dirty
-                if (newOffline) {
-                    // The active vehicle went away with no new active vehicle
-                    qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Plan View - Previous clean plan exists, no new active vehicle, clear stale plan";
-                    removeAll();
-                } else {
-                    // We are transitioning from one active vehicle to another. Show the plan from the new vehicle.
-                    qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Plan View - Previous clean plan exists, new active vehicle, loading from new manager vehicle";
-                    _showPlanFromManagerVehicle();
-                }
-            }
-        } else {
-            // There is no previous Plan in the view
-            if (newOffline) {
-                // Nothing special to do in this case
-                qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Plan View - No previous plan, no longer connected to vehicle, nothing to do";
-            } else {
-                // Just show the plan from the new vehicle
-                qCDebug(PlanMasterControllerLog) << "_activeVehicleChanged: Plan View - No previous plan, new active vehicle, loading from new manager vehicle";
-                _showPlanFromManagerVehicle();
-            }
-        }
     }
 
     // Vehicle changed so we need to signal everything
@@ -470,10 +439,7 @@ void PlanMasterController::saveToFile(const QString& filename)
         }
     }
 
-    // Only clear dirty bit if we are offline
-    if (offline()) {
-        setDirty(false);
-    }
+    setDirty(false);
 }
 
 void PlanMasterController::saveToKml(const QString& filename)
