@@ -36,6 +36,7 @@ public:
     ~PlanMasterController();
 
     Q_PROPERTY(bool                     flyView                 MEMBER _flyView)
+    Q_PROPERTY(Vehicle*                 controllerVehicle       READ controllerVehicle                      CONSTANT)                       ///< Offline controller vehicle
     Q_PROPERTY(Vehicle*                 managerVehicle          READ managerVehicle                         NOTIFY managerVehicleChanged)   ///< Either active vehicle or _controllerVehicle if no active vehicle
     Q_PROPERTY(MissionController*       missionController       READ missionController                      CONSTANT)
     Q_PROPERTY(GeoFenceController*      geoFenceController      READ geoFenceController                     CONSTANT)

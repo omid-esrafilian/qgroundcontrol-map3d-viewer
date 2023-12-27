@@ -63,6 +63,7 @@
         <file alias="MavlinkSettings.qml">src/ui/preferences/MavlinkSettings.qml</file>
         <file alias="MissionCommandTreeEditorTestWindow.qml">src/MissionManager/MissionCommandTreeEditorTestWindow.qml</file>
         <file alias="MissionSettingsEditor.qml">src/PlanView/MissionSettingsEditor.qml</file>
+        <file alias="MissionSettingsDialog.qml">src/PlanView/MissionSettingsDialog.qml</file>
         <file alias="MockLink.qml">src/ui/preferences/MockLink.qml</file>
         <file alias="MockLinkSettings.qml">src/ui/preferences/MockLinkSettings.qml</file>
         <file alias="MotorComponent.qml">src/AutoPilotPlugins/Common/MotorComponent.qml</file>

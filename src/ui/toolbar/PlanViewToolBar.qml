@@ -54,7 +54,7 @@ Rectangle {
         spacing:            ScreenTools.defaultFontPixelWidth
 
         QGCButton {
-            text:       qsTr("Save")
+            text: qsTr("Save")
 
             onClicked: {
                 if (!checkReadyForSave()) {
@@ -67,6 +67,11 @@ Rectangle {
                     planMasterController.saveToCurrent()
                 }
             }
+        }
+
+        QGCButton {
+            text:       qsTr("Plan Settings")
+            onClicked:  missionSettingsDialogComponent.createObject(ApplicationWindow.window).open()
         }
     }
 
@@ -95,6 +100,14 @@ Rectangle {
         onAcceptedForSave: (file) => {
             planMasterController.saveToFile(file)
             close()
+        }
+    }
+
+    Component {
+        id: missionSettingsDialogComponent
+
+        MissionSettingsDialog {
+            planMasterController: _root.planMasterController
         }
     }
 }
