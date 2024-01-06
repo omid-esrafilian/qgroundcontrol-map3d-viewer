@@ -1,0 +1,6 @@
+Module Viewer3D.Widgets
+
+MyRoundButton        		1.0     MyRoundButton.qml
+TextFieldDouble        		1.0     TextFieldDouble.qml
+TextFieldString        		1.0     TextFieldString.qml
+

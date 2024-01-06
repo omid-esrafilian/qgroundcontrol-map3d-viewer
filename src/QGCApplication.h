@@ -32,6 +32,10 @@
 #include "FactSystem.h"
 #include "GPSRTKFactGroup.h"
 
+
+// This is for 3D viewer
+#include "QGCViewer3D.h"
+
 #ifdef QGC_RTLAB_ENABLED
 #include "OpalLink.h"
 #endif
@@ -217,6 +221,10 @@ private:
     QElapsedTimer       _msecsElapsedTime;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
+
+
+    //3D viewer.....
+    QGCViewer3D* _qgcViewer3D = nullptr;
 
     class CompressedSignalList {
         Q_DISABLE_COPY(CompressedSignalList)

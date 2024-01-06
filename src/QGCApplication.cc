@@ -595,6 +595,10 @@ bool QGCApplication::_initForNormalAppBoot()
                     "Your old map cache sets have been reset."));
     }
 
+    // 3D Viewer initialization
+    _qgcViewer3D = new QGCViewer3D(this);
+    _qgcViewer3D->initQml(_qmlAppEngine, this);
+
     settings.sync();
     return true;
 }

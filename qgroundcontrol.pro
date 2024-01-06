@@ -1403,3 +1403,44 @@ LinuxBuild {
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
+
+
+#-------------------------------------------------------------------------------------
+#For 3D Viewer
+
+#Steps:
+#1) Copy Folder "Viewer3D" into src/ directory
+#2) Add an instance of QGCViewer3D in QGCApplication.h
+
+
+QT += \
+    quick3d \
+    xml
+
+CONFIG += qmltypes
+QML_IMPORT_NAME = Viewer3DQmlType
+QML_IMPORT_MAJOR_VERSION = 1
+
+
+SOURCES += \
+    $$PWD/src/Viewer3D/city_map_geometry.cpp \
+    $$PWD/src/Viewer3D/metadatastreamer.cpp \
+    $$PWD/src/Viewer3D/osmparser.cpp \
+    $$PWD/src/Viewer3D/qml_backend.cpp \
+    $$PWD/src/Viewer3D/util_functions.cpp \
+    $$PWD/src/Viewer3D/QGCViewer3D.cpp \
+
+HEADERS += \
+    $$PWD/src/Viewer3D/city_map_geometry.h \
+    $$PWD/src/Viewer3D/cpp_variable_types.h \
+    $$PWD/src/Viewer3D/metadatastreamer.h \
+    $$PWD/src/Viewer3D/osmparser.h \
+    $$PWD/src/Viewer3D/qml_backend.h \
+    $$PWD/src/Viewer3D/qml_variable_types.h \
+    $$PWD/src/Viewer3D/util_functions.h \
+    $$PWD/src/Viewer3D/QGCViewer3D.h \
+
+
+INCLUDEPATH += \
+    $$PWD/src/Viewer3D \
+    $$PWD/src/Viewer3D/earcut \

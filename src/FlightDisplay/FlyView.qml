@@ -27,12 +27,22 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
+
+// 3D Viewer modules
+import Viewer3DQmlType             1.0
+import Viewer3D                    1.0
+import Viewer3D.Models3D           1.0
+
+
 Item {
     id: _root
 
     // These should only be used by MainRootWindow
     property var planController:    _planController
     property var guidedController:  _guidedController
+
+    // This initializes the backend for Map 3D viewer
+    property var  backendQml: Viewer3DQmlBackend
 
     PlanMasterController {
         id:                     _planController
@@ -91,7 +101,7 @@ Item {
             anchors.bottom:         parent.bottom
             anchors.left:           parent.left
             anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-            z:                      _fullItemZorder + 1
+            z:                      _fullItemZorder + 2 // we need to add one extra layer for map 3d viewer (normally was 1)
             parentToolInsets:       _toolInsets
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
@@ -150,6 +160,14 @@ Item {
             visible:            false
         }
 
+        Viewer3DModel{
+            missionController: _missionController
+            id: city_3d_view
+            backendQml: _root.backendQml
+            anchors.fill: parent
+            z: 0
+        }
+
         FlyViewMap {
             id:                     mapControl
             planMasterController:   _planController
@@ -157,6 +175,53 @@ Item {
             pipMode:                !_mainWindowIsMap
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
+        }
+
+
+        // The setting menu for 3D viewer
+        Viewer3DSettingMenu{
+            id:app_setting_menu
+            z: QGroundControl.zOrderWidgets
+            visible:false
+
+            anchors{
+                top: mapHolder.top
+                //            left: _root.left
+                bottom: mapHolder.bottom
+            }
+            opacity: 0.95
+
+            city_map_path_text: _root.backendQml.city_map_path
+            bias_height_text: Number(_root.backendQml.height_bias)
+
+            onMapFileChanged: {
+                console.log(file_path)
+                _root.backendQml.city_map_path = file_path
+            }
+
+            onHeightBiasChanged: {
+                _root.backendQml.height_bias = height
+            }
+
+            Behavior on x{
+                NumberAnimation{
+                    easing.type: Easing.InOutQuad;
+                    duration: 300
+                }
+            }
+
+            state: "SETTING_MENU_CLOSE"
+            states: [
+                State {
+                    name: "SETTING_MENU_OPEN"
+                    PropertyChanges { target: app_setting_menu; x: _root.width - app_setting_menu.width; visible:true}
+
+                },
+                State {
+                    name: "SETTING_MENU_CLOSE"
+                    PropertyChanges { target: app_setting_menu; x: _root.width + app_setting_menu.width}
+                }
+            ]
         }
 
         FlyViewVideo {
