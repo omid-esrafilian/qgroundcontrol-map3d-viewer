@@ -1408,11 +1408,6 @@ LinuxBuild {
 #-------------------------------------------------------------------------------------
 #For 3D Viewer
 
-#Steps:
-#1) Copy Folder "Viewer3D" into src/ directory
-#2) Add an instance of QGCViewer3D in QGCApplication.h
-
-
 QT += \
     quick3d \
     xml
