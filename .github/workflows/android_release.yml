@@ -64,7 +64,7 @@ jobs:
           arch:         ${{ matrix.aqt-arch }}
           extra:        --autodesktop
           dir:          ${{ runner.temp }}
-          modules:      qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtimageformats qtshadertools qtconnectivity
+          modules:      qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtimageformats qtshadertools qtconnectivity qtquick3d
           setup-python: true
 
       - name: Install Android NDK
