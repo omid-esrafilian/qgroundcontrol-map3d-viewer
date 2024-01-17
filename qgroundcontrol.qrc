@@ -303,10 +303,6 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewInsetViewer.qml">src/FlightDisplay/FlyViewInsetViewer.qml</file>
         <file alias="Viewer3D/Viewer3DSettingMenu.qml">src/Viewer3D/Viewer3D/Viewer3DSettingMenu.qml</file>
         <file alias="Viewer3D/qmldir">src/Viewer3D/Viewer3D/qmldir</file>
-        <file alias="Viewer3D/Widgets/MyRoundButton.qml">src/Viewer3D/Viewer3D/Widgets/MyRoundButton.qml</file>
-        <file alias="Viewer3D/Widgets/TextFieldDouble.qml">src/Viewer3D/Viewer3D/Widgets/TextFieldDouble.qml</file>
-        <file alias="Viewer3D/Widgets/TextFieldString.qml">src/Viewer3D/Viewer3D/Widgets/TextFieldString.qml</file>
-        <file alias="Viewer3D/Widgets/qmldir">src/Viewer3D/Viewer3D/Widgets/qmldir</file>
         <file alias="Viewer3D/Models3D/CameraLightModel.qml">src/Viewer3D/Viewer3D/Models3D/CameraLightModel.qml</file>
         <file alias="Viewer3D/Models3D/Viewer3DModel.qml">src/Viewer3D/Viewer3D/Models3D/Viewer3DModel.qml</file>
         <file alias="Viewer3D/Models3D/qmldir">src/Viewer3D/Viewer3D/Models3D/qmldir</file>

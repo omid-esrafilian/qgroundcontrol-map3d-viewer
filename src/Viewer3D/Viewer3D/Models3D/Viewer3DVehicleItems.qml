@@ -1,18 +1,18 @@
-import QtQuick 2.9
+import QtQuick
 import QtQuick3D
 import Viewer3DQmlType 1.0
 
 import Viewer3D.Models3D.Drones    1.0
 import Viewer3D.Models3D           1.0
 
-import QGroundControl               1.0
-import QGroundControl.Controllers   1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.FlightMap     1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
+import QGroundControl
+import QGroundControl.Controllers
+import QGroundControl.Controls
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 

@@ -1,5 +1,5 @@
 import QtQuick3D
-import QtQuick 2.9
+import QtQuick
 import Viewer3DQmlType 1.0
 
 import "Djif450/DroneModel_arm_1"

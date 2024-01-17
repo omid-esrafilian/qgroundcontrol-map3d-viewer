@@ -1,12 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Dialogs
+import QtQuick.Layouts
 
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Controls          1.0
-
-import Viewer3D.Widgets 1.0
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -29,96 +28,92 @@ Rectangle {
         colorGroupEnabled:  enabled
     }
 
-    Text {
+    QGCLabel {
         id: map_file_label
-        height: ScreenTools.defaultFontPixelWidth * 3
-        color: "#ffffff"
+        Layout.fillWidth:   true
+        wrapMode:           Text.WordWrap
+        visible:            true
         text: qsTr("3D Map File:")
         anchors.left: parent.left
         anchors.top: parent.top
-        font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
         anchors.leftMargin: leftMarginSpace
         anchors.topMargin: ScreenTools.defaultFontPixelWidth * 3
     }
 
-    MyRoundButton{
+    QGCButton {
         id: map_file_btn
-//        x: 450
-        width: ScreenTools.defaultFontPixelWidth * 15
-        height: ScreenTools.defaultFontPixelWidth * 5
-        text: "Select File"
         anchors.right: map_file_text_feild.right
         anchors.top: map_file_text_feild.bottom
-        anchors.topMargin: 10
-        anchors.rightMargin: 0
-        buttonTextColor: "black"
-        buttonColor: "#ffffff"
-        icon.color: "#ffffff"
+        anchors.topMargin: ScreenTools.defaultFontPixelWidth * 2
+        anchors.rightMargin: ScreenTools.defaultFontPixelWidth
 
-        Connections {
-            target: map_file_btn
-            onClicked:{
-                folderDialog.open()
-            }
+        visible:    true
+        text:       qsTr("Select File")
+
+        onClicked: {
+            fileDialog.openForLoad()
         }
 
-        FileDialog {
-            id: folderDialog
-            fileMode: FileDialog.OpenFile
-//            selectMultiple: false
-            onAccepted: {
-                var path = selectedFile.toString();
-//                var path = folderDialog.fileUrl.toString();
-                // remove prefixed "file:///"
-                path = path.replace(/^(file:\/{3})/,"");
-                // unescape html codes like '%23' for '#'
-                var cleanPath = decodeURIComponent(path);
+        QGCFileDialog {
+            id:             fileDialog
 
-                map_file_text_feild.text = cleanPath
-                mapFileChanged(cleanPath)
-            }
+            nameFilters:    [qsTr("OpenStreetMap files (*.osm)")]
+            title:          qsTr("Select map file")
+            onAcceptedForLoad: (file) => {
+                                   map_file_text_feild.text = file
+                                   mapFileChanged(file)
+                               }
         }
     }
 
-    TextFieldString {
-        id: map_file_text_feild
-        height: ScreenTools.defaultFontPixelWidth * 4.5
+    QGCTextField {
+        id:                 map_file_text_feild
+        height:             ScreenTools.defaultFontPixelWidth * 4.5
+        unitsLabel:         ""
+        showUnits:          false
+        visible:            true
+
         anchors.verticalCenter: map_file_label.verticalCenter
         anchors.right: parent.right
         anchors.left: map_file_label.right
         anchors.rightMargin: 20
         anchors.leftMargin: 20
         readOnly: true
+
         text: city_map_path_text
     }
 
-    Text {
+    QGCLabel {
         id: height_bias_label
-        height: ScreenTools.defaultFontPixelWidth * 3
-        color: "#ffffff"
+        Layout.fillWidth:   true
+        wrapMode:           Text.WordWrap
+        visible:            true
         text: qsTr("Vehicle Height Bias:")
         anchors.left: parent.left
         anchors.top: map_file_btn.bottom
-        font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
         anchors.leftMargin: leftMarginSpace
         anchors.topMargin: ScreenTools.defaultFontPixelWidth * 2
     }
 
-    TextFieldDouble{
-        id: height_bias_textfeild
+    QGCTextField {
+        id:                 height_bias_textfeild
+        width:              ScreenTools.defaultFontPixelWidth * 15
+        unitsLabel:         "m"
+        showUnits:          true
+        numericValuesOnly:  true
+        visible:            true
 
-        width: ScreenTools.defaultFontPixelWidth * 15
-        height: ScreenTools.defaultFontPixelWidth * 4.5
         anchors.verticalCenter: height_bias_label.verticalCenter
-        anchors.left: height_bias_label.right
-        anchors.leftMargin: 20
-        maximumLength: 6
-        unit_text: "m"
-        max_limit: 1e10
-        min_limit: -1e10
-        text: bias_height_text
+        anchors.left:           height_bias_label.right
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
 
-        onContentChanged: {
+        validator: RegularExpressionValidator{
+            regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
+        }
+
+        onAccepted:
+        {
+            focus = false
             heightBiasChanged(parseFloat(text))
         }
     }

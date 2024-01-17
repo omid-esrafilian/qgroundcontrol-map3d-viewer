@@ -553,6 +553,11 @@ bool QGCApplication::_initForNormalAppBoot()
     QSettings settings;
 
     _qmlAppEngine = toolbox()->corePlugin()->createQmlApplicationEngine(this);
+
+    // 3D Viewer initialization
+    _qgcViewer3D = new QGCViewer3D(this);
+    _qgcViewer3D->initQml(_qmlAppEngine, this);
+
     toolbox()->corePlugin()->createRootWindow(_qmlAppEngine);
 
     // Image provider for PX4 Flow
@@ -595,9 +600,6 @@ bool QGCApplication::_initForNormalAppBoot()
                     "Your old map cache sets have been reset."));
     }
 
-    // 3D Viewer initialization
-    _qgcViewer3D = new QGCViewer3D(this);
-    _qgcViewer3D->initQml(_qmlAppEngine, this);
 
     settings.sync();
     return true;

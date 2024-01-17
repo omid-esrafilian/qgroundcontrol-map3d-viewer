@@ -186,20 +186,19 @@ Item {
 
             anchors{
                 top: mapHolder.top
-                //            left: _root.left
                 bottom: mapHolder.bottom
             }
             opacity: 0.95
 
-            city_map_path_text: _root.backendQml.city_map_path
-            bias_height_text: Number(_root.backendQml.height_bias)
+            city_map_path_text: (_root.backendQml)?(_root.backendQml.city_map_path):("nan")
+            bias_height_text: (_root.backendQml)?(Number(_root.backendQml.height_bias)):("nan")
 
-            onMapFileChanged: {
+            onMapFileChanged: function(file_path){
                 console.log(file_path)
                 _root.backendQml.city_map_path = file_path
             }
 
-            onHeightBiasChanged: {
+            onHeightBiasChanged: function(height){
                 _root.backendQml.height_bias = height
             }
 

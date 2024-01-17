@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick
 import QtQuick3D
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
