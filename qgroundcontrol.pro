@@ -754,13 +754,6 @@ HEADERS += \
     src/Vehicle/VehicleGeneratorFactGroup.h \
     src/Vehicle/VehicleEFIFactGroup.h \
     src/VehicleSetup/JoystickConfigController.h \
-    src/Viewer3D/CityMapGeometry.h \
-    src/Viewer3D/OsmParser.h \
-    src/Viewer3D/Viewer3DCppVariableTypes.h \
-    src/Viewer3D/Viewer3DMetadata.h \
-    src/Viewer3D/Viewer3DQmlBackend.h \
-    src/Viewer3D/Viewer3DQmlVariableTypes.h \
-    src/Viewer3D/Viewer3DUtils.h \
     src/comm/LinkConfiguration.h \
     src/comm/LinkInterface.h \
     src/comm/LinkManager.h \
@@ -776,6 +769,13 @@ HEADERS += \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
     src/Viewer3D/QGCViewer3D.h \
+    src/Viewer3D/CityMapGeometry.h \
+    src/Viewer3D/OsmParser.h \
+    src/Viewer3D/Viewer3DCppVariableTypes.h \
+    src/Viewer3D/Viewer3DMetadata.h \
+    src/Viewer3D/Viewer3DQmlBackend.h \
+    src/Viewer3D/Viewer3DQmlVariableTypes.h \
+    src/Viewer3D/Viewer3DUtils.h \
 
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
@@ -1026,11 +1026,6 @@ SOURCES += \
     src/Vehicle/VehicleEFIFactGroup.cc \
     src/Vehicle/VehicleWindFactGroup.cc \
     src/VehicleSetup/JoystickConfigController.cc \
-    src/Viewer3D/CityMapGeometry.cpp \
-    src/Viewer3D/OsmParser.cpp \
-    src/Viewer3D/Viewer3DMetadata.cpp \
-    src/Viewer3D/Viewer3DQmlBackend.cpp \
-    src/Viewer3D/Viewer3DUtils.cpp \
     src/comm/LinkConfiguration.cc \
     src/comm/LinkInterface.cc \
     src/comm/LinkManager.cc \
@@ -1046,6 +1041,11 @@ SOURCES += \
     src/AnalyzeView/GeoTagController.cc \
     src/AnalyzeView/ExifParser.cc \
     src/Viewer3D/QGCViewer3D.cpp \
+    src/Viewer3D/CityMapGeometry.cpp \
+    src/Viewer3D/OsmParser.cpp \
+    src/Viewer3D/Viewer3DMetadata.cpp \
+    src/Viewer3D/Viewer3DQmlBackend.cpp \
+    src/Viewer3D/Viewer3DUtils.cpp \
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     SOURCES += \

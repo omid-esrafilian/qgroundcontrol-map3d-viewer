@@ -463,6 +463,7 @@ void QGCApplication::_initCommon()
     qmlRegisterType<QGCMapPalette>                      ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
 
     // For 3D viewer types
+    qmlRegisterType<Vec3f>                              (kQGCViewer3D, 1, 0, "Vec3f");
     qmlRegisterType<GpsType>                            (kQGCViewer3D, 1, 0, "GpsType");
     qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
     qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
