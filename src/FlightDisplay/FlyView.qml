@@ -42,7 +42,7 @@ Item {
     property var guidedController:  _guidedController
 
     // This initializes the backend for Map 3D viewer
-    property var  backendQml: Viewer3DQmlBackend
+    property var  backendQml: viewer3DQmlBackend
 
     PlanMasterController {
         id:                     _planController

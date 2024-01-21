@@ -1,6 +1,6 @@
-#include "osmparser.h"
+#include "OsmParser.h"
 #include "earcut.hpp"
-#include "util_functions.h"
+#include "Viewer3DUtils.h"
 
 OsmParser::OsmParser(QObject *parent)
     : QObject{parent}

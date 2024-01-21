@@ -1,22 +1,22 @@
-#ifndef QmlBackend_H
-#define QmlBackend_H
+#ifndef Viewer3DQmlBackend_H
+#define Viewer3DQmlBackend_H
 
 #include <QObject>
 #include <qqml.h>
 #include <QString>
 #include <QTimer>
-#include "osmparser.h"
-#include "qml_variable_types.h"
-#include "metadatastreamer.h"
+#include "OsmParser.h"
+#include "Viewer3DQmlVariableTypes.h"
+#include "Viewer3DMetadata.h"
 #include "Vehicle.h"
 
 
-class MetaDataStreamer;
+class Viewer3DMetadata;
 class Vehicle;
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
-class QmlBackend : public QObject
+class Viewer3DQmlBackend : public QObject
 {
     Q_OBJECT
 
@@ -25,9 +25,9 @@ class QmlBackend : public QObject
     Q_PROPERTY(float height_bias MEMBER m_height_bias NOTIFY heightBiasChanged)
 
 public:
-    explicit QmlBackend(QObject *parent = nullptr);
+    explicit Viewer3DQmlBackend(QObject *parent = nullptr);
 
-    MetaDataStreamer *metadata_loader_thr;
+    Viewer3DMetadata *metadata_loader_thr;
     OsmParser *bld_map_reader_thr;
 
     GpsType* gpsRead(){return m_gps_ref;}
@@ -66,4 +66,4 @@ protected slots:
     void cityMapPathChangedEvent();
 };
 
-#endif // QmlBackend_H
+#endif // Viewer3DQmlBackend_H

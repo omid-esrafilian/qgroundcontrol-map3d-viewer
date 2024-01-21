@@ -47,7 +47,7 @@ View3D {
             id: city_map_geometry
             model_name: "city_map"
             city_map: (backendQml)?(backendQml.city_map_path):("nan")
-            bld_map_reader: Viewer3DOsmReader
+            bld_map_reader: viewer3DOsmReader
         }
 
         materials: [ DefaultMaterial {

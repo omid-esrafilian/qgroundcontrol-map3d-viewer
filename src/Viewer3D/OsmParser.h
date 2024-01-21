@@ -1,7 +1,7 @@
 #ifndef OSMPARSER_H
 #define OSMPARSER_H
 
-#include "cpp_variable_types.h"
+#include "Viewer3DCppVariableTypes.h"
 #include "qgeocoordinate.h"
 #include "qqml.h"
 #include <QObject>

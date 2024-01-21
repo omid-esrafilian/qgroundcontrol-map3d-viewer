@@ -1,5 +1,5 @@
-#ifndef CPP_VARIABLE_TYPES_H
-#define CPP_VARIABLE_TYPES_H
+#ifndef VIEWER3DCPPVARIABLETYPES_H
+#define VIEWER3DCPPVARIABLETYPES_H
 #include "qgeocoordinate.h"
 #include <QObject>
 #include <QVector3D>
@@ -61,4 +61,4 @@ struct drone_str{
 
 };
 
-#endif // CPP_VARIABLE_TYPES_H
+#endif // VIEWER3DCPPVARIABLETYPES_H

@@ -106,10 +106,10 @@
 #include "CustomAction.h"
 #include "CustomActionManager.h"
 
-#include "city_map_geometry.h"
-#include "qml_backend.h"
-#include "qml_variable_types.h"
-#include "osmparser.h"
+#include "CityMapGeometry.h"
+#include "Viewer3DQmlBackend.h"
+#include "Viewer3DQmlVariableTypes.h"
+#include "OsmParser.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -143,16 +143,16 @@
 class FinishVideoInitialization : public QRunnable
 {
 public:
-  FinishVideoInitialization(VideoManager* manager)
-      : _manager(manager)
-  {}
+    FinishVideoInitialization(VideoManager* manager)
+        : _manager(manager)
+    {}
 
-  void run () {
-      _manager->_initVideo();
-  }
+    void run () {
+        _manager->_initVideo();
+    }
 
 private:
-  VideoManager* _manager;
+    VideoManager* _manager;
 };
 
 
@@ -204,11 +204,11 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
         if (getuid() == 0) {
             _exitWithError(QString(
                 tr("You are running %1 as root. "
-                    "You should not do this since it will cause other issues with %1."
-                    "%1 will now exit.<br/><br/>"
-                    "If you are having serial port issues on Ubuntu, execute the following commands to fix most issues:<br/>"
-                    "<pre>sudo usermod -a -G dialout $USER<br/>"
-                    "sudo apt-get remove modemmanager</pre>").arg(qgcApp()->applicationName())));
+                   "You should not do this since it will cause other issues with %1."
+                   "%1 will now exit.<br/><br/>"
+                   "If you are having serial port issues on Ubuntu, execute the following commands to fix most issues:<br/>"
+                   "<pre>sudo usermod -a -G dialout $USER<br/>"
+                   "sudo apt-get remove modemmanager</pre>").arg(qgcApp()->applicationName())));
             return;
         }
         // Determine if we have the correct permissions to access USB serial devices
@@ -333,7 +333,7 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     // Set up our logging filters
     QGCLoggingCategoryRegister::instance()->setFilterRulesFromSettings(loggingOptions);
 
-    // Initialize Bluetooth
+// Initialize Bluetooth
 #ifdef QGC_ENABLE_BLUETOOTH
     QBluetoothLocalDevice localDevice;
     if (localDevice.isValid())
@@ -363,13 +363,13 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 
 #ifndef __mobile__
     _gpsRtkFactGroup = new GPSRTKFactGroup(this);
-   GPSManager *gpsManager = _toolbox->gpsManager();
-   if (gpsManager) {
-       connect(gpsManager, &GPSManager::onConnect,          this, &QGCApplication::_onGPSConnect);
-       connect(gpsManager, &GPSManager::onDisconnect,       this, &QGCApplication::_onGPSDisconnect);
-       connect(gpsManager, &GPSManager::surveyInStatus,     this, &QGCApplication::_gpsSurveyInStatus);
-       connect(gpsManager, &GPSManager::satelliteUpdate,    this, &QGCApplication::_gpsNumSatellites);
-   }
+    GPSManager *gpsManager = _toolbox->gpsManager();
+    if (gpsManager) {
+        connect(gpsManager, &GPSManager::onConnect,          this, &QGCApplication::_onGPSConnect);
+        connect(gpsManager, &GPSManager::onDisconnect,       this, &QGCApplication::_onGPSDisconnect);
+        connect(gpsManager, &GPSManager::surveyInStatus,     this, &QGCApplication::_gpsSurveyInStatus);
+        connect(gpsManager, &GPSManager::satelliteUpdate,    this, &QGCApplication::_gpsNumSatellites);
+    }
 #endif /* __mobile__ */
 
     _checkForNewVersion();
@@ -453,21 +453,21 @@ void QGCApplication::_initCommon()
     static const char* kQGCControllers  = "QGroundControl.Controllers";
     static const char* kQGCVehicle      = "QGroundControl.Vehicle";
     static const char* kQGCTemplates    = "QGroundControl.Templates";
+    static const char* kQGCViewer3D     = "QGroundControl.Viewer3D";
 
     QSettings settings;
 
     // Register our Qml objects
 
-    qmlRegisterType<QGCPalette>     ("QGroundControl.Palette", 1, 0, "QGCPalette");
-    qmlRegisterType<QGCMapPalette>  ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
+    qmlRegisterType<QGCPalette>                         ("QGroundControl.Palette", 1, 0, "QGCPalette");
+    qmlRegisterType<QGCMapPalette>                      ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
 
-    // for 3D viewer types
-    qmlRegisterType<GpsType>  ("QGroundControl.Viewer3D", 1, 0, "GpsType");
-    qmlRegisterType<GeoCoordinateType>  ("QGroundControl.Viewer3D", 1, 0, "GeoCoordinateType");
-    qmlRegisterType<CityMapGeometry>  ("QGroundControl.Viewer3D", 1, 0, "CityMapGeometry");
-
-    qmlRegisterUncreatableType<QmlBackend>  ("QGroundControl.Viewer3D", 1, 0, "QmlBackend", kRefOnly);
-    qmlRegisterUncreatableType<OsmParser>  ("QGroundControl.Viewer3D", 1, 0, "OsmParser", kRefOnly);
+    // For 3D viewer types
+    qmlRegisterType<GpsType>                            (kQGCViewer3D, 1, 0, "GpsType");
+    qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
+    qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
+    qmlRegisterUncreatableType<Viewer3DQmlBackend>      (kQGCViewer3D, 1, 0, "Viewer3DQmlBackend",          kRefOnly);
+    qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
 
 
     qmlRegisterUncreatableType<Vehicle>                 (kQGCVehicle,                       1, 0, "Vehicle",                    kRefOnly);
@@ -582,7 +582,7 @@ bool QGCApplication::_initForNormalAppBoot()
 
     if (rootWindow) {
         rootWindow->scheduleRenderJob (new FinishVideoInitialization (toolbox()->videoManager()),
-                QQuickWindow::BeforeSynchronizingStage);
+                                      QQuickWindow::BeforeSynchronizingStage);
     }
 
     // Safe to show popup error messages now that main window is created
@@ -603,7 +603,7 @@ bool QGCApplication::_initForNormalAppBoot()
 
     if (_settingsUpgraded) {
         showAppMessage(QString(tr("The format for %1 saved settings has been modified. "
-                    "Your saved settings have been reset to defaults.")).arg(applicationName()));
+                                  "Your saved settings have been reset to defaults.")).arg(applicationName()));
     }
 
     // Connect links with flag AutoconnectLink
@@ -611,7 +611,7 @@ bool QGCApplication::_initForNormalAppBoot()
 
     if (getQGCMapEngine()->wasCacheReset()) {
         showAppMessage(tr("The Offline Map Cache database has been upgraded. "
-                    "Your old map cache sets have been reset."));
+                          "Your old map cache sets have been reset."));
     }
 
 
@@ -670,10 +670,10 @@ void QGCApplication::saveTelemetryLogOnMainThread(QString tempLogfile)
 
         int tryIndex = 1;
         QString saveFileName = nameFormat.arg(
-            QDateTime::currentDateTime().toString(dtFormat)).arg(QStringLiteral("")).arg(toolbox()->settingsManager()->appSettings()->telemetryFileExtension);
+                                             QDateTime::currentDateTime().toString(dtFormat)).arg(QStringLiteral("")).arg(toolbox()->settingsManager()->appSettings()->telemetryFileExtension);
         while (saveDir.exists(saveFileName)) {
             saveFileName = nameFormat.arg(
-                QDateTime::currentDateTime().toString(dtFormat)).arg(QStringLiteral(".%1").arg(tryIndex++)).arg(toolbox()->settingsManager()->appSettings()->telemetryFileExtension);
+                                         QDateTime::currentDateTime().toString(dtFormat)).arg(QStringLiteral(".%1").arg(tryIndex++)).arg(toolbox()->settingsManager()->appSettings()->telemetryFileExtension);
         }
         QString saveFilePath = saveDir.absoluteFilePath(saveFileName);
 
@@ -870,8 +870,8 @@ void QGCApplication::_qgcCurrentStableVersionDownloadComplete(QString /*remoteFi
             int majorVersion, minorVersion, buildVersion;
             if (_parseVersionText(version, majorVersion, minorVersion, buildVersion)) {
                 if (_majorVersion < majorVersion ||
-                        (_majorVersion == majorVersion && _minorVersion < minorVersion) ||
-                        (_majorVersion == majorVersion && _minorVersion == minorVersion && _buildVersion < buildVersion)) {
+                    (_majorVersion == majorVersion && _minorVersion < minorVersion) ||
+                    (_majorVersion == majorVersion && _minorVersion == minorVersion && _buildVersion < buildVersion)) {
                     showAppMessage(tr("There is a newer version of %1 available. You can download it from %2.").arg(applicationName()).arg(toolbox()->corePlugin()->stableDownloadLocation()), tr("New Version Available"));
                 }
             }

@@ -1,7 +1,7 @@
-#ifndef METADATASTREAMER_H
-#define METADATASTREAMER_H
+#ifndef VIEWER3DMETADATA_H
+#define VIEWER3DMETADATA_H
 
-#include "cpp_variable_types.h"
+#include "Viewer3DCppVariableTypes.h"
 #include <QObject>
 #include <QtXml>
 #include <QTextStream>
@@ -9,11 +9,11 @@
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
-class MetaDataStreamer : public QObject
+class Viewer3DMetadata : public QObject
 {
     Q_OBJECT
 public:
-    explicit MetaDataStreamer(const char * data_file_path = nullptr, QObject *parent = nullptr);
+    explicit Viewer3DMetadata(const char * data_file_path = nullptr, QObject *parent = nullptr);
 
     meta_data_type meta_data;
 
@@ -27,4 +27,4 @@ private:
     QString metadata_file_path;
 };
 
-#endif // METADATASTREAMER_H
+#endif // VIEWER3DMETADATA_H

@@ -1,4 +1,4 @@
-#include "metadatastreamer.h"
+#include "Viewer3DMetadata.h"
 
 
 #define ELEMENT_APP_SETTING                         "AppSetting"
@@ -9,13 +9,13 @@
 #define TAG_APP_HEIGHT_BIAS                         "height"
 
 
-MetaDataStreamer::MetaDataStreamer(const char *data_file_path, QObject *parent)
+Viewer3DMetadata::Viewer3DMetadata(const char *data_file_path, QObject *parent)
     : QObject{parent}
 {
     metadata_file_path = QString(data_file_path);
 }
 
-bool MetaDataStreamer::loadMetaDataFile()
+bool Viewer3DMetadata::loadMetaDataFile()
 {
     QDomDocument document;
     QFile xmlFile(metadata_file_path);
@@ -48,7 +48,7 @@ bool MetaDataStreamer::loadMetaDataFile()
     return 1;
 }
 
-bool MetaDataStreamer::updateMetaDataFile()
+bool Viewer3DMetadata::updateMetaDataFile()
 {
     QFile xmlFile(metadata_file_path);
     if (!xmlFile.open(QFile::WriteOnly | QFile::Text ))

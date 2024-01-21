@@ -2,9 +2,9 @@
 #define QGCVIEWER3D_H
 
 #include <QObject>
-#include "metadatastreamer.h"
-#include "qml_backend.h"
-#include "osmparser.h"
+#include "Viewer3DMetadata.h"
+#include "Viewer3DQmlBackend.h"
+#include "OsmParser.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -19,13 +19,13 @@ public:
     void initQml(QQmlApplicationEngine *qmlEngine, QObject *parent);
 
     OsmParser* mapLoader(){ return city_osm_map_loader;}
-    QmlBackend* qmlBackend(){return qml_bk;}
-    MetaDataStreamer* metaDataLoader(){return data_loader;}
+    Viewer3DQmlBackend* qmlBackend(){return qml_bk;}
+    Viewer3DMetadata* metaDataLoader(){return data_loader;}
 
 private:
     OsmParser *city_osm_map_loader = nullptr;
-    MetaDataStreamer *data_loader = nullptr;
-    QmlBackend *qml_bk = nullptr;
+    Viewer3DMetadata *data_loader = nullptr;
+    Viewer3DQmlBackend *qml_bk = nullptr;
 
 signals:
 

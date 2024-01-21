@@ -1,6 +1,6 @@
-#ifndef UTIL_FUNCTIONS_H
-#define UTIL_FUNCTIONS_H
-#include "cpp_variable_types.h"
+#ifndef VIEWER3DUTILS_H
+#define VIEWER3DUTILS_H
+#include "Viewer3DCppVariableTypes.h"
 #include "math.h"
 #include <QGeoCoordinate>
 
@@ -27,4 +27,4 @@ QGeoCoordinate mapEcefToGeodetic(const QVector3D &enu_point);
 QGeoCoordinate mapLocalToGpsPoint(QVector3D local_point, QGeoCoordinate ref_gps);
 
 
-#endif // UTIL_FUNCTIONS_H
+#endif // VIEWER3DUTILS_H

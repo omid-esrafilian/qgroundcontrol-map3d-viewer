@@ -1,11 +1,11 @@
-#include "qml_backend.h"
+#include "Viewer3DQmlBackend.h"
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QUrl>
 #include "QGCViewer3D.h"
 #include "QGCApplication.h"
 
-QmlBackend::QmlBackend(QObject *parent)
+Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
     : QObject{parent}
 {
     mav_link_loaded_flag = false;
@@ -18,10 +18,10 @@ QmlBackend::QmlBackend(QObject *parent)
     main_timer = new QTimer();
     main_timer->start(100);
 
-    connect(main_timer, &QTimer::timeout, this, &QmlBackend::mainTimerEvent);
+    connect(main_timer, &QTimer::timeout, this, &Viewer3DQmlBackend::mainTimerEvent);
 }
 
-void QmlBackend::setGpsRef(GpsType *gps_ref)
+void Viewer3DQmlBackend::setGpsRef(GpsType *gps_ref)
 {
     m_gps_ref->setLat(gps_ref->lat());
     m_gps_ref->setLon(gps_ref->lon());
@@ -30,7 +30,7 @@ void QmlBackend::setGpsRef(GpsType *gps_ref)
     emit gpsRefChanged();
 }
 
-void QmlBackend::initMetadata()
+void Viewer3DQmlBackend::initMetadata()
 {
     metadata_loader_thr = qgcViewer3D()->metaDataLoader();
     metadata_loader_thr->loadMetaDataFile();
@@ -41,35 +41,35 @@ void QmlBackend::initMetadata()
     emit heightBiasChanged();
     emit cityMapPathChanged();
 
-    connect(this, &QmlBackend::cityMapPathChanged, this, &QmlBackend::cityMapPathChangedEvent);
-    connect(this, &QmlBackend::heightBiasChanged, this, &QmlBackend::heightBiasChangedEvent);
+    connect(this, &Viewer3DQmlBackend::cityMapPathChanged, this, &Viewer3DQmlBackend::cityMapPathChangedEvent);
+    connect(this, &Viewer3DQmlBackend::heightBiasChanged, this, &Viewer3DQmlBackend::heightBiasChangedEvent);
 }
 
-void QmlBackend::setActiveVehicle(Vehicle *_active_vehicle)
+void Viewer3DQmlBackend::setActiveVehicle(Vehicle *_active_vehicle)
 {
     active_vehicle = _active_vehicle;
     vechicle_set_flag = true;
 
-    connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleChanged, this, &QmlBackend::activeVehicleChanged);
+    connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleChanged, this, &Viewer3DQmlBackend::activeVehicleChanged);
 }
 
-void QmlBackend::initOsmMapLoader()
+void Viewer3DQmlBackend::initOsmMapLoader()
 {
     bld_map_reader_thr = qgcViewer3D()->mapLoader();
-    connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &QmlBackend::gpsRefChangedEvent);
+    connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::gpsRefChangedEvent);
 }
 
-void QmlBackend::activeVehicleChanged(Vehicle *newActiveVehicle)
+void Viewer3DQmlBackend::activeVehicleChanged(Vehicle *newActiveVehicle)
 {
     active_vehicle = newActiveVehicle;
 }
 
-void QmlBackend::mainTimerEvent()
+void Viewer3DQmlBackend::mainTimerEvent()
 {
     emit mainTimerTimeout();
 }
 
-void QmlBackend::gpsRefChangedEvent(QGeoCoordinate new_gps_ref)
+void Viewer3DQmlBackend::gpsRefChangedEvent(QGeoCoordinate new_gps_ref)
 {
 
     m_gps_ref->setLat(new_gps_ref.latitude());
@@ -81,14 +81,14 @@ void QmlBackend::gpsRefChangedEvent(QGeoCoordinate new_gps_ref)
     qDebug() << "3D map gps reference:" << m_gps_ref->lat() << m_gps_ref->lon() << m_gps_ref->alt();
 }
 
-void QmlBackend::heightBiasChangedEvent()
+void Viewer3DQmlBackend::heightBiasChangedEvent()
 {
     bld_map_reader_thr->setBuildingMapHeightBias(m_height_bias);
     metadata_loader_thr->meta_data.height_bias = m_height_bias;
     metadata_loader_thr->updateMetaDataFile();
 }
 
-void QmlBackend::cityMapPathChangedEvent()
+void Viewer3DQmlBackend::cityMapPathChangedEvent()
 {
     metadata_loader_thr->meta_data.city_map_path = m_city_map_path;
     metadata_loader_thr->updateMetaDataFile();

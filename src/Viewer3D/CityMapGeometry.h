@@ -1,9 +1,9 @@
 
-#ifndef CITY_MAP_GEOMETRY_H
-#define CITY_MAP_GEOMETRY_H
+#ifndef CITYMAPGEOMETRY_H
+#define CITYMAPGEOMETRY_H
 
 #include <QQuick3DGeometry>
-#include "osmparser.h"
+#include "OsmParser.h"
 #include <QTimer>
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
@@ -45,4 +45,4 @@ protected slots:
     void mainTimerEvent();
 };
 
-#endif // CITY_MAP_GEOMETRY_H
+#endif // CITYMAPGEOMETRY_H

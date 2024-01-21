@@ -1,9 +1,9 @@
-#ifndef QML_VARIABLE_TYPES_H
-#define QML_VARIABLE_TYPES_H
+#ifndef VIEWER3DQMLVARIABLETYPES_H
+#define VIEWER3DQMLVARIABLETYPES_H
 #include <QObject>
 #include <qqml.h>
-#include "cpp_variable_types.h"
-#include "util_functions.h"
+#include "Viewer3DCppVariableTypes.h"
+#include "Viewer3DUtils.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -223,6 +223,6 @@ private:
 };
 
 
-#endif // QML_VARIABLE_TYPES_H
+#endif // VIEWER3DQMLVARIABLETYPES_H
 
 
