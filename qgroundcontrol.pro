@@ -259,7 +259,8 @@ QT += \
     xml \
     texttospeech \
     core-private \
-    core5compat
+    core5compat \
+    quick3d
 
 # Multimedia only used if QVC is enabled
 !contains (DEFINES, QGC_DISABLE_UVC) {
@@ -420,6 +421,8 @@ INCLUDEPATH += \
     src/ui/px4_configuration \
     src/ui/toolbar \
     src/ui/uas \
+    src/Viewer3D \
+    src/Viewer3D/earcut \
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     INCLUDEPATH += \
@@ -765,6 +768,15 @@ HEADERS += \
     src/uas/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
+    src/Viewer3D/city_map_geometry.h \
+    src/Viewer3D/cpp_variable_types.h \
+    src/Viewer3D/metadatastreamer.h \
+    src/Viewer3D/osmparser.h \
+    src/Viewer3D/qml_backend.h \
+    src/Viewer3D/qml_variable_types.h \
+    src/Viewer3D/util_functions.h \
+    src/Viewer3D/QGCViewer3D.h \
+
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     HEADERS += \
@@ -1028,6 +1040,12 @@ SOURCES += \
     src/uas/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
     src/AnalyzeView/ExifParser.cc \
+    src/Viewer3D/city_map_geometry.cpp \
+    src/Viewer3D/metadatastreamer.cpp \
+    src/Viewer3D/osmparser.cpp \
+    src/Viewer3D/qml_backend.cpp \
+    src/Viewer3D/util_functions.cpp \
+    src/Viewer3D/QGCViewer3D.cpp \
 
 contains (DEFINES, QGC_ENABLE_PAIRING) {
     SOURCES += \
@@ -1403,39 +1421,3 @@ LinuxBuild {
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
-
-
-#-------------------------------------------------------------------------------------
-#For 3D Viewer
-
-QT += \
-    quick3d \
-    xml
-
-CONFIG += qmltypes
-QML_IMPORT_NAME = Viewer3DQmlType
-QML_IMPORT_MAJOR_VERSION = 1
-
-
-SOURCES += \
-    $$PWD/src/Viewer3D/city_map_geometry.cpp \
-    $$PWD/src/Viewer3D/metadatastreamer.cpp \
-    $$PWD/src/Viewer3D/osmparser.cpp \
-    $$PWD/src/Viewer3D/qml_backend.cpp \
-    $$PWD/src/Viewer3D/util_functions.cpp \
-    $$PWD/src/Viewer3D/QGCViewer3D.cpp \
-
-HEADERS += \
-    $$PWD/src/Viewer3D/city_map_geometry.h \
-    $$PWD/src/Viewer3D/cpp_variable_types.h \
-    $$PWD/src/Viewer3D/metadatastreamer.h \
-    $$PWD/src/Viewer3D/osmparser.h \
-    $$PWD/src/Viewer3D/qml_backend.h \
-    $$PWD/src/Viewer3D/qml_variable_types.h \
-    $$PWD/src/Viewer3D/util_functions.h \
-    $$PWD/src/Viewer3D/QGCViewer3D.h \
-
-
-INCLUDEPATH += \
-    $$PWD/src/Viewer3D \
-    $$PWD/src/Viewer3D/earcut \

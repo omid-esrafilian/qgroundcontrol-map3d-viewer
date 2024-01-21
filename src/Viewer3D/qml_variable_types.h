@@ -13,7 +13,6 @@ class Vec3f: public QObject
     Q_PROPERTY(float x READ x WRITE setX NOTIFY xChanged)
     Q_PROPERTY(float y READ y WRITE setY NOTIFY yChanged)
     Q_PROPERTY(float z READ z WRITE setZ NOTIFY zChanged)
-    QML_ELEMENT
 
         public:
 
@@ -83,7 +82,6 @@ class GpsType: public QObject
     Q_PROPERTY(float lat READ lat WRITE setLat NOTIFY latChanged)
     Q_PROPERTY(float lon READ lon WRITE setLon NOTIFY lonChanged)
     Q_PROPERTY(float alt READ alt WRITE setAlt NOTIFY altChanged)
-    QML_ELEMENT
 
         public:
                  explicit GpsType(QObject *parent = nullptr, float lat_=0, float lon_=0, float alt_=0)
@@ -140,8 +138,6 @@ class GeoCoordinateType: public QObject
     Q_PROPERTY(GpsType* gps_ref READ gpsRead WRITE setGpsRef NOTIFY gpsRefChanged)
     Q_PROPERTY(GpsType* coordinate READ coordinate WRITE setCoordinate NOTIFY coordinateChanged)
     Q_PROPERTY(Vec3f* localCoordinate READ localCoordinate NOTIFY localCoordinateChanged)
-
-    QML_ELEMENT
 
         public:
                  explicit GeoCoordinateType(QObject *parent = nullptr){

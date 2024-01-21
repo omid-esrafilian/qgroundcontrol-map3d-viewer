@@ -1,6 +1,6 @@
 import QtQuick3D
 import QtQuick
-import Viewer3DQmlType 1.0
+import QGroundControl.Viewer3D
 
 import "Djif450/DroneModel_arm_1"
 import "Djif450/DroneModel_arm_2"

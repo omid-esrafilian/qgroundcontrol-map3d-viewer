@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick3D
-import Viewer3DQmlType 1.0
 
-import Viewer3D.Models3D.Drones    1.0
-import Viewer3D.Models3D           1.0
+import Viewer3D.Models3D.Drones
+import Viewer3D.Models3D
+import QGroundControl.Viewer3D
 
 import QGroundControl
 import QGroundControl.Controllers

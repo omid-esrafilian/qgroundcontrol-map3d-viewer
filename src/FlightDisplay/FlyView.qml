@@ -29,9 +29,9 @@ import QGroundControl.Vehicle
 
 
 // 3D Viewer modules
-import Viewer3DQmlType             1.0
-import Viewer3D                    1.0
-import Viewer3D.Models3D           1.0
+import QGroundControl.Viewer3D
+import Viewer3D
+import Viewer3D.Models3D
 
 
 Item {

@@ -11,7 +11,6 @@
 class CityMapGeometry : public QQuick3DGeometry
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(CityMapGeometry)
     Q_PROPERTY(QString model_name READ modelName WRITE setModelName NOTIFY modelNameChanged)
     Q_PROPERTY(QString city_map READ cityMapPath WRITE setCityMap NOTIFY cityMapChanged)
     Q_PROPERTY(OsmParser* bld_map_reader MEMBER m_bld_map_reader NOTIFY bldMapReaderChanged)

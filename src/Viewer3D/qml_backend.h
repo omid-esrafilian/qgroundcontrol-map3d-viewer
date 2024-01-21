@@ -24,9 +24,6 @@ class QmlBackend : public QObject
     Q_PROPERTY(GpsType* gps_ref READ gpsRead NOTIFY gpsRefChanged)
     Q_PROPERTY(float height_bias MEMBER m_height_bias NOTIFY heightBiasChanged)
 
-
-    QML_ELEMENT
-
 public:
     explicit QmlBackend(QObject *parent = nullptr);
 

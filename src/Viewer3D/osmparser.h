@@ -16,9 +16,8 @@
 class OsmParser : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-        public:
-                 explicit OsmParser(QObject *parent = nullptr);
+public:
+    explicit OsmParser(QObject *parent = nullptr);
 
     QGeoCoordinate gps_ref_point;
     QMap<uint64_t, QGeoCoordinate> map_nodes;

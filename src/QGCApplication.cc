@@ -106,6 +106,11 @@
 #include "CustomAction.h"
 #include "CustomActionManager.h"
 
+#include "city_map_geometry.h"
+#include "qml_backend.h"
+#include "qml_variable_types.h"
+#include "osmparser.h"
+
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
 #endif
@@ -455,6 +460,15 @@ void QGCApplication::_initCommon()
 
     qmlRegisterType<QGCPalette>     ("QGroundControl.Palette", 1, 0, "QGCPalette");
     qmlRegisterType<QGCMapPalette>  ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
+
+    // for 3D viewer types
+    qmlRegisterType<GpsType>  ("QGroundControl.Viewer3D", 1, 0, "GpsType");
+    qmlRegisterType<GeoCoordinateType>  ("QGroundControl.Viewer3D", 1, 0, "GeoCoordinateType");
+    qmlRegisterType<CityMapGeometry>  ("QGroundControl.Viewer3D", 1, 0, "CityMapGeometry");
+
+    qmlRegisterUncreatableType<QmlBackend>  ("QGroundControl.Viewer3D", 1, 0, "QmlBackend", kRefOnly);
+    qmlRegisterUncreatableType<OsmParser>  ("QGroundControl.Viewer3D", 1, 0, "OsmParser", kRefOnly);
+
 
     qmlRegisterUncreatableType<Vehicle>                 (kQGCVehicle,                       1, 0, "Vehicle",                    kRefOnly);
     qmlRegisterUncreatableType<MissionManager>          (kQGCVehicle,                       1, 0, "MissionManager",             kRefOnly);
