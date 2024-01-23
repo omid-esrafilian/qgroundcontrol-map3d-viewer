@@ -31,34 +31,6 @@ Node{
         return Qt.vector3d(_vec.x/norm_vec, _vec.y/norm_vec, _vec.z/norm_vec)
     }
 
-    function normalizeVec4(_vec)
-    {
-        var norm_vec = Math.sqrt(_vec.x*_vec.x + _vec.y*_vec.y + _vec.z*_vec.z + _vec.w*_vec.w)
-        return Qt.vector4d(_vec.x/norm_vec, _vec.y/norm_vec, _vec.z/norm_vec, _vec.w/norm_vec)
-    }
-
-    function eulerFromQuaternions(vec_q)
-    {
-        var M_PI = 3.1415
-        var sinr_cosp = 2 * (vec_q.w * vec_q.x + vec_q.y * vec_q.z)
-        var cosr_cosp = 1 - 2 * (vec_q.x * vec_q.x + vec_q.y * vec_q.y)
-        var roll = Math.atan2(sinr_cosp, cosr_cosp)
-
-        // pitch (y-axis rotation)
-        var sinp = Math.sqrt(1 + 2 * (vec_q.w * vec_q.y - vec_q.x * vec_q.z))
-        var cosp = Math.sqrt(1 - 2 * (vec_q.w * vec_q.y - vec_q.x * vec_q.z))
-        var pitch = 2 * Math.atan2(sinp, cosp) - M_PI / 2
-
-        // yaw (z-axis rotation)
-        var siny_cosp = 2 * (vec_q.w * vec_q.z + vec_q.x * vec_q.y)
-        var cosy_cosp = 1 - 2 * (vec_q.y * vec_q.y + vec_q.z * vec_q.z)
-        var yaw = Math.atan2(siny_cosp, cosy_cosp)
-
-        var rad_2_deg = 180.0 / 3.1415
-        console.log("euler:", roll * rad_2_deg, pitch * rad_2_deg, yaw * rad_2_deg)
-        return Qt.vector3d(roll * rad_2_deg, pitch * rad_2_deg, yaw * rad_2_deg)
-    }
-
     function get_rotation_between(vec_a, vec_b)
     {
         var vec_a_n = normalizeVec(vec_a)

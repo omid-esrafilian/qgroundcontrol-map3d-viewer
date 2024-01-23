@@ -22,14 +22,13 @@ import QGroundControl.Vehicle
 View3D {
     id: topRightView
 
-    property var  backendQml:      null
-    property var  missionController
-    readonly property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
-
-
     camera: standAloneScene.camera_main
     importScene: CameraLightModel{
         id: standAloneScene
+    }
+
+    Viewer3DFacts{
+        id: _viewer3DFacts
     }
 
 //    renderMode: View3D.Inline
@@ -46,8 +45,8 @@ View3D {
         geometry: CityMapGeometry {
             id: city_map_geometry
             model_name: "city_map"
-            city_map: (backendQml)?(backendQml.city_map_path):("nan")
-            bld_map_reader: viewer3DOsmReader
+            city_map: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+            bld_map_reader: _viewer3DFacts.osmParser
         }
 
         materials: [ DefaultMaterial {
@@ -62,7 +61,7 @@ View3D {
 
         delegate: Viewer3DVehicleItems{
             _vehicle: object
-            _backendQml: topRightView.backendQml
+            _backendQml: _viewer3DFacts.qmlBackend
             _planMasterController: masterController
 
             PlanMasterController {
@@ -89,7 +88,7 @@ View3D {
         onPositionChanged: (mouse)=> {
             let roll = standAloneScene.cam_node_in_rotation.x * (3.1415/180)
             let pitch = standAloneScene.cam_node_in_rotation.y * (3.1415/180)
-            let yaw = standAloneScene.cam_node_in_rotation.z * (3.1415/180)
+//            let yaw = standAloneScene.cam_node_in_rotation.z * (3.1415/180)
 
             if (mouse.buttons === Qt.LeftButton) { // Left button for translate
                 let dx_l = (mouse.x - lastPos.x) * transferSpeed

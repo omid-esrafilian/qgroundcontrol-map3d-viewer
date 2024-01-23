@@ -8,17 +8,13 @@
 Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
     : QObject{parent}
 {
-    mav_link_loaded_flag = false;
-    vechicle_set_flag = false;
     m_gps_ref = new GpsType();
+}
 
+void Viewer3DQmlBackend::init()
+{
     initMetadata();
     initOsmMapLoader();
-
-    main_timer = new QTimer();
-    main_timer->start(100);
-
-    connect(main_timer, &QTimer::timeout, this, &Viewer3DQmlBackend::mainTimerEvent);
 }
 
 void Viewer3DQmlBackend::setGpsRef(GpsType *gps_ref)
@@ -45,33 +41,14 @@ void Viewer3DQmlBackend::initMetadata()
     connect(this, &Viewer3DQmlBackend::heightBiasChanged, this, &Viewer3DQmlBackend::heightBiasChangedEvent);
 }
 
-void Viewer3DQmlBackend::setActiveVehicle(Vehicle *_active_vehicle)
-{
-    active_vehicle = _active_vehicle;
-    vechicle_set_flag = true;
-
-    connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleChanged, this, &Viewer3DQmlBackend::activeVehicleChanged);
-}
-
 void Viewer3DQmlBackend::initOsmMapLoader()
 {
-    bld_map_reader_thr = qgcApp()->viewer3D()->mapLoader();
+    bld_map_reader_thr = qgcApp()->viewer3D()->osmParser();
     connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::gpsRefChangedEvent);
-}
-
-void Viewer3DQmlBackend::activeVehicleChanged(Vehicle *newActiveVehicle)
-{
-    active_vehicle = newActiveVehicle;
-}
-
-void Viewer3DQmlBackend::mainTimerEvent()
-{
-    emit mainTimerTimeout();
 }
 
 void Viewer3DQmlBackend::gpsRefChangedEvent(QGeoCoordinate new_gps_ref)
 {
-
     m_gps_ref->setLat(new_gps_ref.latitude());
     m_gps_ref->setLon(new_gps_ref.longitude());
     m_gps_ref->setAlt(new_gps_ref.altitude());
@@ -92,5 +69,4 @@ void Viewer3DQmlBackend::cityMapPathChangedEvent()
 {
     metadata_loader_thr->meta_data.city_map_path = m_city_map_path;
     metadata_loader_thr->updateMetaDataFile();
-    qDebug("New 3D map file selected!!!!!!");
 }

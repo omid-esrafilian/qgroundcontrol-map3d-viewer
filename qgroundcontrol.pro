@@ -438,6 +438,7 @@ HEADERS += \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
+    src/Viewer3D/Viewer3DFacts.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -452,6 +453,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 SOURCES += \
     src/QmlControls/CustomActionManager.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
+    src/Viewer3D/Viewer3DFacts.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \

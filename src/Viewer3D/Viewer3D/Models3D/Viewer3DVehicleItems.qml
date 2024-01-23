@@ -18,15 +18,15 @@ import QGroundControl.Vehicle
 
 Node {
     id: map3d_item_root
-    property var  _backendQml:      null
-    property var  _vehicle:      null
-    property var  _planMasterController:      null
-    property var  _missionController: (_planMasterController)?(_planMasterController.missionController):(null)
+    property var  _backendQml:                  null
+    property var  _vehicle:                     null
+    property var  _planMasterController:        null
+    property var  _missionController:           (_planMasterController)?(_planMasterController.missionController):(null)
 
     function addMissionItemsToListModel() {
         mission_waypoint_list_model.clear()
         var gps2Local_ = gps2Local
-        gps2Local_.gps_ref = backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gps_ref
 
         for (var i = 1; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i)
@@ -47,7 +47,7 @@ Node {
         mission_path_model.clear()
         var gps2Local_ = gps2Local
 
-        gps2Local_.gps_ref = backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gps_ref
         for (var i = 2; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i-1)
             gps2Local_.coordinate.lat = missionItem.coordinate.latitude

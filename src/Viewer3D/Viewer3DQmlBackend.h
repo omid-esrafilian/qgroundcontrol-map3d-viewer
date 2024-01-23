@@ -4,7 +4,6 @@
 #include <QObject>
 #include <qqml.h>
 #include <QString>
-#include <QTimer>
 #include "OsmParser.h"
 #include "Viewer3DQmlVariableTypes.h"
 #include "Viewer3DMetadata.h"
@@ -30,37 +29,28 @@ public:
     Viewer3DMetadata *metadata_loader_thr;
     OsmParser *bld_map_reader_thr;
 
+    void init();
+
     GpsType* gpsRead(){return m_gps_ref;}
     void setGpsRef(GpsType* gps_ref);
 
     float getHeightBias(){return m_height_bias;}
 
     void initMetadata();
-    void setActiveVehicle(Vehicle* _active_vehicle);
     void initOsmMapLoader();
 
 signals:
     void userPoseChanged();
-    void mainTimerTimeout();
     void gpsRefChanged();
     void heightBiasChanged();
     void cityMapPathChanged();
 
 private:
-    QObject *object;
-    QTimer *main_timer;
-    Vehicle * active_vehicle;
-
-    bool mav_link_loaded_flag;
-    bool vechicle_set_flag;
-
     QString m_city_map_path;
     GpsType* m_gps_ref;
     float m_height_bias;
 
 protected slots:
-    void activeVehicleChanged (Vehicle* newActiveVehicle);
-    void mainTimerEvent();
     void gpsRefChangedEvent(QGeoCoordinate new_gps_ref);
     void heightBiasChangedEvent();
     void cityMapPathChangedEvent();

@@ -41,8 +41,6 @@ Item {
     property var planController:    _planController
     property var guidedController:  _guidedController
 
-    // This initializes the backend for Map 3D viewer
-    property var  backendQml: viewer3DQmlBackend
 
     PlanMasterController {
         id:                     _planController
@@ -161,11 +159,9 @@ Item {
         }
 
         Viewer3DModel{
-            missionController: _missionController
-            id: city_3d_view
-            backendQml: _root.backendQml
-            anchors.fill: parent
-            z: 0
+            id:                     viewer3DWindow
+            anchors.fill:           parent
+            z:                      0
         }
 
         FlyViewMap {
@@ -177,50 +173,17 @@ Item {
             mapName:                "FlightDisplayView"
         }
 
-
-        // The setting menu for 3D viewer
         Viewer3DSettingMenu{
-            id:app_setting_menu
-            z: QGroundControl.zOrderWidgets
-            visible:false
+            id:         viewer3DSettingMenu
+            z:          QGroundControl.zOrderWidgets
+            visible:    false
+            opacity:    0.95
 
             anchors{
                 top: mapHolder.top
                 bottom: mapHolder.bottom
+                right: mapHolder.right
             }
-            opacity: 0.95
-
-            city_map_path_text: (_root.backendQml)?(_root.backendQml.city_map_path):("nan")
-            bias_height_text: (_root.backendQml)?(Number(_root.backendQml.height_bias)):("nan")
-
-            onMapFileChanged: function(file_path){
-                console.log(file_path)
-                _root.backendQml.city_map_path = file_path
-            }
-
-            onHeightBiasChanged: function(height){
-                _root.backendQml.height_bias = height
-            }
-
-            Behavior on x{
-                NumberAnimation{
-                    easing.type: Easing.InOutQuad;
-                    duration: 300
-                }
-            }
-
-            state: "SETTING_MENU_CLOSE"
-            states: [
-                State {
-                    name: "SETTING_MENU_OPEN"
-                    PropertyChanges { target: app_setting_menu; x: _root.width - app_setting_menu.width; visible:true}
-
-                },
-                State {
-                    name: "SETTING_MENU_CLOSE"
-                    PropertyChanges { target: app_setting_menu; x: _root.width + app_setting_menu.width}
-                }
-            ]
         }
 
         FlyViewVideo {

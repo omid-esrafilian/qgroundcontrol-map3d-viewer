@@ -7,21 +7,26 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
 
+import QGroundControl.Viewer3D
+
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Rectangle {
 
     signal mapFileChanged(string file_path)
     signal heightBiasChanged(real height)
-    property alias city_map_path_text: map_file_text_feild.text
-    property alias bias_height_text: height_bias_textfeild.text
+    property string windowState: "SETTING_MENU_CLOSE"
+    property real default_width: Screen.width * 0.2
 
     property int leftMarginSpace: ScreenTools.defaultFontPixelWidth
 
     id: window_body
-    width: Screen.width * 0.2
-
+    clip: true
     color: qgcPal.window
+
+    Viewer3DFacts{
+        id: _viewer3DFacts
+    }
 
     QGCPalette {
         id:                 qgcPal
@@ -80,7 +85,7 @@ Rectangle {
         anchors.leftMargin: 20
         readOnly: true
 
-        text: city_map_path_text
+        text: (_viewer3DFacts.qmlBackend)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
     }
 
     QGCLabel {
@@ -107,6 +112,8 @@ Rectangle {
         anchors.left:           height_bias_label.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
 
+        text: (_viewer3DFacts.qmlBackend)?(Number(_viewer3DFacts.qmlBackend.height_bias)):("nan")
+
         validator: RegularExpressionValidator{
             regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
         }
@@ -117,4 +124,34 @@ Rectangle {
             heightBiasChanged(parseFloat(text))
         }
     }
+
+    onMapFileChanged: function(file_path){
+        console.log(file_path)
+        _viewer3DFacts.qmlBackend.city_map_path = file_path
+    }
+
+    onHeightBiasChanged: function(height){
+        _viewer3DFacts.qmlBackend.height_bias = height
+    }
+
+    Behavior on width{
+        NumberAnimation{
+            easing.type: Easing.InOutQuad;
+            duration: 300
+        }
+    }
+
+    state: windowState
+
+    states: [
+        State {
+            name: "SETTING_MENU_OPEN"
+            PropertyChanges { target: window_body; width: default_width; visible:true}
+
+        },
+        State {
+            name: "SETTING_MENU_CLOSE"
+            PropertyChanges { target: window_body; width: 0}
+        }
+    ]
 }
