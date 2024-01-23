@@ -32,7 +32,7 @@ void Viewer3DQmlBackend::setGpsRef(GpsType *gps_ref)
 
 void Viewer3DQmlBackend::initMetadata()
 {
-    metadata_loader_thr = qgcViewer3D()->metaDataLoader();
+    metadata_loader_thr = qgcApp()->viewer3D()->metaDataLoader();
     metadata_loader_thr->loadMetaDataFile();
 
     m_height_bias = metadata_loader_thr->meta_data.height_bias;
@@ -55,7 +55,7 @@ void Viewer3DQmlBackend::setActiveVehicle(Vehicle *_active_vehicle)
 
 void Viewer3DQmlBackend::initOsmMapLoader()
 {
-    bld_map_reader_thr = qgcViewer3D()->mapLoader();
+    bld_map_reader_thr = qgcApp()->viewer3D()->mapLoader();
     connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::gpsRefChangedEvent);
 }
 

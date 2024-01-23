@@ -86,6 +86,8 @@ public:
     // Still working on getting rid of this and using dependency injection instead for everything
     QGCToolbox* toolbox(void) { return _toolbox; }
 
+    QGCViewer3D* viewer3D(void) { return _viewer3D; }
+
     /// Do we have Bluetooth Support?
     bool isBluetoothAvailable() const{ return _bluetoothAvailable; }
 
@@ -224,7 +226,7 @@ private:
 
 
     //3D viewer.....
-    QGCViewer3D* _qgcViewer3D = nullptr;
+    QGCViewer3D* _viewer3D = nullptr;
 
     class CompressedSignalList {
         Q_DISABLE_COPY(CompressedSignalList)

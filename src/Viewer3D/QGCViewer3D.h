@@ -14,8 +14,6 @@ class QGCViewer3D : public QObject
 public:
     explicit QGCViewer3D(QObject *parent = nullptr);
 
-    static QGCViewer3D*  _map_app;   ///< Our own singleton. Should be reference directly by qgcViewer3D
-
     void initQml(QQmlApplicationEngine *qmlEngine, QObject *parent);
 
     OsmParser* mapLoader(){ return city_osm_map_loader;}
@@ -30,9 +28,6 @@ private:
 signals:
 
 };
-
-/// @brief Returns the QGCViewer3D object singleton.
-QGCViewer3D* qgcViewer3D(void);
 
 #endif // QGCVIEWER3D_H
 

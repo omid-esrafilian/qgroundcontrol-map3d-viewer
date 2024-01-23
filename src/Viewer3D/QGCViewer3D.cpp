@@ -1,16 +1,8 @@
 #include "QGCViewer3D.h"
-QGCViewer3D* QGCViewer3D::_map_app = nullptr;
-
-QGCViewer3D* qgcViewer3D(void)
-{
-    return QGCViewer3D::_map_app;
-}
 
 QGCViewer3D::QGCViewer3D(QObject *parent)
     : QObject{parent}
 {
-    _map_app = this;
-
     const char * metadata_file_address = "map3d_viewer_meta_data.xml";
     data_loader = new Viewer3DMetadata(metadata_file_address, parent);
 
@@ -22,6 +14,6 @@ void QGCViewer3D::initQml(QQmlApplicationEngine *qmlEngine, QObject *parent)
 {
     qml_bk = new Viewer3DQmlBackend(parent);
 
-    qmlEngine->rootContext()->setContextProperty("viewer3DOsmReader", qgcViewer3D()->mapLoader());
-    qmlEngine->rootContext()->setContextProperty("viewer3DQmlBackend", qgcViewer3D()->qmlBackend());
+    qmlEngine->rootContext()->setContextProperty("viewer3DOsmReader", mapLoader());
+    qmlEngine->rootContext()->setContextProperty("viewer3DQmlBackend", qmlBackend());
 }

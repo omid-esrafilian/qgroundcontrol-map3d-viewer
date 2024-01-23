@@ -361,6 +361,10 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox = new QGCToolbox(this);
     _toolbox->setChildToolboxes();
 
+
+    // 3D Viewer initialization
+    _viewer3D = new QGCViewer3D(this);
+
 #ifndef __mobile__
     _gpsRtkFactGroup = new GPSRTKFactGroup(this);
     GPSManager *gpsManager = _toolbox->gpsManager();
@@ -569,9 +573,7 @@ bool QGCApplication::_initForNormalAppBoot()
 
     _qmlAppEngine = toolbox()->corePlugin()->createQmlApplicationEngine(this);
 
-    // 3D Viewer initialization
-    _qgcViewer3D = new QGCViewer3D(this);
-    _qgcViewer3D->initQml(_qmlAppEngine, this);
+    viewer3D()->initQml(_qmlAppEngine, this);
 
     toolbox()->corePlugin()->createRootWindow(_qmlAppEngine);
 
