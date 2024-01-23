@@ -86,7 +86,7 @@ To install Qt:
 			- **Android**: _Android_
 		- _Qt 5 Compatibility Module_
 		- _Qt Shader Tools_
-		- _Qt Quick 3D_
+
    - Under _Additional Libraries_ select:
      - _Qt Charts_
      - _Qt Connectivity_
@@ -95,7 +95,6 @@ To install Qt:
      - _Qt Positioning_
      - _Qt Serial Port_
      - _Qt Speech_
-     
 
 1. Install Additional Packages (Platform Specific)
 
