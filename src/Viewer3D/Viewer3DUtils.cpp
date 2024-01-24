@@ -10,7 +10,7 @@
 #define ins_e_sq 				ins_f * (2 - ins_f)    // Square of Eccentricity
 
 
-QVector3D mapGeodeticToEcef(gps_point gps_point_)
+QVector3D mapGeodeticToEcef(GpsPoint gps_point_)
 {
     double lat_rad = gps_point_.lat * DEG_TO_RAD;
     double lon_rad = gps_point_.lon * DEG_TO_RAD;
@@ -42,7 +42,7 @@ QVector3D mapGeodeticToEcef(QGeoCoordinate gps_point_)
     return out_point;
 }
 
-QVector3D mapEcefToEnu(QVector3D ecef_point, gps_point ref_gps)
+QVector3D mapEcefToEnu(QVector3D ecef_point, GpsPoint ref_gps)
 {
     // Convert to radians in notation consistent with the paper:
     double lambda = ref_gps.lat * DEG_TO_RAD;
@@ -102,7 +102,7 @@ QVector3D mapEcefToEnu(QVector3D ecef_point, QGeoCoordinate ref_gps)
     return QVector3D(xEast, yNorth, zUp);
 }
 
-QVector3D mapGpsToLocalPoint(gps_point gps_point_, gps_point ref_gps)
+QVector3D mapGpsToLocalPoint(GpsPoint gps_point_, GpsPoint ref_gps)
 {
     QVector3D ecef = mapGeodeticToEcef(gps_point_);
     return mapEcefToEnu(ecef, ref_gps);

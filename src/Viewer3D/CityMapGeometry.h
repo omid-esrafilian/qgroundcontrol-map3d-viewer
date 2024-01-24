@@ -3,46 +3,47 @@
 #define CITYMAPGEOMETRY_H
 
 #include <QQuick3DGeometry>
-#include "OsmParser.h"
 #include <QTimer>
+
+#include "OsmParser.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 class CityMapGeometry : public QQuick3DGeometry
 {
     Q_OBJECT
-    Q_PROPERTY(QString model_name READ modelName WRITE setModelName NOTIFY modelNameChanged)
-    Q_PROPERTY(QString city_map READ cityMapPath WRITE setCityMap NOTIFY cityMapChanged)
-    Q_PROPERTY(OsmParser* bld_map_reader MEMBER m_bld_map_reader NOTIFY bldMapReaderChanged)
+    Q_PROPERTY(QString modelName READ modelName WRITE setModelName NOTIFY modelNameChanged)
+    Q_PROPERTY(QString osmFilePath READ osmFilePath WRITE setOsmFilePath NOTIFY osmFilePathChanged)
+    Q_PROPERTY(OsmParser* osmParser MEMBER _osmParser NOTIFY osmParserChanged)
 
 public:
 
     CityMapGeometry();
 
-    QString modelName() const { return m_model_name; }
-    void setModelName(QString m_name);
+    QString modelName() const { return _modelName; }
+    void setModelName(QString modelName);
 
-    QString cityMapPath() const {return m_city_map_path;}
-    void setCityMap(QString map_path);
+    QString osmFilePath() const {return _osmFilePath;}
+    void setOsmFilePath(QString filePath);
 
 signals:
     void modelNameChanged();
-    void cityMapChanged();
+    void osmFilePathChanged();
     void gpsRefChanged();
-    void bldMapReaderChanged();
+    void osmParserChanged();
 
 private:
     void updateData();
 
-    QString m_model_name;
-    QString m_city_map_path;
-    QByteArray vertexData;
-    OsmParser *m_bld_map_reader;
-    bool map_loaded_flag;
-    QTimer *main_timer;
+    QString _modelName;
+    QString _osmFilePath;
+    QByteArray _vertexData;
+    OsmParser *_osmParser;
+    bool _mapLoadedFlag;
+    QTimer *_mainTimer;
 
 protected slots:
-    void mainTimerEvent();
+    void _mainTimerEvent();
 };
 
 #endif // CITYMAPGEOMETRY_H

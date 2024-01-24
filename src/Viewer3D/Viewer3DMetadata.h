@@ -1,11 +1,12 @@
 #ifndef VIEWER3DMETADATA_H
 #define VIEWER3DMETADATA_H
 
-#include "Viewer3DCppVariableTypes.h"
 #include <QObject>
 #include <QtXml>
 #include <QTextStream>
 #include <qxmlstream.h>
+
+#include "Viewer3DCppVariableTypes.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -15,7 +16,7 @@ class Viewer3DMetadata : public QObject
 public:
     explicit Viewer3DMetadata(const char * data_file_path = nullptr, QObject *parent = nullptr);
 
-    meta_data_type meta_data;
+    Viewer3DMetadataType  meta_data;
 
     bool loadMetaDataFile();
     bool updateMetaDataFile();

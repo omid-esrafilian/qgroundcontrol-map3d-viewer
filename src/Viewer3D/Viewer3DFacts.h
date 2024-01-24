@@ -2,12 +2,12 @@
 #define VIEWER3DFACTS_H
 
 #include <QObject>
+
 #include "Viewer3DMetadata.h"
 #include "Viewer3DQmlBackend.h"
 #include "OsmParser.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
-
 
 // This class contains all the variables shared between the C++ and QML sides for 3D viewer.
 class Viewer3DFacts : public QObject

@@ -2,34 +2,35 @@
 
 CityMapGeometry::CityMapGeometry()
 {
-    m_bld_map_reader = nullptr;
-    m_model_name = "city_map_defualt_name";
-    vertexData.clear();
-    map_loaded_flag = 0;
+    _osmParser = nullptr;
+    _modelName = "city_map_defualt_name";
+    _vertexData.clear();
+    _mapLoadedFlag = 0;
 
-    main_timer = new QTimer(this);
-    main_timer->start(500);
-    connect(main_timer, &QTimer::timeout, this, &CityMapGeometry::mainTimerEvent);
+    _mainTimer = new QTimer(this);
+    _mainTimer->start(500);
+    connect(_mainTimer, &QTimer::timeout, this, &CityMapGeometry::_mainTimerEvent);
 
     updateData();
 }
 
-void CityMapGeometry::setModelName(QString m_name)
+void CityMapGeometry::setModelName(QString modelName)
 {
-    m_model_name = m_name;
-    //    setName(m_model_name);
+    _modelName = modelName;
+    //    setName(_modelName);
 
     emit modelNameChanged();
 }
 
-void CityMapGeometry::setCityMap(QString map_path)
+void CityMapGeometry::setOsmFilePath(QString filePath)
 {
-    if(m_city_map_path.compare(map_path) == 0)
+    if(_osmFilePath.compare(filePath) == 0){
         return;
+    }
 
-    map_loaded_flag = 0;
-    m_city_map_path = map_path;
-    emit cityMapChanged();
+    _mapLoadedFlag = 0;
+    _osmFilePath = filePath;
+    emit osmFilePathChanged();
 
     updateData();
 }
@@ -39,17 +40,16 @@ void CityMapGeometry::updateData()
 {
     clear();
 
-    if(!m_bld_map_reader)
+    if(!_osmParser){
         return;
+    }
 
-    m_bld_map_reader->parseOsmFile(m_city_map_path);
-    vertexData = m_bld_map_reader->buildingToMesh();
-
+    _osmParser->parseOsmFile(_osmFilePath);
+    _vertexData = _osmParser->buildingToMesh();
 
     int stride = 3 * sizeof(float);
-    if(!vertexData.isEmpty())
-    {
-        setVertexData(vertexData);
+    if(!_vertexData.isEmpty()){
+        setVertexData(_vertexData);
         setStride(stride);
 
         setPrimitiveType(QQuick3DGeometry::PrimitiveType::Triangles);
@@ -59,15 +59,14 @@ void CityMapGeometry::updateData()
                      QQuick3DGeometry::Attribute::F32Type);
 
     }
-    map_loaded_flag = 1;
+    _mapLoadedFlag = 1;
 
     update();
 }
 
-void CityMapGeometry::mainTimerEvent()
+void CityMapGeometry::_mainTimerEvent()
 {
-    if(!map_loaded_flag)
-    {
+    if(!_mapLoadedFlag){
         updateData();
     }
 }

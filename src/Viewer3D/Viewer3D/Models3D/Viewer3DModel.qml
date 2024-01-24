@@ -44,9 +44,9 @@ View3D {
         scale: Qt.vector3d(10, 10, 10)
         geometry: CityMapGeometry {
             id: city_map_geometry
-            model_name: "city_map"
-            city_map: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
-            bld_map_reader: _viewer3DFacts.osmParser
+            modelName: "city_map"
+            osmFilePath: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+            osmParser: _viewer3DFacts.osmParser
         }
 
         materials: [ DefaultMaterial {

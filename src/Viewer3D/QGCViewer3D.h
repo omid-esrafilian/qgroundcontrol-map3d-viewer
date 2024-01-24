@@ -2,6 +2,7 @@
 #define QGCVIEWER3D_H
 
 #include <QObject>
+
 #include "Viewer3DMetadata.h"
 #include "Viewer3DQmlBackend.h"
 #include "OsmParser.h"

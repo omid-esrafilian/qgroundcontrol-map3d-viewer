@@ -15,11 +15,11 @@
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 
-QVector3D mapGeodeticToEcef(gps_point gps_point_);
+QVector3D mapGeodeticToEcef(GpsPoint gps_point_);
 QVector3D mapGeodeticToEcef(QGeoCoordinate gps_point_);
-QVector3D mapEcefToEnu(QVector3D ecef_point, gps_point ref_gps);
+QVector3D mapEcefToEnu(QVector3D ecef_point, GpsPoint ref_gps);
 QVector3D mapEcefToEnu(QVector3D ecef_point, QGeoCoordinate ref_gps);
-QVector3D mapGpsToLocalPoint(gps_point gps_point_, gps_point ref_gps);
+QVector3D mapGpsToLocalPoint(GpsPoint gps_point_, GpsPoint ref_gps);
 QVector3D mapGpsToLocalPoint(QGeoCoordinate gps_point_, QGeoCoordinate ref_gps);
 
 QVector3D mapEnuToEcef(const QVector3D &enu_point, QGeoCoordinate& ref_gps);

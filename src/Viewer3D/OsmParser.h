@@ -1,8 +1,6 @@
 #ifndef OSMPARSER_H
 #define OSMPARSER_H
 
-#include "Viewer3DCppVariableTypes.h"
-#include "qgeocoordinate.h"
 #include "qqml.h"
 #include <QObject>
 #include <QtXml>
@@ -10,6 +8,9 @@
 #include <QMap>
 #include <QVector3D>
 #include <QVector2D>
+#include "qgeocoordinate.h"
+
+#include "Viewer3DCppVariableTypes.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -19,37 +20,36 @@ class OsmParser : public QObject
 public:
     explicit OsmParser(QObject *parent = nullptr);
 
-    QGeoCoordinate gps_ref_point;
-    QMap<uint64_t, QGeoCoordinate> map_nodes;
-    QMap<uint64_t, bld_str> map_buildings;
+    void setGpsRef(QGeoCoordinate gpsRef);
+    QGeoCoordinate getGpsRef(){ return _gpsRefPoint;}
+    void setBuildingLevelHeight(float levelHeight){_buildingLevelHeight = levelHeight;}
+    float getBuildingLevelHeight(void){return _buildingLevelHeight;}
+    void parseOsmFile(QString filePath);
+    void decodeNodeTags(QDomElement& xmlComponent, QMap<uint64_t, QGeoCoordinate> &nodeMap);
+    void decodeBuildings(QDomElement& xmlComponent, QMap<uint64_t, BuildingType > &buildingMap, QMap<uint64_t, QGeoCoordinate> &nodeMap, QGeoCoordinate gpsRef);
 
-
-    void setGpsRef(QGeoCoordinate gps_ref);
-    QGeoCoordinate getGpsRef(){ return gps_ref_point;}
-    void setBuildingLevelHeight(float level_height){building_level_height = level_height;}
-    float getBuildingLevelHeight(void){return building_level_height;}
-    void parseOsmFile(QString file_path);
-    void decodeNodeTags(QDomElement& xml_component, QMap<uint64_t, QGeoCoordinate> &node_map);
-    void decodeBuildings(QDomElement& xml_component, QMap<uint64_t, bld_str > &building_map, QMap<uint64_t, QGeoCoordinate> &node_map, QGeoCoordinate gps_ref);
-
-    void setBuildingMapHeightBias(float height_bias){ map_height_bias = height_bias;}
-    float getBuildingMapHeightBias(void){ return map_height_bias;}
+    void setBuildingMapHeightBias(float heightBias){ _mapHeightBias = heightBias;}
+    float getBuildingMapHeightBias(void){ return _mapHeightBias;}
 
 
     QByteArray buildingToMesh();
 
-    void trianglateWallsExtrudedPolygon(std::vector<QVector3D>& triangulated_mesh, std::vector<QVector2D> vertices_ccw, float h, bool inverse_order=0, bool duplicate_st_end_point=0);
-    void trianglateRectangle(std::vector<QVector3D>& triangulated_mesh, std::vector<QVector3D> vertices_ccw, bool invert_normal);
+    void trianglateWallsExtrudedPolygon(std::vector<QVector3D>& triangulatedMesh, std::vector<QVector2D> verticesCcw, float h, bool inverseOrder=0, bool duplicateStartEndPoint=0);
+    void trianglateRectangle(std::vector<QVector3D>& triangulatedMesh, std::vector<QVector3D> verticesCcw, bool invertNormal);
 
 private:
-    bool gps_ref_set;
-    float building_level_height;
-    bool map_loaded;
-    float map_height_bias;
+    QGeoCoordinate _gpsRefPoint;
+    QMap<uint64_t, QGeoCoordinate> _mapNodes;
+    QMap<uint64_t, BuildingType> _mapBuildings;
+
+    bool _gpsRefSet;
+    float _buildingLevelHeight;
+    bool _mapLoadedFlag;
+    float _mapHeightBias;
 
 
 signals:
-    void gpsRefChanged(QGeoCoordinate new_gps_ref);
+    void gpsRefChanged(QGeoCoordinate newGpsRef);
     void newMapLoaded();
 
 };

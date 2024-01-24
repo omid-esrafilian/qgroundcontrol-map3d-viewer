@@ -157,8 +157,8 @@ class GeoCoordinateType: public QObject
 
     void gps_to_local()
     {
-        gps_point gps_tmp = {m_coordinate->lat(), m_coordinate->lon(), m_coordinate->alt()};
-        gps_point gps_ref_tmp = {m_gps_ref->lat(), m_gps_ref->lon(), m_gps_ref->alt()};
+        GpsPoint gps_tmp = {m_coordinate->lat(), m_coordinate->lon(), m_coordinate->alt()};
+        GpsPoint gps_ref_tmp = {m_gps_ref->lat(), m_gps_ref->lon(), m_gps_ref->alt()};
 
         QVector3D local_pose_tmp = mapGpsToLocalPoint(gps_tmp, gps_ref_tmp);
 

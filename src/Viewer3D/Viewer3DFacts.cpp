@@ -4,8 +4,7 @@
 
 Viewer3DFacts::Viewer3DFacts()
 {
-    if(qgcApp()->viewer3D())
-    {
+    if(qgcApp()->viewer3D()){
         _osmParser = qgcApp()->viewer3D()->osmParser();
         _qmlBackend = qgcApp()->viewer3D()->qmlBackend();
     }
