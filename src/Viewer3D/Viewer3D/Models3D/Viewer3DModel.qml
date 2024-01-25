@@ -45,7 +45,7 @@ View3D {
         geometry: CityMapGeometry {
             id: city_map_geometry
             modelName: "city_map"
-            osmFilePath: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+            osmFilePath: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.osmFilePath):("nan")
             osmParser: _viewer3DFacts.osmParser
         }
 

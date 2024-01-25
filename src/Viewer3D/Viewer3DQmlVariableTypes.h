@@ -2,8 +2,9 @@
 #define VIEWER3DQMLVARIABLETYPES_H
 #include <QObject>
 #include <qqml.h>
-#include "Viewer3DCppVariableTypes.h"
+
 #include "Viewer3DUtils.h"
+#include <QGeoCoordinate>
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -157,8 +158,8 @@ class GeoCoordinateType: public QObject
 
     void gps_to_local()
     {
-        GpsPoint gps_tmp = {m_coordinate->lat(), m_coordinate->lon(), m_coordinate->alt()};
-        GpsPoint gps_ref_tmp = {m_gps_ref->lat(), m_gps_ref->lon(), m_gps_ref->alt()};
+        QGeoCoordinate gps_tmp = {m_coordinate->lat(), m_coordinate->lon(), m_coordinate->alt()};
+        QGeoCoordinate gps_ref_tmp = {m_gps_ref->lat(), m_gps_ref->lon(), m_gps_ref->alt()};
 
         QVector3D local_pose_tmp = mapGpsToLocalPoint(gps_tmp, gps_ref_tmp);
 

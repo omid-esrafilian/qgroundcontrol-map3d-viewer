@@ -4,14 +4,13 @@
 #include <QObject>
 #include <qqml.h>
 #include <QString>
+
 #include "OsmParser.h"
 #include "Viewer3DQmlVariableTypes.h"
 #include "Viewer3DMetadata.h"
-#include "Vehicle.h"
 
 
 class Viewer3DMetadata;
-class Vehicle;
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -19,9 +18,9 @@ class Viewer3DQmlBackend : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString city_map_path MEMBER m_city_map_path NOTIFY cityMapPathChanged)
-    Q_PROPERTY(GpsType* gps_ref READ gpsRead NOTIFY gpsRefChanged)
-    Q_PROPERTY(float height_bias MEMBER m_height_bias NOTIFY heightBiasChanged)
+    Q_PROPERTY(QString osmFilePath MEMBER _osmFilePath NOTIFY cityMapPathChanged)
+    Q_PROPERTY(GpsType* gpsRef READ gpsRef NOTIFY gpsRefChanged)
+    Q_PROPERTY(float heightBias MEMBER _heightBias NOTIFY heightBiasChanged)
 
 public:
     explicit Viewer3DQmlBackend(QObject *parent = nullptr);
@@ -31,10 +30,8 @@ public:
 
     void init();
 
-    GpsType* gpsRead(){return m_gps_ref;}
-    void setGpsRef(GpsType* gps_ref);
-
-    float getHeightBias(){return m_height_bias;}
+    GpsType* gpsRef(){return _gpsRef;}
+    void setGpsRef(GpsType* gpsRef);
 
     void initMetadata();
     void initOsmMapLoader();
@@ -46,14 +43,14 @@ signals:
     void cityMapPathChanged();
 
 private:
-    QString m_city_map_path;
-    GpsType* m_gps_ref;
-    float m_height_bias;
+    QString _osmFilePath;
+    GpsType* _gpsRef;
+    float _heightBias;
 
 protected slots:
-    void gpsRefChangedEvent(QGeoCoordinate new_gps_ref);
-    void heightBiasChangedEvent();
-    void cityMapPathChangedEvent();
+    void _gpsRefChangedEvent(QGeoCoordinate newGpsRef);
+    void _heightBiasChangedEvent();
+    void _cityMapPathChangedEvent();
 };
 
 #endif // Viewer3DQmlBackend_H

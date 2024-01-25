@@ -6,17 +6,16 @@
 #include <QTextStream>
 #include <qxmlstream.h>
 
-#include "Viewer3DCppVariableTypes.h"
-
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 class Viewer3DMetadata : public QObject
 {
     Q_OBJECT
 public:
-    explicit Viewer3DMetadata(const char * data_file_path = nullptr, QObject *parent = nullptr);
+    explicit Viewer3DMetadata(const char * filePath = nullptr, QObject *parent = nullptr);
 
-    Viewer3DMetadataType  meta_data;
+    float heightBias;
+    QString osmFilePath;
 
     bool loadMetaDataFile();
     bool updateMetaDataFile();
@@ -25,7 +24,8 @@ signals:
 
 
 private:
-    QString metadata_file_path;
+    QString _metadataFilePath;
+
 };
 
 #endif // VIEWER3DMETADATA_H

@@ -26,7 +26,7 @@ Node {
     function addMissionItemsToListModel() {
         mission_waypoint_list_model.clear()
         var gps2Local_ = gps2Local
-        gps2Local_.gps_ref = _backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gpsRef
 
         for (var i = 1; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i)
@@ -47,7 +47,7 @@ Node {
         mission_path_model.clear()
         var gps2Local_ = gps2Local
 
-        gps2Local_.gps_ref = _backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gpsRef
         for (var i = 2; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i-1)
             gps2Local_.coordinate.lat = missionItem.coordinate.latitude
@@ -88,10 +88,10 @@ Node {
         id: vehicle_3d
         vehicle: _vehicle
         modelScale: Qt.vector3d(0.05, 0.05, 0.05)
-        heightBias: _backendQml.height_bias
-        gpsRefLat: _backendQml.gps_ref.lat
-        gpsRefLon: _backendQml.gps_ref.lon
-        gpsRefAlt: _backendQml.gps_ref.alt
+        heightBias: _backendQml.heightBias
+        gpsRefLat: _backendQml.gpsRef.lat
+        gpsRefLon: _backendQml.gpsRef.lon
+        gpsRefAlt: _backendQml.gpsRef.alt
     }
 
     Repeater3D{
@@ -101,10 +101,10 @@ Node {
         delegate: Waypoint3DModel{
             opacity: 0.8
             missionItem: model
-            heightBias: _backendQml.height_bias
-            gpsRefLat: _backendQml.gps_ref.lat
-            gpsRefLon: _backendQml.gps_ref.lon
-            gpsRefAlt: _backendQml.gps_ref.alt
+            heightBias: _backendQml.heightBias
+            gpsRefLat: _backendQml.gpsRef.lat
+            gpsRefLon: _backendQml.gpsRef.lon
+            gpsRefAlt: _backendQml.gpsRef.alt
         }
     }
 
@@ -113,8 +113,8 @@ Node {
         model: mission_path_model
 
         delegate: Line3D{
-            p_1: Qt.vector3d(model.x_1 * 10, model.y_1 * 10, (model.z_1 + _backendQml.height_bias) * 10)
-            p_2: Qt.vector3d(model.x_2 * 10, model.y_2 * 10, (model.z_2 + _backendQml.height_bias) * 10)
+            p_1: Qt.vector3d(model.x_1 * 10, model.y_1 * 10, (model.z_1 + _backendQml.heightBias) * 10)
+            p_2: Qt.vector3d(model.x_2 * 10, model.y_2 * 10, (model.z_2 + _backendQml.heightBias) * 10)
             lineWidth:8
             color: "orange"
         }

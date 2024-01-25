@@ -85,7 +85,7 @@ Rectangle {
         anchors.leftMargin: 20
         readOnly: true
 
-        text: (_viewer3DFacts.qmlBackend)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+        text: (_viewer3DFacts.qmlBackend)?(_viewer3DFacts.qmlBackend.osmFilePath):("nan")
     }
 
     QGCLabel {
@@ -112,7 +112,7 @@ Rectangle {
         anchors.left:           height_bias_label.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
 
-        text: (_viewer3DFacts.qmlBackend)?(Number(_viewer3DFacts.qmlBackend.height_bias)):("nan")
+        text: (_viewer3DFacts.qmlBackend)?(Number(_viewer3DFacts.qmlBackend.heightBias)):("nan")
 
         validator: RegularExpressionValidator{
             regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
@@ -127,11 +127,11 @@ Rectangle {
 
     onMapFileChanged: function(file_path){
         console.log(file_path)
-        _viewer3DFacts.qmlBackend.city_map_path = file_path
+        _viewer3DFacts.qmlBackend.osmFilePath = file_path
     }
 
     onHeightBiasChanged: function(height){
-        _viewer3DFacts.qmlBackend.height_bias = height
+        _viewer3DFacts.qmlBackend.heightBias = height
     }
 
     Behavior on width{

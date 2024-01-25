@@ -1,7 +1,7 @@
 #ifndef VIEWER3DUTILS_H
 #define VIEWER3DUTILS_H
-#include "Viewer3DCppVariableTypes.h"
 #include "math.h"
+
 #include <QGeoCoordinate>
 
 #ifndef DEG_TO_RAD
@@ -15,11 +15,11 @@
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 
-QVector3D mapGeodeticToEcef(GpsPoint gps_point_);
 QVector3D mapGeodeticToEcef(QGeoCoordinate gps_point_);
-QVector3D mapEcefToEnu(QVector3D ecef_point, GpsPoint ref_gps);
+QVector3D mapGeodeticToEcef(QGeoCoordinate gps_point_);
 QVector3D mapEcefToEnu(QVector3D ecef_point, QGeoCoordinate ref_gps);
-QVector3D mapGpsToLocalPoint(GpsPoint gps_point_, GpsPoint ref_gps);
+QVector3D mapEcefToEnu(QVector3D ecef_point, QGeoCoordinate ref_gps);
+QVector3D mapGpsToLocalPoint(QGeoCoordinate gps_point_, QGeoCoordinate ref_gps);
 QVector3D mapGpsToLocalPoint(QGeoCoordinate gps_point_, QGeoCoordinate ref_gps);
 
 QVector3D mapEnuToEcef(const QVector3D &enu_point, QGeoCoordinate& ref_gps);

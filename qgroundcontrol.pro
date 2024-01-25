@@ -742,7 +742,6 @@ HEADERS += \
     src/Viewer3D/QGCViewer3D.h \
     src/Viewer3D/CityMapGeometry.h \
     src/Viewer3D/OsmParser.h \
-    src/Viewer3D/Viewer3DCppVariableTypes.h \
     src/Viewer3D/Viewer3DMetadata.h \
     src/Viewer3D/Viewer3DQmlBackend.h \
     src/Viewer3D/Viewer3DQmlVariableTypes.h \

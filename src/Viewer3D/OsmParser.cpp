@@ -2,6 +2,16 @@
 #include "earcut.hpp"
 #include "Viewer3DUtils.h"
 
+typedef union {
+    uint array[3];
+
+    struct {
+        uint x;
+        uint y;
+        uint z;
+    } axis;
+} vec3i;
+
 OsmParser::OsmParser(QObject *parent)
     : QObject{parent}
 {

@@ -8,7 +8,7 @@
 Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
     : QObject{parent}
 {
-    m_gps_ref = new GpsType();
+    _gpsRef = new GpsType();
 }
 
 void Viewer3DQmlBackend::init()
@@ -17,11 +17,11 @@ void Viewer3DQmlBackend::init()
     initOsmMapLoader();
 }
 
-void Viewer3DQmlBackend::setGpsRef(GpsType *gps_ref)
+void Viewer3DQmlBackend::setGpsRef(GpsType *gpsRef)
 {
-    m_gps_ref->setLat(gps_ref->lat());
-    m_gps_ref->setLon(gps_ref->lon());
-    m_gps_ref->setAlt(gps_ref->alt());
+    _gpsRef->setLat(gpsRef->lat());
+    _gpsRef->setLon(gpsRef->lon());
+    _gpsRef->setAlt(gpsRef->alt());
 
     emit gpsRefChanged();
 }
@@ -31,42 +31,42 @@ void Viewer3DQmlBackend::initMetadata()
     metadata_loader_thr = qgcApp()->viewer3D()->metaDataLoader();
     metadata_loader_thr->loadMetaDataFile();
 
-    m_height_bias = metadata_loader_thr->meta_data.height_bias;
-    m_city_map_path = metadata_loader_thr->meta_data.city_map_path;
+    _heightBias = metadata_loader_thr->heightBias;
+    _osmFilePath = metadata_loader_thr->osmFilePath;
 
     emit heightBiasChanged();
     emit cityMapPathChanged();
 
-    connect(this, &Viewer3DQmlBackend::cityMapPathChanged, this, &Viewer3DQmlBackend::cityMapPathChangedEvent);
-    connect(this, &Viewer3DQmlBackend::heightBiasChanged, this, &Viewer3DQmlBackend::heightBiasChangedEvent);
+    connect(this, &Viewer3DQmlBackend::cityMapPathChanged, this, &Viewer3DQmlBackend::_cityMapPathChangedEvent);
+    connect(this, &Viewer3DQmlBackend::heightBiasChanged, this, &Viewer3DQmlBackend::_heightBiasChangedEvent);
 }
 
 void Viewer3DQmlBackend::initOsmMapLoader()
 {
     bld_map_reader_thr = qgcApp()->viewer3D()->osmParser();
-    connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::gpsRefChangedEvent);
+    connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::_gpsRefChangedEvent);
 }
 
-void Viewer3DQmlBackend::gpsRefChangedEvent(QGeoCoordinate new_gps_ref)
+void Viewer3DQmlBackend::_gpsRefChangedEvent(QGeoCoordinate newGpsRef)
 {
-    m_gps_ref->setLat(new_gps_ref.latitude());
-    m_gps_ref->setLon(new_gps_ref.longitude());
-    m_gps_ref->setAlt(new_gps_ref.altitude());
+    _gpsRef->setLat(newGpsRef.latitude());
+    _gpsRef->setLon(newGpsRef.longitude());
+    _gpsRef->setAlt(newGpsRef.altitude());
 
     emit gpsRefChanged();
 
-    qDebug() << "3D map gps reference:" << m_gps_ref->lat() << m_gps_ref->lon() << m_gps_ref->alt();
+    qDebug() << "3D map gps reference:" << _gpsRef->lat() << _gpsRef->lon() << _gpsRef->alt();
 }
 
-void Viewer3DQmlBackend::heightBiasChangedEvent()
+void Viewer3DQmlBackend::_heightBiasChangedEvent()
 {
-    bld_map_reader_thr->setBuildingMapHeightBias(m_height_bias);
-    metadata_loader_thr->meta_data.height_bias = m_height_bias;
+    bld_map_reader_thr->setBuildingMapHeightBias(_heightBias);
+    metadata_loader_thr->heightBias = _heightBias;
     metadata_loader_thr->updateMetaDataFile();
 }
 
-void Viewer3DQmlBackend::cityMapPathChangedEvent()
+void Viewer3DQmlBackend::_cityMapPathChangedEvent()
 {
-    metadata_loader_thr->meta_data.city_map_path = m_city_map_path;
+    metadata_loader_thr->osmFilePath = _osmFilePath;
     metadata_loader_thr->updateMetaDataFile();
 }

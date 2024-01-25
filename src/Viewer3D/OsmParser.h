@@ -10,12 +10,20 @@
 #include <QVector2D>
 #include "qgeocoordinate.h"
 
-#include "Viewer3DCppVariableTypes.h"
-
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 class OsmParser : public QObject
 {
+    struct BuildingType
+    {
+        std::vector<QGeoCoordinate> points_gps;
+        std::vector<QVector2D> points_local;
+        std::vector<QVector3D> triangulated_mesh;
+        QVector2D bb_max, bb_min; //bounding boxes
+        float height;
+        int levels;
+    };
+
     Q_OBJECT
 public:
     explicit OsmParser(QObject *parent = nullptr);
