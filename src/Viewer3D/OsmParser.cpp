@@ -32,7 +32,7 @@ void OsmParser::parseOsmFile(QString filePath)
     QDomDocument xml_content;
 // Load xml file as raw data
 #ifdef __unix__
-    file_path = QString("/") + file_path;
+    filePath = QString("/") + filePath;
 #endif
     QFile f(filePath);
     if (!f.open(QIODevice::ReadOnly )) {

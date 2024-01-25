@@ -8,7 +8,6 @@
 Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
     : QObject{parent}
 {
-    _gpsRef = new GpsType();
 }
 
 void Viewer3DQmlBackend::init()
@@ -17,12 +16,13 @@ void Viewer3DQmlBackend::init()
     initOsmMapLoader();
 }
 
-void Viewer3DQmlBackend::setGpsRef(GpsType *gpsRef)
+void Viewer3DQmlBackend::setGpsRef(const QGeoCoordinate &gpsRef)
 {
-    _gpsRef->setLat(gpsRef->lat());
-    _gpsRef->setLon(gpsRef->lon());
-    _gpsRef->setAlt(gpsRef->alt());
+    if(_gpsRef == gpsRef){
+        return;
+    }
 
+    _gpsRef = gpsRef;
     emit gpsRefChanged();
 }
 
@@ -48,14 +48,12 @@ void Viewer3DQmlBackend::initOsmMapLoader()
 }
 
 void Viewer3DQmlBackend::_gpsRefChangedEvent(QGeoCoordinate newGpsRef)
-{
-    _gpsRef->setLat(newGpsRef.latitude());
-    _gpsRef->setLon(newGpsRef.longitude());
-    _gpsRef->setAlt(newGpsRef.altitude());
+{   
+    _gpsRef = newGpsRef;
 
     emit gpsRefChanged();
 
-    qDebug() << "3D map gps reference:" << _gpsRef->lat() << _gpsRef->lon() << _gpsRef->alt();
+    qDebug() << "3D map gps reference:" << _gpsRef.latitude() << _gpsRef.longitude() << _gpsRef.altitude();
 }
 
 void Viewer3DQmlBackend::_heightBiasChangedEvent()

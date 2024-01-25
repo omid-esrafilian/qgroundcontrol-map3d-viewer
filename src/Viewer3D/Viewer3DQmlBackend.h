@@ -19,7 +19,7 @@ class Viewer3DQmlBackend : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString osmFilePath MEMBER _osmFilePath NOTIFY cityMapPathChanged)
-    Q_PROPERTY(GpsType* gpsRef READ gpsRef NOTIFY gpsRefChanged)
+    Q_PROPERTY(QGeoCoordinate gpsRef READ gpsRef NOTIFY gpsRefChanged)
     Q_PROPERTY(float heightBias MEMBER _heightBias NOTIFY heightBiasChanged)
 
 public:
@@ -30,8 +30,8 @@ public:
 
     void init();
 
-    GpsType* gpsRef(){return _gpsRef;}
-    void setGpsRef(GpsType* gpsRef);
+    QGeoCoordinate gpsRef(){return _gpsRef;}
+    void setGpsRef(const QGeoCoordinate& gpsRef);
 
     void initMetadata();
     void initOsmMapLoader();
@@ -44,7 +44,7 @@ signals:
 
 private:
     QString _osmFilePath;
-    GpsType* _gpsRef;
+    QGeoCoordinate _gpsRef;
     float _heightBias;
 
 protected slots:

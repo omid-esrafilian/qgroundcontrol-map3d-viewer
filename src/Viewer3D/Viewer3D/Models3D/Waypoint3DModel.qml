@@ -1,5 +1,7 @@
 import QtQuick3D
 import QtQuick
+import QtPositioning
+
 import QGroundControl.Viewer3D
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -7,31 +9,10 @@ Node{
     id: body
 
     property var    missionItem
-    property double gpsRefLat: 0
-    property double gpsRefLon: 0
-    property double gpsRefAlt: 0
-
     property double heightBias: 0
     property double pose_y: body.missionItem.y * 10
     property double pose_z: (body.missionItem.z + heightBias) * 10
     property double pose_x: body.missionItem.x * 10
-
-    GeoCoordinateType{
-        id: gps_to_local
-
-        gps_ref{
-            lat: body.gpsRefLat
-            lon: body.gpsRefLon
-            alt: body.gpsRefAlt
-        }
-
-        coordinate{
-
-            lat: body.missionItem.x
-            lon: body.missionItem.y
-            alt: 0
-        }
-    }
 
     position{
         x: body.pose_x

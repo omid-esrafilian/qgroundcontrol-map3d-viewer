@@ -1,5 +1,7 @@
 import QtQuick3D
 import QtQuick
+import QtPositioning
+
 import QGroundControl.Viewer3D
 
 import "Djif450/DroneModel_arm_1"
@@ -26,10 +28,7 @@ Node{
 
     property var    vehicle
     property double heightBias: 0
-
-    property double gpsRefLat: 0
-    property double gpsRefLon: 0
-    property double gpsRefAlt: 0
+    property var gpsRef: QtPositioning.coordinate(0, 0, 0)
 
     property double roll:        vehicle ? vehicle.roll.value : 0
     property double pitch:        vehicle ? vehicle.pitch.value : 0
@@ -45,20 +44,9 @@ Node{
 
     GeoCoordinateType{
         id: gps_to_local
-
-        gps_ref{
-            lat: body.gpsRefLat
-            lon: body.gpsRefLon
-            alt: body.gpsRefAlt
-        }
-
-        coordinate{
-            lat: body.vehicle.coordinate.latitude
-            lon: body.vehicle.coordinate.longitude
-            alt: body.vehicle.coordinate.altitude
-        }
+        gpsRef: body.gpsRef
+        coordinate: body.vehicle.coordinate
     }
-
 
     Node{
         id: lable_txt

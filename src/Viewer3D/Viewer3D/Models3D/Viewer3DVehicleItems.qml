@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick3D
+import QtPositioning
 
 import Viewer3D.Models3D.Drones
 import Viewer3D.Models3D
@@ -26,13 +27,12 @@ Node {
     function addMissionItemsToListModel() {
         mission_waypoint_list_model.clear()
         var gps2Local_ = gps2Local
-        gps2Local_.gps_ref = _backendQml.gpsRef
+        gps2Local_.gpsRef = _backendQml.gpsRef
 
         for (var i = 1; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
+            gps2Local_.coordinate = missionItem.coordinate
+            gps2Local_.coordinate.altitude = 0
             mission_waypoint_list_model.append({
                                                    "x": gps2Local_.localCoordinate.x,
                                                    "y": gps2Local_.localCoordinate.y,
@@ -47,18 +47,16 @@ Node {
         mission_path_model.clear()
         var gps2Local_ = gps2Local
 
-        gps2Local_.gps_ref = _backendQml.gpsRef
+        gps2Local_.gpsRef = _backendQml.gpsRef
         for (var i = 2; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i-1)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
+            gps2Local_.coordinate = missionItem.coordinate
+            gps2Local_.coordinate.altitude = 0
             var p1 = Qt.vector3d(gps2Local_.localCoordinate.x, gps2Local_.localCoordinate.y, missionItem.altitude.value)
 
             missionItem = _missionController.visualItems.get(i)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
+            gps2Local_.coordinate = missionItem.coordinate
+            gps2Local_.coordinate.altitude = 0
             var p2 = Qt.vector3d(gps2Local_.localCoordinate.x, gps2Local_.localCoordinate.y, missionItem.altitude.value)
 
             mission_path_model.append({
@@ -89,9 +87,7 @@ Node {
         vehicle: _vehicle
         modelScale: Qt.vector3d(0.05, 0.05, 0.05)
         heightBias: _backendQml.heightBias
-        gpsRefLat: _backendQml.gpsRef.lat
-        gpsRefLon: _backendQml.gpsRef.lon
-        gpsRefAlt: _backendQml.gpsRef.alt
+        gpsRef: _backendQml.gpsRef
     }
 
     Repeater3D{
@@ -102,9 +98,6 @@ Node {
             opacity: 0.8
             missionItem: model
             heightBias: _backendQml.heightBias
-            gpsRefLat: _backendQml.gpsRef.lat
-            gpsRefLon: _backendQml.gpsRef.lon
-            gpsRefAlt: _backendQml.gpsRef.alt
         }
     }
 
