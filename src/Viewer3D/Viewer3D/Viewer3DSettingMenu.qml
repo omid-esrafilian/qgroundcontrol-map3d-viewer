@@ -13,11 +13,11 @@ import QGroundControl.Viewer3D
 
 Rectangle {
 
+    signal closeBtnClicked()
     signal mapFileChanged(string file_path)
     signal heightBiasChanged(real height)
 
     property var viewer3DManager: null
-    property string windowState: "SETTING_MENU_CLOSE"
     property real default_width: Screen.width * 0.2
 
     property int leftMarginSpace: ScreenTools.defaultFontPixelWidth
@@ -25,6 +25,7 @@ Rectangle {
     id: window_body
     clip: true
     color: qgcPal.window
+    visible: true
 
     QGCPalette {
         id:                 qgcPal
@@ -131,25 +132,4 @@ Rectangle {
     onHeightBiasChanged: function(height){
         viewer3DManager.qmlBackend.heightBias = height
     }
-
-    Behavior on width{
-        NumberAnimation{
-            easing.type: Easing.InOutQuad;
-            duration: 300
-        }
-    }
-
-    state: windowState
-
-    states: [
-        State {
-            name: "SETTING_MENU_OPEN"
-            PropertyChanges { target: window_body; width: default_width; visible:true}
-
-        },
-        State {
-            name: "SETTING_MENU_CLOSE"
-            PropertyChanges { target: window_body; width: 0}
-        }
-    ]
 }

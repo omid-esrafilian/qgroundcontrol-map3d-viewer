@@ -56,7 +56,7 @@ ToolStripActionList {
                 iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
                 text =           qsTr("3D View")
                 city_map_setting_icon.enabled = false
-                viewer3DSettingMenu.windowState = "SETTING_MENU_CLOSE"
+                viewer3DWindow.settingMenuOpen = false
                 city_map_setting_icon.checked = false
             }
         },
@@ -66,8 +66,7 @@ ToolStripActionList {
             iconSource:     "/qmlimages/Viewer3D/GearIcon.png"
             enabled: false
             onTriggered:{
-                viewer3DSettingMenu.windowState = (viewer3DSettingMenu.windowState === "SETTING_MENU_OPEN")?("SETTING_MENU_CLOSE"):("SETTING_MENU_OPEN")
-                checked = (viewer3DSettingMenu.windowState === "SETTING_MENU_OPEN")?(true):(false)
+                viewer3DWindow.settingMenuOpen = !viewer3DWindow.settingMenuOpen
             }
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
