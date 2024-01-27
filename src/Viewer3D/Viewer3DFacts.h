@@ -23,6 +23,8 @@ public:
 protected:
     OsmParser *_osmParser = nullptr;
     Viewer3DQmlBackend *_qmlBackend = nullptr;
+    Viewer3DMetadata *_metadataLoader = nullptr;
+
 
 };
 

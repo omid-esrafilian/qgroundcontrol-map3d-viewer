@@ -5,13 +5,13 @@ import QtQuick.Controls
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Node {
-    property alias cam_node_in_rotation: cameraPerspectiveOne.eulerRotation
-    property alias cam_node_middle_position: cameraPerspectiveTwo.position
-    property alias camera_main: cameraPerspectiveOne
+    property alias cameraOneRotation: cameraPerspectiveOne.eulerRotation
+    property alias cameraTwoPosition: cameraPerspectiveTwo.position
+    property alias cameraOne: cameraPerspectiveOne
 
-    property real tilt: 0.001
-    property real pan: 0.001
-    property real r_zoom: 1000
+    property real _tilt: 0.001
+    property real _pan: 0.001
+    property real _zoom: 1000
 
 
     DirectionalLight {
@@ -49,9 +49,9 @@ Node {
                 id: cameraPerspectiveTwo
 
                 position{
-                    x: r_zoom * Math.sin(tilt) * Math.cos(pan)
-                    z: r_zoom * Math.sin(tilt) * Math.sin(pan)
-                    y: r_zoom * Math.cos(tilt)
+                    x: _zoom * Math.sin(_tilt) * Math.cos(_pan)
+                    z: _zoom * Math.sin(_tilt) * Math.sin(_pan)
+                    y: _zoom * Math.cos(_tilt)
                 }
 
                 PerspectiveCamera {

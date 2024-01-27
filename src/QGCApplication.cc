@@ -363,9 +363,9 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox->setChildToolboxes();
 
 
-    // 3D Viewer initialization
-    _viewer3D = new QGCViewer3D(this);
-    _viewer3D->init();
+// 3D Viewer initialization
+//    _viewer3D = new QGCViewer3D(this);
+//    _viewer3D->init();
 
 #ifndef __mobile__
     _gpsRtkFactGroup = new GPSRTKFactGroup(this);

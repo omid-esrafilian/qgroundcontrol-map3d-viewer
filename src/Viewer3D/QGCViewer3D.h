@@ -22,9 +22,6 @@ public:
     Viewer3DQmlBackend* qmlBackend(){return _qmlBackend;}
     Viewer3DMetadata* metaDataLoader(){return _metadataLoader;}
 
-private:
-    Viewer3DMetadata *_metadataLoader = nullptr;
-
 };
 
 #endif // QGCVIEWER3D_H

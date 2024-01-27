@@ -25,16 +25,13 @@ class Viewer3DQmlBackend : public QObject
 public:
     explicit Viewer3DQmlBackend(QObject *parent = nullptr);
 
-    Viewer3DMetadata *metadata_loader_thr;
-    OsmParser *bld_map_reader_thr;
-
-    void init();
+    void init(Viewer3DMetadata * metadataThr=nullptr, OsmParser* osmThr=nullptr);
 
     QGeoCoordinate gpsRef(){return _gpsRef;}
     void setGpsRef(const QGeoCoordinate& gpsRef);
 
-    void initMetadata();
-    void initOsmMapLoader();
+    void initMetadata(Viewer3DMetadata * metadataThr=nullptr);
+    void initOsmMapLoader(OsmParser* osmThr=nullptr);
 
 signals:
     void userPoseChanged();
@@ -43,6 +40,9 @@ signals:
     void cityMapPathChanged();
 
 private:
+    Viewer3DMetadata *_metadataThread;
+    OsmParser *_osmParserThread;
+
     QString _osmFilePath;
     QGeoCoordinate _gpsRef;
     float _heightBias;

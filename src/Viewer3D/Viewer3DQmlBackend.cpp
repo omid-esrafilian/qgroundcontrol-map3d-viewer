@@ -10,10 +10,10 @@ Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
 {
 }
 
-void Viewer3DQmlBackend::init()
+void Viewer3DQmlBackend::init(Viewer3DMetadata * metadataThr, OsmParser* osmThr)
 {
-    initMetadata();
-    initOsmMapLoader();
+    initMetadata(metadataThr);
+    initOsmMapLoader(osmThr);
 }
 
 void Viewer3DQmlBackend::setGpsRef(const QGeoCoordinate &gpsRef)
@@ -26,13 +26,17 @@ void Viewer3DQmlBackend::setGpsRef(const QGeoCoordinate &gpsRef)
     emit gpsRefChanged();
 }
 
-void Viewer3DQmlBackend::initMetadata()
+void Viewer3DQmlBackend::initMetadata(Viewer3DMetadata * metadataThr)
 {
-    metadata_loader_thr = qgcApp()->viewer3D()->metaDataLoader();
-    metadata_loader_thr->loadMetaDataFile();
+    if(metadataThr) {
+        _metadataThread = metadataThr;
+    }else {
+        _metadataThread = qgcApp()->viewer3D()->metaDataLoader();
+    }
+    _metadataThread->loadMetaDataFile();
 
-    _heightBias = metadata_loader_thr->heightBias;
-    _osmFilePath = metadata_loader_thr->osmFilePath;
+    _heightBias = _metadataThread->heightBias;
+    _osmFilePath = _metadataThread->osmFilePath;
 
     emit heightBiasChanged();
     emit cityMapPathChanged();
@@ -41,10 +45,14 @@ void Viewer3DQmlBackend::initMetadata()
     connect(this, &Viewer3DQmlBackend::heightBiasChanged, this, &Viewer3DQmlBackend::_heightBiasChangedEvent);
 }
 
-void Viewer3DQmlBackend::initOsmMapLoader()
+void Viewer3DQmlBackend::initOsmMapLoader(OsmParser* osmThr)
 {
-    bld_map_reader_thr = qgcApp()->viewer3D()->osmParser();
-    connect(bld_map_reader_thr, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::_gpsRefChangedEvent);
+    if(osmThr){
+        _osmParserThread = osmThr;
+    }else{
+        _osmParserThread = qgcApp()->viewer3D()->osmParser();
+    }
+    connect(_osmParserThread, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::_gpsRefChangedEvent);
 }
 
 void Viewer3DQmlBackend::_gpsRefChangedEvent(QGeoCoordinate newGpsRef)
@@ -58,13 +66,13 @@ void Viewer3DQmlBackend::_gpsRefChangedEvent(QGeoCoordinate newGpsRef)
 
 void Viewer3DQmlBackend::_heightBiasChangedEvent()
 {
-    bld_map_reader_thr->setBuildingMapHeightBias(_heightBias);
-    metadata_loader_thr->heightBias = _heightBias;
-    metadata_loader_thr->updateMetaDataFile();
+    _osmParserThread->setBuildingMapHeightBias(_heightBias);
+    _metadataThread->heightBias = _heightBias;
+    _metadataThread->updateMetaDataFile();
 }
 
 void Viewer3DQmlBackend::_cityMapPathChangedEvent()
 {
-    metadata_loader_thr->osmFilePath = _osmFilePath;
-    metadata_loader_thr->updateMetaDataFile();
+    _metadataThread->osmFilePath = _osmFilePath;
+    _metadataThread->updateMetaDataFile();
 }

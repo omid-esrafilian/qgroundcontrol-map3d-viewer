@@ -5,6 +5,18 @@ import QtQuick3D
 
 Node{
 
+    id: lineBody
+    property vector3d p_1: Qt.vector3d(10, 0, 0)
+    property vector3d p_2: Qt.vector3d(0, 20, 0)
+    property real lineWidth: 5
+    property alias color: line_mat.diffuseColor
+
+    readonly property vector3d vec_1: Qt.vector3d(p_2.x - p_1.x,
+                                                  p_2.y - p_1.y,
+                                                  p_2.z - p_1.z)
+    readonly property real length_: vecNorm(vec_1)
+    readonly property vector3d vec_2: Qt.vector3d(0, length_, 0)
+
     function crossProduct(vec_a, vec_b)
     {
         var vec_c = Qt.vector3d(0, 0, 0)
@@ -31,7 +43,7 @@ Node{
         return Qt.vector3d(_vec.x/norm_vec, _vec.y/norm_vec, _vec.z/norm_vec)
     }
 
-    function get_rotation_between(vec_a, vec_b)
+    function getRotationBetween(vec_a, vec_b)
     {
         var vec_a_n = normalizeVec(vec_a)
         var vec_b_n = normalizeVec(vec_b)
@@ -69,27 +81,16 @@ Node{
         return Quaternion.fromAxisAndAngle(axis_, angle_ * 180/3.1415)
     }
 
-    id: line_root
-    property vector3d p_1: Qt.vector3d(10, 0, 0)
-    property vector3d p_2: Qt.vector3d(0, 20, 0)
-    property real lineWidth: 5
-    property alias color: line_mat.diffuseColor
-
-    readonly property vector3d vec_1: Qt.vector3d(p_2.x - p_1.x,
-                                          p_2.y - p_1.y,
-                                          p_2.z - p_1.z)
-    readonly property real length_: vecNorm(vec_1)
-    readonly property vector3d vec_2: Qt.vector3d(0, length_, 0)
-
-    rotation: get_rotation_between(vec_2, vec_1)
+    rotation: getRotationBetween(vec_2, vec_1)
     position: p_1
 
     Model {
-        readonly property real scale_pose: 50
-        readonly property real height: line_root.length_
-        readonly property real radius: line_root.lineWidth * 0.1
+        readonly property real scalePose: 50
+        readonly property real height: lineBody.length_
+        readonly property real radius: lineBody.lineWidth * 0.1
+
         source: "#Cylinder"
-        scale: Qt.vector3d(radius/scale_pose, 0.5 * height/scale_pose, radius/scale_pose)
+        scale: Qt.vector3d(radius/scalePose, 0.5 * height/scalePose, radius/scalePose)
         position: Qt.vector3d(0, 0.5 * height, 0)
 
         materials:

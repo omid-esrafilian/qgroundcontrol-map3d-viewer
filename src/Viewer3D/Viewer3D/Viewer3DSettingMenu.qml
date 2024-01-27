@@ -15,6 +15,8 @@ Rectangle {
 
     signal mapFileChanged(string file_path)
     signal heightBiasChanged(real height)
+
+    property var viewer3DManager: null
     property string windowState: "SETTING_MENU_CLOSE"
     property real default_width: Screen.width * 0.2
 
@@ -23,10 +25,6 @@ Rectangle {
     id: window_body
     clip: true
     color: qgcPal.window
-
-    Viewer3DFacts{
-        id: _viewer3DFacts
-    }
 
     QGCPalette {
         id:                 qgcPal
@@ -85,7 +83,7 @@ Rectangle {
         anchors.leftMargin: 20
         readOnly: true
 
-        text: (_viewer3DFacts.qmlBackend)?(_viewer3DFacts.qmlBackend.osmFilePath):("nan")
+        text: (viewer3DManager)?(viewer3DManager.qmlBackend.osmFilePath):("nan")
     }
 
     QGCLabel {
@@ -112,7 +110,7 @@ Rectangle {
         anchors.left:           height_bias_label.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
 
-        text: (_viewer3DFacts.qmlBackend)?(Number(_viewer3DFacts.qmlBackend.heightBias)):("nan")
+        text: (viewer3DManager)?(Number(viewer3DManager.qmlBackend.heightBias)):("nan")
 
         validator: RegularExpressionValidator{
             regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
@@ -127,11 +125,11 @@ Rectangle {
 
     onMapFileChanged: function(file_path){
         console.log(file_path)
-        _viewer3DFacts.qmlBackend.osmFilePath = file_path
+        viewer3DManager.qmlBackend.osmFilePath = file_path
     }
 
     onHeightBiasChanged: function(height){
-        _viewer3DFacts.qmlBackend.heightBias = height
+        viewer3DManager.qmlBackend.heightBias = height
     }
 
     Behavior on width{

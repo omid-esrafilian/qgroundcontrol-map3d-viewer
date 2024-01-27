@@ -158,7 +158,13 @@ Item {
             visible:            false
         }
 
-        Viewer3DModel{
+//        Viewer3DModel{
+//            id:                     viewer3DWindow
+//            anchors.fill:           parent
+//            z:                      0
+//        }
+
+        Viewer3D{
             id:                     viewer3DWindow
             anchors.fill:           parent
             z:                      0
@@ -173,18 +179,18 @@ Item {
             mapName:                "FlightDisplayView"
         }
 
-        Viewer3DSettingMenu{
-            id:         viewer3DSettingMenu
-            z:          QGroundControl.zOrderWidgets
-            visible:    false
-            opacity:    0.95
+//        Viewer3DSettingMenu{
+//            id:         viewer3DSettingMenu
+//            z:          QGroundControl.zOrderWidgets
+//            visible:    false
+//            opacity:    0.95
 
-            anchors{
-                top: mapHolder.top
-                bottom: mapHolder.bottom
-                right: mapHolder.right
-            }
-        }
+//            anchors{
+//                top: mapHolder.top
+//                bottom: mapHolder.bottom
+//                right: mapHolder.right
+//            }
+//        }
 
         FlyViewVideo {
             id: videoControl
