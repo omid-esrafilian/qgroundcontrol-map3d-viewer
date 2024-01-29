@@ -9,29 +9,39 @@ import QGroundControl.Controls
 
 // 3D Viewer modules
 import QGroundControl.Viewer3D
-import Viewer3D
 import Viewer3D.Models3D
 
 
 Item{
     id: viewer3DBody
+    property bool viewer3DOpen: false
     property bool settingMenuOpen: false
 
     Viewer3DFacts{
         id: _viewer3DManager
     }
 
-    Viewer3DModel{
-        id:                     viewer3DWindow
-        anchors.fill:           parent
-        viewer3DManager:        _viewer3DManager
-        //        z:                      viewer3DVisible
+    Loader{
+        id: view3DLoader
+        anchors.fill: parent
+
+        onLoaded: {
+            item.viewer3DManager = _viewer3DManager
+        }
     }
+
+    onViewer3DOpenChanged: {
+        view3DLoader.source = "Models3D/Viewer3DModel.qml"
+        if(viewer3DOpen){
+            viewer3DBody.z = 1
+        }else{
+            viewer3DBody.z = 0
+        }
+    }
+
     onSettingMenuOpenChanged:{
         if(settingMenuOpen === true){
             popupWindow.open()
-        }else{
-            popupWindow.close()
         }
     }
 
@@ -72,6 +82,6 @@ Item{
             }
         }
 
-        closePolicy: Popup.CloseOnEscape
+        closePolicy: Popup.NoAutoClose
     }
 }

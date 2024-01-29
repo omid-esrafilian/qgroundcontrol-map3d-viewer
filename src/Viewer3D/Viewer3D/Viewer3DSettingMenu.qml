@@ -132,4 +132,17 @@ Rectangle {
     onHeightBiasChanged: function(height){
         viewer3DManager.qmlBackend.heightBias = height
     }
+
+    QGCButton {
+        id: close_btn
+        anchors{
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+        width:      ScreenTools.defaultFontPixelWidth * 10
+        text:       qsTr("Close")
+        onClicked: {
+            closeBtnClicked()
+        }
+    }
 }

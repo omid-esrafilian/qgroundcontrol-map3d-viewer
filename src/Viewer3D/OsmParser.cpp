@@ -1,6 +1,10 @@
 #include "OsmParser.h"
+
+#include <QThread>
+
 #include "earcut.hpp"
 #include "Viewer3DUtils.h"
+
 
 typedef union {
     uint array[3];
@@ -15,6 +19,9 @@ typedef union {
 OsmParser::OsmParser(QObject *parent)
     : QObject{parent}
 {
+    _mainThread = new QThread(this);
+
+    this->moveToThread(_mainThread);
     _gpsRefSet = false;
     _buildingLevelHeight = 0; // meters
 }
@@ -40,6 +47,7 @@ void OsmParser::parseOsmFile(QString filePath)
         qDebug() << "Error while loading file";
         return;
     }
+    qDebug("Loading OSM file!!!");
     // Set data into the QDomDocument before processing
     xml_content.setContent(&f);
     f.close();

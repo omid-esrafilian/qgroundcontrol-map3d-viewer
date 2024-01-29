@@ -32,10 +32,6 @@
 #include "FactSystem.h"
 #include "GPSRTKFactGroup.h"
 
-
-// This is for 3D viewer
-#include "QGCViewer3D.h"
-
 #ifdef QGC_RTLAB_ENABLED
 #include "OpalLink.h"
 #endif
@@ -85,8 +81,6 @@ public:
 
     // Still working on getting rid of this and using dependency injection instead for everything
     QGCToolbox* toolbox(void) { return _toolbox; }
-
-    QGCViewer3D* viewer3D(void) { return _viewer3D; }
 
     /// Do we have Bluetooth Support?
     bool isBluetoothAvailable() const{ return _bluetoothAvailable; }
@@ -223,10 +217,6 @@ private:
     QElapsedTimer       _msecsElapsedTime;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
-
-
-    //3D viewer.....
-    QGCViewer3D* _viewer3D = nullptr;
 
     class CompressedSignalList {
         Q_DISABLE_COPY(CompressedSignalList)

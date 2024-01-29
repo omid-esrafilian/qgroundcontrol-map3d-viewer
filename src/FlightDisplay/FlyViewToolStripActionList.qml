@@ -32,7 +32,7 @@ ToolStripActionList {
             text:           qsTr("3D View")
             iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
             onTriggered:{
-                if(viewer3DWindow.z === 0)
+                if(viewer3DWindow.viewer3DOpen === false)
                 {
                     show3dMap();
                 }
@@ -44,7 +44,7 @@ ToolStripActionList {
 
             function show3dMap()
             {
-                viewer3DWindow.z = 1
+                viewer3DWindow.viewer3DOpen = true
                 map_icon.iconSource =     "/qmlimages/PaperPlane.svg"
                 text=           qsTr("Fly")
                 city_map_setting_icon.enabled = true
@@ -52,7 +52,7 @@ ToolStripActionList {
 
             function showFlyMap()
             {
-                viewer3DWindow.z = 0
+                viewer3DWindow.viewer3DOpen = false
                 iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
                 text =           qsTr("3D View")
                 city_map_setting_icon.enabled = false

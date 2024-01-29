@@ -2,8 +2,6 @@
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QUrl>
-#include "QGCViewer3D.h"
-#include "QGCApplication.h"
 
 Viewer3DQmlBackend::Viewer3DQmlBackend(QObject *parent)
     : QObject{parent}
@@ -28,11 +26,7 @@ void Viewer3DQmlBackend::setGpsRef(const QGeoCoordinate &gpsRef)
 
 void Viewer3DQmlBackend::initMetadata(Viewer3DMetadata * metadataThr)
 {
-    if(metadataThr) {
-        _metadataThread = metadataThr;
-    }else {
-        _metadataThread = qgcApp()->viewer3D()->metaDataLoader();
-    }
+    _metadataThread = metadataThr;
     _metadataThread->loadMetaDataFile();
 
     _heightBias = _metadataThread->heightBias;
@@ -47,11 +41,7 @@ void Viewer3DQmlBackend::initMetadata(Viewer3DMetadata * metadataThr)
 
 void Viewer3DQmlBackend::initOsmMapLoader(OsmParser* osmThr)
 {
-    if(osmThr){
-        _osmParserThread = osmThr;
-    }else{
-        _osmParserThread = qgcApp()->viewer3D()->osmParser();
-    }
+    _osmParserThread = osmThr;
     connect(_osmParserThread, &OsmParser::gpsRefChanged, this, &Viewer3DQmlBackend::_gpsRefChangedEvent);
 }
 

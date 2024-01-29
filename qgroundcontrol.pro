@@ -417,7 +417,6 @@ HEADERS += \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
-    src/Viewer3D/Viewer3DFacts.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -427,7 +426,6 @@ HEADERS += \
 SOURCES += \
     src/QmlControls/CustomActionManager.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
-    src/Viewer3D/Viewer3DFacts.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
@@ -739,13 +737,13 @@ HEADERS += \
     src/uas/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
-    src/Viewer3D/QGCViewer3D.h \
     src/Viewer3D/CityMapGeometry.h \
     src/Viewer3D/OsmParser.h \
     src/Viewer3D/Viewer3DMetadata.h \
     src/Viewer3D/Viewer3DQmlBackend.h \
     src/Viewer3D/Viewer3DQmlVariableTypes.h \
     src/Viewer3D/Viewer3DUtils.h \
+    src/Viewer3D/Viewer3DFacts.h \
 
 
 # FIXME-QT6: NYI
@@ -998,12 +996,13 @@ SOURCES += \
     src/uas/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
     src/AnalyzeView/ExifParser.cc \
-    src/Viewer3D/QGCViewer3D.cpp \
     src/Viewer3D/CityMapGeometry.cpp \
     src/Viewer3D/OsmParser.cpp \
     src/Viewer3D/Viewer3DMetadata.cpp \
     src/Viewer3D/Viewer3DQmlBackend.cpp \
     src/Viewer3D/Viewer3DUtils.cpp \
+    src/Viewer3D/Viewer3DFacts.cpp \
+
 
 DebugBuild {
 SOURCES += \

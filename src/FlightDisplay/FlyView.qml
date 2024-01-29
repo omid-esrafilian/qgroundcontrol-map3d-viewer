@@ -27,12 +27,8 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
-
 // 3D Viewer modules
-import QGroundControl.Viewer3D
 import Viewer3D
-import Viewer3D.Models3D
-
 
 Item {
     id: _root
@@ -40,7 +36,6 @@ Item {
     // These should only be used by MainRootWindow
     property var planController:    _planController
     property var guidedController:  _guidedController
-
 
     PlanMasterController {
         id:                     _planController
@@ -158,16 +153,9 @@ Item {
             visible:            false
         }
 
-//        Viewer3DModel{
-//            id:                     viewer3DWindow
-//            anchors.fill:           parent
-//            z:                      0
-//        }
-
         Viewer3D{
             id:                     viewer3DWindow
             anchors.fill:           parent
-            z:                      0
         }
 
         FlyViewMap {
@@ -178,19 +166,6 @@ Item {
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
         }
-
-//        Viewer3DSettingMenu{
-//            id:         viewer3DSettingMenu
-//            z:          QGroundControl.zOrderWidgets
-//            visible:    false
-//            opacity:    0.95
-
-//            anchors{
-//                top: mapHolder.top
-//                bottom: mapHolder.bottom
-//                right: mapHolder.right
-//            }
-//        }
 
         FlyViewVideo {
             id: videoControl

@@ -362,11 +362,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox = new QGCToolbox(this);
     _toolbox->setChildToolboxes();
 
-
-// 3D Viewer initialization
-//    _viewer3D = new QGCViewer3D(this);
-//    _viewer3D->init();
-
 #ifndef __mobile__
     _gpsRtkFactGroup = new GPSRTKFactGroup(this);
     GPSManager *gpsManager = _toolbox->gpsManager();
@@ -570,7 +565,6 @@ bool QGCApplication::_initForNormalAppBoot()
     QSettings settings;
 
     _qmlAppEngine = toolbox()->corePlugin()->createQmlApplicationEngine(this);
-
     toolbox()->corePlugin()->createRootWindow(_qmlAppEngine);
 
     // Image provider for PX4 Flow

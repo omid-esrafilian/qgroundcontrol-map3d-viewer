@@ -46,6 +46,7 @@ public:
     void trianglateRectangle(std::vector<QVector3D>& triangulatedMesh, std::vector<QVector3D> verticesCcw, bool invertNormal);
 
 private:
+    QThread* _mainThread;
     QGeoCoordinate _gpsRefPoint;
     QMap<uint64_t, QGeoCoordinate> _mapNodes;
     QMap<uint64_t, BuildingType> _mapBuildings;

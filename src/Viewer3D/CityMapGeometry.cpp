@@ -1,5 +1,8 @@
 #include "CityMapGeometry.h"
 
+#include<QThread>
+
+
 CityMapGeometry::CityMapGeometry()
 {
     _osmParser = nullptr;
