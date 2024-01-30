@@ -1,5 +1,5 @@
-#ifndef VIEWER3DFACTS_H
-#define VIEWER3DFACTS_H
+#ifndef VIEWER3DMANAGER_H
+#define VIEWER3DMANAGER_H
 
 #include <QObject>
 
@@ -10,7 +10,7 @@
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 // This class contains all the variables shared between the C++ and QML sides for 3D viewer.
-class Viewer3DFacts : public QObject
+class Viewer3DManager : public QObject
 {
     Q_OBJECT
 
@@ -18,7 +18,7 @@ class Viewer3DFacts : public QObject
     Q_PROPERTY(Viewer3DQmlBackend* qmlBackend MEMBER _qmlBackend CONSTANT)
 
 public:
-    explicit Viewer3DFacts();
+    explicit Viewer3DManager();
 
 protected:
     OsmParser *_osmParser = nullptr;
@@ -28,4 +28,4 @@ protected:
 
 };
 
-#endif // VIEWER3DFACTS_H
+#endif // VIEWER3DMANAGER_H

@@ -110,7 +110,7 @@
 #include "Viewer3DQmlBackend.h"
 #include "Viewer3DQmlVariableTypes.h"
 #include "OsmParser.h"
-#include "Viewer3DFacts.h"
+#include "Viewer3DManager.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -466,10 +466,9 @@ void QGCApplication::_initCommon()
     // For 3D viewer types
     qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
     qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
-    qmlRegisterType<Viewer3DFacts>                      (kQGCViewer3D, 1, 0, "Viewer3DFacts");
+    qmlRegisterType<Viewer3DManager>                      (kQGCViewer3D, 1, 0, "Viewer3DManager");
     qmlRegisterUncreatableType<Viewer3DQmlBackend>      (kQGCViewer3D, 1, 0, "Viewer3DQmlBackend",          kRefOnly);
     qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
-
 
     qmlRegisterUncreatableType<Vehicle>                 (kQGCVehicle,                       1, 0, "Vehicle",                    kRefOnly);
     qmlRegisterUncreatableType<MissionManager>          (kQGCVehicle,                       1, 0, "MissionManager",             kRefOnly);

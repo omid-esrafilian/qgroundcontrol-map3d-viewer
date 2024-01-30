@@ -1,7 +1,7 @@
-#include "Viewer3DFacts.h"
+#include "Viewer3DManager.h"
 
 
-Viewer3DFacts::Viewer3DFacts()
+Viewer3DManager::Viewer3DManager()
 {
     const char * metadata_file_address = "map3d_viewer_meta_data.xml";
     _metadataLoader = new Viewer3DMetadata(metadata_file_address, this);

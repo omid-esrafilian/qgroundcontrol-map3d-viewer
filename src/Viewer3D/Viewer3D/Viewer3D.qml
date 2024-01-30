@@ -17,7 +17,7 @@ Item{
     property bool viewer3DOpen: false
     property bool settingMenuOpen: false
 
-    Viewer3DFacts{
+    Viewer3DManager{
         id: _viewer3DManager
     }
 

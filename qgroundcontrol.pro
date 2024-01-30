@@ -723,6 +723,7 @@ HEADERS += \
     src/Vehicle/VehicleGeneratorFactGroup.h \
     src/Vehicle/VehicleEFIFactGroup.h \
     src/VehicleSetup/JoystickConfigController.h \
+    src/Viewer3D/Viewer3DManager.h \
     src/comm/LinkConfiguration.h \
     src/comm/LinkInterface.h \
     src/comm/LinkManager.h \
@@ -743,7 +744,6 @@ HEADERS += \
     src/Viewer3D/Viewer3DQmlBackend.h \
     src/Viewer3D/Viewer3DQmlVariableTypes.h \
     src/Viewer3D/Viewer3DUtils.h \
-    src/Viewer3D/Viewer3DFacts.h \
 
 
 # FIXME-QT6: NYI
@@ -982,6 +982,7 @@ SOURCES += \
     src/Vehicle/VehicleEFIFactGroup.cc \
     src/Vehicle/VehicleWindFactGroup.cc \
     src/VehicleSetup/JoystickConfigController.cc \
+    src/Viewer3D/Viewer3DManager.cpp \
     src/comm/LinkConfiguration.cc \
     src/comm/LinkInterface.cc \
     src/comm/LinkManager.cc \
@@ -1001,7 +1002,6 @@ SOURCES += \
     src/Viewer3D/Viewer3DMetadata.cpp \
     src/Viewer3D/Viewer3DQmlBackend.cpp \
     src/Viewer3D/Viewer3DUtils.cpp \
-    src/Viewer3D/Viewer3DFacts.cpp \
 
 
 DebugBuild {
