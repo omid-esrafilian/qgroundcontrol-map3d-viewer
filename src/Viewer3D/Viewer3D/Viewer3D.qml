@@ -16,6 +16,7 @@ import Viewer3D.Models3D
 
 Item{
     id: viewer3DBody
+
     property bool isOpen: false
     property bool   _viewer3DEnabled:        QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
 
