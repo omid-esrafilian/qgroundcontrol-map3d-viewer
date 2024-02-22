@@ -212,6 +212,12 @@ SettingsPage {
                     text:       qsTr("Select File")
 
                     onClicked: {
+                        var filename = qsTr(_viewer3DOsmFilePath.rawValue);
+                        const found = filename.match(/(.*)[\/\\]/);
+                        if(found){
+                            filename = found[1]||''; // extracting the directory from the file path
+                            fileDialog.folder = (filename[0] === "/")?(filename.slice(1)):(filename);
+                        }
                         fileDialog.openForLoad()
                     }
 
@@ -219,6 +225,7 @@ SettingsPage {
                         id:             fileDialog
                         nameFilters:    [qsTr("OpenStreetMap files (*.osm)")]
                         title:          qsTr("Select map file")
+
                         onAcceptedForLoad: (file) => {
                                                osmFileTextField.text = file
                                                _viewer3DOsmFilePath.value = osmFileTextField.text

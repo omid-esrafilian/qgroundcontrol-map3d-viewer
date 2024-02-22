@@ -5,13 +5,22 @@ qt_add_library(Viewer3D STATIC
     earcut.hpp
     OsmParser.cc
     OsmParser.h
-	Viewer3DManager.cc
+    Viewer3DManager.cc
     Viewer3DManager.h
     Viewer3DQmlBackend.cc
     Viewer3DQmlBackend.h
     Viewer3DQmlVariableTypes.h
     Viewer3DUtils.cc
     Viewer3DUtils.h
+    Viewer3DTileReply.h
+    Viewer3DTileReply.cc
+    Viewer3DTerrainGeometry.h
+    Viewer3DTerrainGeometry.cc
+    Viewer3DTerrainTexture.h
+    Viewer3DTerrainTexture.cc
+    Viewer3DTileQuery.h
+    Viewer3DTileQuery.cc
+
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Quick3D)
