@@ -114,6 +114,7 @@ void OsmParser::decodeNodeTags(QDomElement &xmlComponent, QMap<uint64_t, QGeoCoo
     int64_t id_tmp=0;
     QGeoCoordinate gps_tmp;
     QString attribute;
+
     if (xmlComponent.tagName()=="node") {
 
         attribute = xmlComponent.attribute("id","-1");
@@ -144,6 +145,13 @@ void OsmParser::decodeNodeTags(QDomElement &xmlComponent, QMap<uint64_t, QGeoCoo
             gps_tmp.setAltitude(0);
             setGpsRef(gps_tmp);
         }
+    }else if(xmlComponent.tagName() == "bounds") {
+        _coordinate_min.setLatitude(xmlComponent.attribute("minlat","0").toFloat());
+        _coordinate_min.setLongitude(xmlComponent.attribute("minlon","0").toFloat());
+        _coordinate_min.setAltitude(0);
+        _coordinate_max.setLatitude(xmlComponent.attribute("maxlat","0").toFloat());
+        _coordinate_max.setLongitude(xmlComponent.attribute("maxlon","0").toFloat());
+        _coordinate_max.setAltitude(0);
     }
 }
 

@@ -2,6 +2,7 @@ import QtQuick3D
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
+import QtPositioning
 
 import Viewer3D.Models3D.Drones
 import Viewer3D.Models3D
@@ -107,6 +108,43 @@ View3D {
                 opacity: 1.0
             }
         ]
+    }
+
+    Model {
+        id: pointModel
+        visible: true
+        scale: Qt.vector3d(10, 10, 10)
+
+        geometry: EarthTerrain {
+            id: earthSphere
+            sectorCount: 10
+            stackCount: 10
+            refCoordinate: viewer3DManager.qmlBackend.gpsRef
+        }
+
+        materials: CustomMaterial {
+            vertexShader: "/ShaderVertex/earthMaterial.vert"
+            fragmentShader: "/ShaderFragment/earthMaterial.frag"
+            property TextureInput someTextureMap: TextureInput {
+                texture: Texture {
+                    textureData: earthTexture
+                }
+            }
+        }
+    }
+
+    EarthTextureData {
+        id: earthTexture
+        zoomLevel: 19
+        osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
+
+        onTextureLoadedChanged: {
+            if(textureLoaded === true){
+                earthSphere.roiMin = roiMinCoordinate;
+                earthSphere.roiMax = roiMaxCoordinate;
+                earthSphere.updateEarthData();
+            }
+        }
     }
 
     Component{
