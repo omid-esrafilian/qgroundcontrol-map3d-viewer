@@ -2,6 +2,8 @@
 #include <QImage>
 #include <QUrl>
 
+
+
 EarthTextureData::EarthTextureData()
 {
 }
@@ -12,7 +14,9 @@ void EarthTextureData::loadTexture()
     std::pair<QGeoCoordinate, QGeoCoordinate> roiPair = earthTileLoader.findAndLoadMapTiles(_zoomLevel, _osmParser->getMapBoundingBoxCoordinate().first, _osmParser->getMapBoundingBoxCoordinate().second);
     setRoiMinCoordinate(roiPair.first);
     setRoiMaxCoordinate(roiPair.second);
-    connect(&earthTileLoader, &MapTileImageryLoader::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
+    setRoiMaxCoordinate(roiPair.second);
+    // connect(&earthTileLoader, &MapTileImageryLoader::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
+    connect(&earthTileLoader, &MapTileQuery::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
 }
 
 void EarthTextureData::updateTexture(QSize image_size, QByteArray image_data)

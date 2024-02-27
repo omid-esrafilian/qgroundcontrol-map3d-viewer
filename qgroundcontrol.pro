@@ -621,7 +621,7 @@ HEADERS += \
     src/Viewer3D/earthterrain.h \
     src/Viewer3D/earthtexturedata.h \
     src/Viewer3D/maptileimageryloader.h \
-
+    src/Viewer3D/MapTileQuery.h \
 
 AndroidBuild {
     HEADERS += \
@@ -883,6 +883,7 @@ SOURCES += \
     src/Viewer3D/earthterrain.cpp \
     src/Viewer3D/earthtexturedata.cpp \
     src/Viewer3D/maptileimageryloader.cpp \
+    src/Viewer3D/MapTileQuery.cpp \
 
 DebugBuild {
 SOURCES += \

@@ -8,9 +8,9 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-#include "maptileimageryloader.h"
+// #include "maptileimageryloader.h"
+#include "MapTileQuery.h"
 #include "OsmParser.h"
-
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
@@ -47,12 +47,9 @@ public:
     void setOsmParser(OsmParser *newOsmParser);
 
 private:
-    QNetworkAccessManager* _manager;
-    QNetworkReply* _reply;
-    bool _requestFinished;
-    QByteArray _ImageHttpData;
 
-    MapTileImageryLoader earthTileLoader;;
+    // MapTileImageryLoader earthTileLoader;;
+    MapTileQuery earthTileLoader;
 
     void updateEarthTexture();
     void setTextureLoaded(bool laoded){_textureLoaded = laoded; emit textureLoadedChanged();}
