@@ -13,6 +13,11 @@
 #include <QGeoCoordinate>
 
 #include "FlightMapSettings.h"
+#include "MapTileFetcher.h"
+
+
+///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
+
 
 class MapTileQuery : public QObject
 {
@@ -22,7 +27,7 @@ public:
     {
         int L = 256; // length of each square image downloaded tile
 
-        std::vector<QPoint> tilesIndexArray;
+        QList<QString> tileList;
         int zoomLevel;
         QPoint tileMinIndex;
         QPoint tileMaxIndex;
@@ -58,7 +63,7 @@ public:
         }
 
         void clear(){
-            tilesIndexArray.clear();
+            tileList.clear();
         }
     }MapTileContainer_t;
 
@@ -82,21 +87,19 @@ public:
     QSize getMapSize(){ return QSize(_mapToBeLoaded.mapWidth, _mapToBeLoaded.mapHeight);}
 
 private:
-    QNetworkAccessManager* _networkManager;
-    QNetworkReply* _reply;
-    int _mapTileLoadStat;
+    int _mapTilesLoadStat;
     MapTileContainer_t _mapToBeLoaded;
 
     FlightMapSettings* _flightMapSettings;
     QString _mapType;
+    int _mapId;
 
     double valueClip(double n, double _minValue, double _maxValue);
     QPoint latLonToPixelXY(QGeoCoordinate pointCoordinate, int zoomLevel);
     QPoint pixelXYToTileXY(QPoint pixel);
     QPoint tileXYToPixelXY(QPoint tile);
     QGeoCoordinate pixelXYToLatLong(QPoint pixel, int zoomLevel);
-    void _loadNextMaptile();
-    void httpServerReplyFinished();
+    void tileDone(MapTileFetcher::tileInfo_t _tileData);
     void httpReadyRead();
     void mapTypeChangedEvent(QVariant value);
 
