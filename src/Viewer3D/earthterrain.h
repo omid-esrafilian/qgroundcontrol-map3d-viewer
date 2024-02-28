@@ -7,8 +7,9 @@
 #include <QCamera>
 #include <QGeoCoordinate>
 
-///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
+#include "Viewer3DSettings.h"
 
+///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 class EarthTerrain : public QQuick3DGeometry
 {
@@ -54,15 +55,17 @@ private:
     std::vector<QVector3D> _normals;
 
     void buildTerrain(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale);
-    void buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale);
+    bool buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale);
 
     QVector3D computeFaceNormal(QVector3D x1, QVector3D x2, QVector3D x3);
     void changeUpAxis(int from, int to);
+    void clearScene();
 
     int _radius;
     QGeoCoordinate _roiMin;
     QGeoCoordinate _roiMax;
     QGeoCoordinate _refCoordinate;
+    Viewer3DSettings* _viewer3DSettings = nullptr;
 
 
 signals:

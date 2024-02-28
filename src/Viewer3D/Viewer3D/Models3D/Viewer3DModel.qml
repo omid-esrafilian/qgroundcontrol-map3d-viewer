@@ -117,8 +117,6 @@ View3D {
 
         geometry: EarthTerrain {
             id: earthSphere
-            sectorCount: 10
-            stackCount: 10
             refCoordinate: viewer3DManager.qmlBackend.gpsRef
         }
 
@@ -140,6 +138,8 @@ View3D {
 
         onTextureLoadedChanged: {
             if(textureLoaded === true){
+                earthSphere.sectorCount = tileCount.width
+                earthSphere.stackCount = tileCount.height
                 earthSphere.roiMin = roiMinCoordinate;
                 earthSphere.roiMax = roiMaxCoordinate;
                 earthSphere.updateEarthData();

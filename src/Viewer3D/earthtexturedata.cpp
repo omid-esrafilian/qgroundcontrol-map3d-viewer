@@ -3,7 +3,6 @@
 #include <QUrl>
 
 
-
 EarthTextureData::EarthTextureData()
 {
 }
@@ -11,11 +10,10 @@ EarthTextureData::EarthTextureData()
 void EarthTextureData::loadTexture()
 {
     _textureLoaded = 0;
-    std::pair<QGeoCoordinate, QGeoCoordinate> roiPair = earthTileLoader.findAndLoadMapTiles(_zoomLevel, _osmParser->getMapBoundingBoxCoordinate().first, _osmParser->getMapBoundingBoxCoordinate().second);
-    setRoiMinCoordinate(roiPair.first);
-    setRoiMaxCoordinate(roiPair.second);
-    setRoiMaxCoordinate(roiPair.second);
-    // connect(&earthTileLoader, &MapTileImageryLoader::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
+    MapTileQuery::TileStatistics_t tileInfo = earthTileLoader.adaptiveMapTilesLoader(_osmParser->getMapBoundingBoxCoordinate().first, _osmParser->getMapBoundingBoxCoordinate().second);
+    setRoiMinCoordinate(tileInfo.coordinateMin);
+    setRoiMaxCoordinate(tileInfo.coordinateMax);
+    setTileCount(tileInfo.tileCounts);
     connect(&earthTileLoader, &MapTileQuery::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
 }
 
@@ -94,4 +92,17 @@ void EarthTextureData::setOsmParser(OsmParser *newOsmParser)
     }
 
     emit osmParserChanged();
+}
+
+QSize EarthTextureData::tileCount() const
+{
+    return _tileCount;
+}
+
+void EarthTextureData::setTileCount(const QSize &newTileCount)
+{
+    if (_tileCount == newTileCount)
+        return;
+    _tileCount = newTileCount;
+    emit tileCountChanged();
 }

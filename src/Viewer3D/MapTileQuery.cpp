@@ -8,6 +8,9 @@
 #define PI                  acos(-1.0f)
 #define DEG_TO_RAD          PI/180.0f
 #define RAD_TO_DEG          180.0f/PI
+#define MAX_TILE_COUNTS     100
+#define MAX_ZOOM_LEVEL      20
+
 
 enum RequestStat{
     STARTED,
@@ -45,7 +48,7 @@ void MapTileQuery::loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileM
     _loadNextMaptile();
 }
 
-std::pair<QGeoCoordinate, QGeoCoordinate> MapTileQuery::findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
+MapTileQuery::TileStatistics_t MapTileQuery::findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
 {
     float lat_1 = coordinate_1.latitude(); float lon_1 = coordinate_1.longitude();
     float lat_2 = coordinate_2.latitude(); float lon_2 = coordinate_2.longitude();
@@ -70,7 +73,40 @@ std::pair<QGeoCoordinate, QGeoCoordinate> MapTileQuery::findAndLoadMapTiles(int 
     QGeoCoordinate maxCoordinate_ = QGeoCoordinate(minCoordinate.latitude(), maxCoordinate.longitude(), 0);
 
     loadMapTiles(zoomLevel, minTile, maxTile);
-    return std::pair<QGeoCoordinate, QGeoCoordinate>(minCoordinate_, maxCoordinate_);
+
+    TileStatistics_t _output;
+    _output.coordinateMin = minCoordinate_;
+    _output.coordinateMax = maxCoordinate_;
+    _output.tileCounts = QSize(maxTile.x() - minTile.x(), maxTile.y() - minTile.y());
+    _output.zoomLevel = zoomLevel;
+
+    return _output;
+}
+
+MapTileQuery::TileStatistics_t MapTileQuery::adaptiveMapTilesLoader(QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
+{
+    int zoomLevel;
+    for(zoomLevel=MAX_ZOOM_LEVEL; zoomLevel>0; zoomLevel--){
+        if(maxTileCount(zoomLevel, coordinate_1, coordinate_2) < MAX_TILE_COUNTS){
+            break;
+        }
+    }
+    return findAndLoadMapTiles(zoomLevel, coordinate_1, coordinate_2);
+}
+
+int MapTileQuery::maxTileCount(int zoomLevel, QGeoCoordinate coordinateMin, QGeoCoordinate coordinateMax)
+{
+    double mapSize = powf(2, zoomLevel);
+    double latResolution = 180.0 / mapSize;
+    double lonResolution = 360.0 / mapSize;
+
+    double latLen = coordinateMax.latitude() - coordinateMin.latitude();
+    double lonLen = coordinateMax.longitude() - coordinateMin.longitude();
+
+    int tileXCount = ceil(lonLen/lonResolution);
+    int tileYCount = ceil(latLen/latResolution);
+
+    return tileXCount * tileYCount;
 }
 
 double MapTileQuery::valueClip(double n, double _minValue, double _maxValue)

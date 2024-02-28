@@ -16,7 +16,9 @@
 
 class MapTileQuery : public QObject
 {
-    struct MapTileCOntainer
+
+public:
+    typedef struct MapTileContainer_s
     {
         int L = 256; // length of each square image downloaded tile
 
@@ -35,7 +37,6 @@ class MapTileQuery : public QObject
             mapWidth = (tileMaxIndex.x() - tileMinIndex.x() + 1) * L;
             mapHeight = (tileMaxIndex.y() - tileMinIndex.y() + 1) * L;
             mapTileMerged = QImage(mapWidth, mapHeight, QImage::Format_RGB32);
-            qDebug() << "Map Loaded init!!" << mapTileMerged.size();
         }
 
         void setMapTile(){
@@ -59,7 +60,14 @@ class MapTileQuery : public QObject
         void clear(){
             tilesIndexArray.clear();
         }
-    };
+    }MapTileContainer_t;
+
+    typedef struct TileStatistics_s{
+        QGeoCoordinate coordinateMin;
+        QGeoCoordinate coordinateMax;
+        QSize tileCounts;
+        int zoomLevel;
+    } TileStatistics_t;
 
 
     Q_OBJECT
@@ -67,7 +75,9 @@ public:
     explicit MapTileQuery(QObject *parent = nullptr);
 
     void loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileMaxIndex);
-    std::pair<QGeoCoordinate, QGeoCoordinate> findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
+    TileStatistics_t findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
+    TileStatistics_t adaptiveMapTilesLoader(QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
+    int maxTileCount(int zoomLevel, QGeoCoordinate coordinateMin, QGeoCoordinate coordinateMax);
     QByteArray getMapData(){ return _mapToBeLoaded.getMapData();}
     QSize getMapSize(){ return QSize(_mapToBeLoaded.mapWidth, _mapToBeLoaded.mapHeight);}
 
@@ -75,7 +85,7 @@ private:
     QNetworkAccessManager* _networkManager;
     QNetworkReply* _reply;
     int _mapTileLoadStat;
-    MapTileCOntainer _mapToBeLoaded;
+    MapTileContainer_t _mapToBeLoaded;
 
     FlightMapSettings* _flightMapSettings;
     QString _mapType;

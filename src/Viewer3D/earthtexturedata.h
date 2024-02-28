@@ -20,6 +20,7 @@ class EarthTextureData : public QQuick3DTextureData
     Q_PROPERTY(OsmParser* osmParser READ osmParser WRITE setOsmParser NOTIFY osmParserChanged)
     Q_PROPERTY(QGeoCoordinate roiMinCoordinate READ roiMinCoordinate WRITE setRoiMinCoordinate NOTIFY roiMinCoordinateChanged)
     Q_PROPERTY(QGeoCoordinate roiMaxCoordinate READ roiMaxCoordinate WRITE setRoiMaxCoordinate NOTIFY roiMaxCoordinateChanged)
+    Q_PROPERTY(QSize tileCount READ tileCount NOTIFY tileCountChanged)
     Q_PROPERTY(bool textureLoaded READ textureLoaded NOTIFY textureLoadedChanged)
     Q_PROPERTY(int zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
 
@@ -46,6 +47,9 @@ public:
     OsmParser *osmParser() const;
     void setOsmParser(OsmParser *newOsmParser);
 
+    QSize tileCount() const;
+    void setTileCount(const QSize &newTileCount);
+
 private:
 
     // MapTileImageryLoader earthTileLoader;;
@@ -63,12 +67,15 @@ private:
 
     OsmParser *_osmParser = nullptr;
 
+    QSize _tileCount;
+
 signals:
     void roiMinCoordinateChanged();
     void roiMaxCoordinateChanged();
     void textureLoadedChanged();
     void zoomLevelChanged();
     void osmParserChanged();
+    void tileCountChanged();
 };
 
 #endif // EARTHTEXTUREDATA_H

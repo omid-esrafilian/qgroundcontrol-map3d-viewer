@@ -33,7 +33,6 @@ class MapTileImageryLoader : public QObject
             mapWidth = (tileMaxIndex.x() - tileMinIndex.x() + 1) * L;
             mapHeight = (tileMaxIndex.y() - tileMinIndex.y() + 1) * L;
             mapTileMerged = QImage(mapWidth, mapHeight, QImage::Format_RGB32);
-            qDebug() << "Map Loaded init!!" << mapTileMerged.size();
         }
 
         void setMapTile(){

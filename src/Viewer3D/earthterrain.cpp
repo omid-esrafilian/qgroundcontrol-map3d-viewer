@@ -5,6 +5,8 @@
 #include "math.h"
 
 #include "Viewer3DUtils.h"
+#include "QGCApplication.h"
+#include "SettingsManager.h"
 
 #define PI                  acos(-1.0f)
 #define MaxLatitude         85.05112878
@@ -12,7 +14,12 @@
 
 EarthTerrain::EarthTerrain()
 {
+    _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
+    setSectorCount(0);
+    setStackCount(0);
     setRadius(EarthRadius);
+    connect(_viewer3DSettings->osmFilePath(), &Fact::rawValueChanged, this, &EarthTerrain::clearScene);
+    connect(this, &EarthTerrain::refCoordinateChanged, this, &EarthTerrain::updateEarthData);
 }
 
 void EarthTerrain::updateEarthData()
@@ -22,8 +29,10 @@ void EarthTerrain::updateEarthData()
     stride += 3 * sizeof(float); // for for normals
     stride += 2 * sizeof(float); // for UV
 
-    qDebug() << "Updating eaerth sphere with: " << roiMin() << roiMax();
-    buildTerrain_2(roiMin(), roiMax(), refCoordinate(), 1);
+    if(buildTerrain_2(roiMin(), roiMax(), refCoordinate(), 1) == 0){
+        return;
+    }
+    qDebug() << "Updating the Earth sphere with: " << roiMin() << roiMax();
 
     QByteArray vertexData;
     vertexData.resize(_vertices.size() * stride);
@@ -159,6 +168,17 @@ void EarthTerrain::changeUpAxis(int from, int to)
                                 tx[1] * nx + ty[1] * ny + tz[1] * nz,
                                 tx[2] * nx + ty[2] * ny + tz[2] * nz);
     }
+}
+
+void EarthTerrain::clearScene()
+{
+    clear();
+    setSectorCount(0);
+    setStackCount(0);
+    _vertices.clear();
+    _normals.clear();
+    _texCoords.clear();
+    update();
 }
 
 int EarthTerrain::sectorCount() const
@@ -331,8 +351,12 @@ void EarthTerrain::buildTerrain(QGeoCoordinate roiMinCoordinate, QGeoCoordinate 
     changeUpAxis(3, 2);
 }
 
-void EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
+bool EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
 {
+    if(_sectorCount == 0 || _stackCount == 0){
+        return false;
+    }
+
     float sectorLength = abs(roiMaxCoordinate.longitude() - roiMinCoordinate.longitude());
     float stackLength = abs(roiMaxCoordinate.latitude() - roiMinCoordinate.latitude());
     float stackRef = roiMaxCoordinate.latitude();
@@ -466,6 +490,7 @@ void EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinat
             }
         }
     }
+    return true;
 }
 
 int EarthTerrain::radius() const

@@ -13,7 +13,7 @@ Node {
     property real _pan: 0.001
     property real _zoom: 1500
 
-    property real lightsBrightness: 0.4
+    property real lightsBrightness: 0.3
 
     function resetCamera(){
         camNode.position = Qt.vector3d(0, 0, 0);
