@@ -20,6 +20,18 @@ typedef union {
 OsmParser::OsmParser(QObject *parent)
     : QObject{parent}
 {
+    _singleStoreyBuildings.append("bungalow");
+    _singleStoreyBuildings.append("shed");
+    _singleStoreyBuildings.append("kiosk");
+    _singleStoreyBuildings.append("cabin");
+
+    _doubleStoreyBuildings.append("yes");
+    _doubleStoreyBuildings.append("house");
+    _doubleStoreyBuildings.append("industrial");
+    _doubleStoreyBuildings.append("warehouse");
+    _doubleStoreyBuildings.append("supermarket");
+    _doubleStoreyBuildings.append("commercial");
+
     _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
 
     _gpsRefSet = false;
@@ -51,14 +63,15 @@ void OsmParser::setBuildingLevelHeight(QVariant value)
 
 void OsmParser::parseOsmFile(QString filePath)
 {
+    _mapNodes.clear();
+    _mapBuildings.clear();
+    _gpsRefSet = false;
+    _mapLoadedFlag = false;
+    resetGpsRef();
+
     if(filePath == "Please select an OSM file"){
         if(_mapLoadedFlag){
             qDebug("The 3D View has been cleared!");
-            _mapNodes.clear();
-            _mapBuildings.clear();
-            _gpsRefSet = false;
-            _mapLoadedFlag = false;
-            resetGpsRef();
         }else{
             qDebug("No OSM File is selected!");
         }
@@ -170,8 +183,21 @@ void OsmParser::decodeBuildings(QDomElement &xmlComponent, QMap<uint64_t, Buildi
                 bld_tmp.levels = Child.attribute("v","0").toInt();
             }else if(attribute == "height") {
                 bld_tmp.height = Child.attribute("v","0").toFloat();
+            }else if(attribute == "building" && bld_tmp.levels == 0 && bld_tmp.height == 0){
+                QString attribute_2 = Child.attribute("v","0");
+                if(_singleStoreyBuildings.contains(attribute_2)){
+                    bld_tmp.levels = 1;
+                }else if(_doubleStoreyBuildings.contains(attribute_2)){
+                    bld_tmp.levels = 2;
+                }
+            }else if(attribute == "leisure" && bld_tmp.levels == 0 && bld_tmp.height == 0){
+                QString attribute_2 = Child.attribute("v","0");
+                if(attribute_2 == "stadium"){
+                    bld_tmp.levels = 1;
+                }
             }
         }
+
         Child = Child.nextSibling().toElement();
     }
 
