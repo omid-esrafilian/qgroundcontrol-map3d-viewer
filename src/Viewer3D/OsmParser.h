@@ -57,6 +57,8 @@ private:
     float _buildingLevelHeight;
     bool _mapLoadedFlag;
     Viewer3DSettings* _viewer3DSettings = nullptr;
+    QList<QString> _singleStoreyBuildings;
+    QList<QString> _doubleStoreyBuildings;
 
 
 signals:
