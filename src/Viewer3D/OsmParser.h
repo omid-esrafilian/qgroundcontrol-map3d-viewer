@@ -76,13 +76,13 @@ private:
     QGeoCoordinate _gpsRefPoint;
     QMap<uint64_t, QGeoCoordinate> _mapNodes;
     QMap<uint64_t, BuildingType> _mapBuildings;
+    QGeoCoordinate _coordinate_min, _coordinate_max; //Osm map bounding boxes in global coordinate
 
     bool _gpsRefSet;
     float _buildingLevelHeight;
     bool _mapLoadedFlag;
     Viewer3DSettings* _viewer3DSettings = nullptr;
     QList<QString> _singleStoreyBuildings;
-    QList<QString> _doubleStoreyBuildings;
     QList<QString> _doubleStoreyLeisure;
 
 
