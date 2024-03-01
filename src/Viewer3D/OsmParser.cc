@@ -25,14 +25,10 @@ OsmParser::OsmParser(QObject *parent)
     _singleStoreyBuildings.append("kiosk");
     _singleStoreyBuildings.append("cabin");
 
-    _doubleStoreyBuildings.append("yes");
-    _doubleStoreyBuildings.append("house");
-    _doubleStoreyBuildings.append("industrial");
-    _doubleStoreyBuildings.append("warehouse");
-    _doubleStoreyBuildings.append("supermarket");
-    _doubleStoreyBuildings.append("commercial");
-
     _doubleStoreyLeisure.append("stadium");
+    _doubleStoreyLeisure.append("sports_hall");
+    _doubleStoreyLeisure.append("sports_centre");
+    _doubleStoreyLeisure.append("sauna");
 
     _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
 
@@ -134,9 +130,20 @@ void OsmParser::decodeNodeTags(QDomElement &xmlComponent, QMap<uint64_t, QGeoCoo
 
         if(id_tmp > 0) {
             nodeMap.insert((uint64_t)id_tmp, gps_tmp);
-            if(!_gpsRefSet) {
-                setGpsRef(gps_tmp);
-            }
+        }
+    }else if(xmlComponent.tagName() == "bounds") {
+        _coordinate_min.setLatitude(xmlComponent.attribute("minlat","0").toFloat());
+        _coordinate_min.setLongitude(xmlComponent.attribute("minlon","0").toFloat());
+        _coordinate_min.setAltitude(0);
+        _coordinate_max.setLatitude(xmlComponent.attribute("maxlat","0").toFloat());
+        _coordinate_max.setLongitude(xmlComponent.attribute("maxlon","0").toFloat());
+        _coordinate_max.setAltitude(0);
+
+        if(!_gpsRefSet) {
+            gps_tmp.setLatitude(0.5 * (_coordinate_min.latitude() + _coordinate_max.latitude()));
+            gps_tmp.setLongitude(0.5 * (_coordinate_min.longitude() + _coordinate_max.longitude()));
+            gps_tmp.setAltitude(0);
+            setGpsRef(gps_tmp);
         }
     }
 }
@@ -192,7 +199,7 @@ void OsmParser::decodeBuildings(QDomElement &xmlComponent, QMap<uint64_t, Buildi
                 QString attribute_2 = Child.attribute("v","0");
                 if(_singleStoreyBuildings.contains(attribute_2)){
                     bld_tmp.levels = 1;
-                }else if(_doubleStoreyBuildings.contains(attribute_2)){
+                }else{
                     bld_tmp.levels = 2;
                 }
             }else if(attribute == "leisure" && bld_tmp.levels == 0 && bld_tmp.height == 0){
