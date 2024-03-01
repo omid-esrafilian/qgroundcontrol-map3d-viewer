@@ -27,7 +27,6 @@ OsmParser::OsmParser(QObject *parent)
 
     _doubleStoreyLeisure.append("stadium");
     _doubleStoreyLeisure.append("sports_hall");
-    _doubleStoreyLeisure.append("sports_centre");
     _doubleStoreyLeisure.append("sauna");
 
     _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
@@ -244,6 +243,8 @@ void OsmParser::decodeRelations(QDomElement &xmlComponent, QMap<uint64_t, Buildi
     bld_tmp.height = 0;
     bld_tmp.levels = 0;
     std::vector<int64_t> bldToBeRemoved;
+    bool isBuilding = false;
+    bool isMultipolygon = false;
 
     while (!Child.isNull()) {
         if (Child.tagName()=="member") {
@@ -266,15 +267,25 @@ void OsmParser::decodeRelations(QDomElement &xmlComponent, QMap<uint64_t, Buildi
             attribute = Child.attribute("k","0");
             if(attribute == "type") {
                 if(Child.attribute("v","0") == "multipolygon"){
-                    for(uint i_id=0; i_id<bldToBeRemoved.size(); i_id++){
-                        buildingMap.remove(bldToBeRemoved[i_id]);
-                    }
-                    buildingMap.insert(bldToBeRemoved[0], bld_tmp);
-                    return;
+                    isMultipolygon = true;
                 }
+            }else if(attribute == "building"){
+                isBuilding = true;
             }
         }
         Child = Child.nextSibling().toElement();
+    }
+
+    if(isBuilding){
+        if(bld_tmp.height == 0){
+            bld_tmp.levels = (bld_tmp.levels == 0)?(2):(bld_tmp.levels);
+        }
+    }
+    if(isMultipolygon){
+        for(uint i_id=0; i_id<bldToBeRemoved.size(); i_id++){
+            buildingMap.remove(bldToBeRemoved[i_id]);
+        }
+        buildingMap.insert(bldToBeRemoved[0], bld_tmp);
     }
 }
 
