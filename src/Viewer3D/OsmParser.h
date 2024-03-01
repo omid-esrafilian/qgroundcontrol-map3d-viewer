@@ -20,11 +20,34 @@ class OsmParser : public QObject
     struct BuildingType
     {
         std::vector<QGeoCoordinate> points_gps;
+        std::vector<QGeoCoordinate> points_gps_inner;
         std::vector<QVector2D> points_local;
+        std::vector<QVector2D> points_local_inner;
         std::vector<QVector3D> triangulated_mesh;
-        QVector2D bb_max, bb_min; //bounding boxes
+        QVector2D bb_max = QVector2D(-1e6, -1e6); //bounding boxes
+        QVector2D bb_min = QVector2D(1e6, 1e6); //bounding boxes
         float height;
-        int levels;
+        float levels;
+
+        void append(std::vector<QGeoCoordinate> newPoints, bool isInner){
+            for(uint i=0; i<newPoints.size(); i++){
+                if(isInner){
+                points_gps_inner.push_back(newPoints[i]);
+                }else{
+                    points_gps.push_back(newPoints[i]);
+                }
+            }
+        }
+
+        void append(std::vector<QVector2D> newPoints, bool isInner){
+            for(uint i=0; i<newPoints.size(); i++){
+                if(isInner){
+                    points_local_inner.push_back(newPoints[i]);
+                }else{
+                    points_local.push_back(newPoints[i]);
+                }
+            }
+        }
     };
 
     Q_OBJECT
@@ -42,6 +65,7 @@ public:
     void parseOsmFile(QString filePath);
     void decodeNodeTags(QDomElement& xmlComponent, QMap<uint64_t, QGeoCoordinate> &nodeMap);
     void decodeBuildings(QDomElement& xmlComponent, QMap<uint64_t, BuildingType > &buildingMap, QMap<uint64_t, QGeoCoordinate> &nodeMap, QGeoCoordinate gpsRef);
+    void decodeRelations(QDomElement& xmlComponent, QMap<uint64_t, BuildingType > &buildingMap, QMap<uint64_t, QGeoCoordinate> &nodeMap, QGeoCoordinate gpsRef);
 
     QByteArray buildingToMesh();
 
@@ -59,6 +83,7 @@ private:
     Viewer3DSettings* _viewer3DSettings = nullptr;
     QList<QString> _singleStoreyBuildings;
     QList<QString> _doubleStoreyBuildings;
+    QList<QString> _doubleStoreyLeisure;
 
 
 signals:
