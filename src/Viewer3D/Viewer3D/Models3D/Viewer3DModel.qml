@@ -136,8 +136,8 @@ View3D {
         zoomLevel: 19
         osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
 
-        onTextureLoadedChanged: {
-            if(textureLoaded === true){
+        onTextureGeometryDoneChanged: {
+            if(textureGeometryDone === true){
                 earthSphere.sectorCount = tileCount.width
                 earthSphere.stackCount = tileCount.height
                 earthSphere.roiMin = roiMinCoordinate;

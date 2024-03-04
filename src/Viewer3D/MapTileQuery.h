@@ -36,30 +36,57 @@ public:
         QPoint currentTileIndex;
         QByteArray currentTileData;
 
-        QImage mapTileMerged;
+        QImage mapTextureImage;
+        // QByteArray mapTextureImageData;
         int mapWidth, mapHeight;
         void init(){
             mapWidth = (tileMaxIndex.x() - tileMinIndex.x() + 1) * L;
             mapHeight = (tileMaxIndex.y() - tileMinIndex.y() + 1) * L;
-            mapTileMerged = QImage(mapWidth, mapHeight, QImage::Format_RGB32);
+            mapTextureImage = QImage(mapWidth, mapHeight, QImage::Format_RGBA32FPx4);
+            mapTextureImage.fill(Qt::gray);
+            // mapTextureImageData.resize(mapWidth * mapHeight * 4 * 4); // 4 channnels and each 4 bytes
+            // mapTextureImageData = QByteArray((char*)mapTextureImage.bits(), mapTextureImage.sizeInBytes());
         }
 
         void setMapTile(){
-            QPixmap tmpImage;
-            tmpImage.loadFromData(currentTileData);
+            QPixmap tmpPixmap;
+            tmpPixmap.loadFromData(currentTileData);
+            QImage tmpImage = tmpPixmap.toImage().convertToFormat(QImage::Format_RGBA32FPx4);
 
-            QPainter painter(&mapTileMerged);
-            painter.drawImage((currentTileIndex.x() - tileMinIndex.x()) * L,
-                              (currentTileIndex.y() - tileMinIndex.y()) * L,
-                              tmpImage.toImage());
+            QPainter painter(&mapTextureImage);
+            int idxX = (currentTileIndex.x() - tileMinIndex.x()) * L;
+            int idxY = (currentTileIndex.y() - tileMinIndex.y()) * L;
+            painter.drawImage(idxX,
+                              idxY,
+                              tmpImage);
+
+            // int startByteIdx = idxX * mapHeight + idxY;
+            // startByteIdx = startByteIdx * 4 * 4;
+            // QByteArray tmpImageData =  QByteArray::fromRawData((const char*)tmpImage.bits(), tmpImage.sizeInBytes());
+            // memcpy(mapTextureImageData.data() + startByteIdx, tmpImageData.constData(), tmpImageData.size());
+            // mapTextureImageData.replace(startByteIdx, tmpImageData.size(), tmpImageData);
+
+            // QByteArray tmpImageData =  QByteArray::fromRawData((const char*)tmpImage.bits(), tmpImage.sizeInBytes());
+            // for(int i_x=0; i_x<tmpImageData.size(); i_x+=16){
+            //     mapTextureImageData.replace(startByteIdx, 4, tmpImageData.sliced(i_x, 4));
+            //     startByteIdx+=4;
+            //     mapTextureImageData.replace(startByteIdx, 4, tmpImageData.sliced(i_x+4, 4));
+            //     startByteIdx+=4;
+            //     mapTextureImageData.replace(startByteIdx, 4, tmpImageData.sliced(i_x+8, 4));
+            //     startByteIdx+=4;
+            //     mapTextureImageData.replace(startByteIdx, 4, tmpImageData.sliced(i_x+12, 4));
+            //     startByteIdx+=4;
+            //     // mapTextureImageData.replace(startByteIdx, 4, _alphaCh);
+            //     // startByteIdx+=4;
+            // }
+            // qDebug() << startByteIdx << mapTextureImageData.size();
         }
 
         QByteArray getMapData(){
-            QImage tmpImage = mapTileMerged.convertToFormat(QImage::Format_RGBA32FPx4);
-            QByteArray tmpImageData =  QByteArray::fromRawData((const char*)tmpImage.bits(), tmpImage.sizeInBytes());
+            QByteArray tmpImageData =  QByteArray::fromRawData((const char*)mapTextureImage.bits(), mapTextureImage.sizeInBytes());
             tmpImageData.data();
-
             return tmpImageData;
+            // return mapTextureImageData;
         }
 
         void clear(){
@@ -105,6 +132,7 @@ private:
 
 signals:
     void loadingMapCompleted();
+    void mapTileDownloaded();
 };
 
 #endif // MAPTILEQUERY_H

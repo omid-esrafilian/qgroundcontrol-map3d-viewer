@@ -22,6 +22,7 @@ class EarthTextureData : public QQuick3DTextureData
     Q_PROPERTY(QGeoCoordinate roiMaxCoordinate READ roiMaxCoordinate WRITE setRoiMaxCoordinate NOTIFY roiMaxCoordinateChanged)
     Q_PROPERTY(QSize tileCount READ tileCount NOTIFY tileCountChanged)
     Q_PROPERTY(bool textureLoaded READ textureLoaded NOTIFY textureLoadedChanged)
+    Q_PROPERTY(bool textureGeometryDone READ textureGeometryDone NOTIFY textureGeometryDoneChanged)
     Q_PROPERTY(int zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
 
     Q_OBJECT
@@ -31,7 +32,6 @@ public:
     Q_INVOKABLE void loadTexture();
 
     int _height, _width;
-    void updateTexture(QSize image_size, QByteArray image_data);
 
     QGeoCoordinate roiMinCoordinate() const;
     void setRoiMinCoordinate(const QGeoCoordinate &newRoiMinCoordinate);
@@ -49,6 +49,9 @@ public:
 
     QSize tileCount() const;
     void setTileCount(const QSize &newTileCount);
+
+    bool textureGeometryDone() const;
+    void setTextureGeometryDone(bool newTextureGeometryDone);
 
 private:
 
@@ -69,6 +72,8 @@ private:
 
     QSize _tileCount;
 
+    bool _textureGeometryDone;
+
 signals:
     void roiMinCoordinateChanged();
     void roiMaxCoordinateChanged();
@@ -76,6 +81,7 @@ signals:
     void zoomLevelChanged();
     void osmParserChanged();
     void tileCountChanged();
+    void textureGeometryDoneChanged();
 };
 
 #endif // EARTHTEXTUREDATA_H

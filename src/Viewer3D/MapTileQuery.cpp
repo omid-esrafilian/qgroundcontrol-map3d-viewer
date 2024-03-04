@@ -80,7 +80,7 @@ MapTileQuery::TileStatistics_t MapTileQuery::findAndLoadMapTiles(int zoomLevel, 
     TileStatistics_t _output;
     _output.coordinateMin = minCoordinate_;
     _output.coordinateMax = maxCoordinate_;
-    _output.tileCounts = QSize(maxTile.x() - minTile.x(), maxTile.y() - minTile.y());
+    _output.tileCounts = QSize(maxTile.x() - minTile.x() + 1, maxTile.y() - minTile.y() + 1);
     _output.zoomLevel = zoomLevel;
 
     return _output;
@@ -189,6 +189,7 @@ void MapTileQuery::tileDone(MapTileFetcher::tileInfo_t _tileData)
         emit loadingMapCompleted();
     }
 
+    emit mapTileDownloaded();
     disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
     reply->deleteLater();
 }

@@ -1,34 +1,38 @@
 #include "earthtexturedata.h"
 #include <QImage>
 #include <QUrl>
+#include <unistd.h>
 
 
 EarthTextureData::EarthTextureData()
 {
+    setTextureGeometryDone(false);
+    setTextureLoaded(false);
 }
 
 void EarthTextureData::loadTexture()
 {
-    _textureLoaded = 0;
+    setTextureLoaded(false);
     MapTileQuery::TileStatistics_t tileInfo = earthTileLoader.adaptiveMapTilesLoader(_osmParser->getMapBoundingBoxCoordinate().first, _osmParser->getMapBoundingBoxCoordinate().second);
     setRoiMinCoordinate(tileInfo.coordinateMin);
     setRoiMaxCoordinate(tileInfo.coordinateMax);
     setTileCount(tileInfo.tileCounts);
-    connect(&earthTileLoader, &MapTileQuery::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
-}
 
-void EarthTextureData::updateTexture(QSize image_size, QByteArray image_data)
-{
-    setSize(image_size);
-    setFormat(QQuick3DTextureData::RGBA32F);
-    setHasTransparency(false);
-    setTextureData(image_data);
+
+
+    connect(&earthTileLoader, &MapTileQuery::loadingMapCompleted, this, &EarthTextureData::updateEarthTexture);
+    // connect(&earthTileLoader, &MapTileQuery::mapTileDownloaded, this, &EarthTextureData::updateEarthTexture);
 }
 
 void EarthTextureData::updateEarthTexture()
 {
+    setSize(earthTileLoader.getMapSize());
+    setFormat(QQuick3DTextureData::RGBA32F);
+    setHasTransparency(false);
+
+    setTextureData(earthTileLoader.getMapData());
     setTextureLoaded(true);
-    updateTexture(earthTileLoader.getMapSize(), earthTileLoader.getMapData());
+    setTextureGeometryDone(true);
 }
 
 QGeoCoordinate EarthTextureData::roiMinCoordinate() const
@@ -105,4 +109,17 @@ void EarthTextureData::setTileCount(const QSize &newTileCount)
         return;
     _tileCount = newTileCount;
     emit tileCountChanged();
+}
+
+bool EarthTextureData::textureGeometryDone() const
+{
+    return _textureGeometryDone;
+}
+
+void EarthTextureData::setTextureGeometryDone(bool newTextureGeometryDone)
+{
+    if (_textureGeometryDone == newTextureGeometryDone)
+        return;
+    _textureGeometryDone = newTextureGeometryDone;
+    emit textureGeometryDoneChanged();
 }
