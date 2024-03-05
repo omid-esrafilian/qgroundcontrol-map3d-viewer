@@ -4,9 +4,14 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.Controllers
+import QGroundControl.FactSystem
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
-import QGroundControl.Controls
+import QGroundControl.Vehicle
 
 import QGroundControl.Viewer3D
 import Viewer3D.Models3D

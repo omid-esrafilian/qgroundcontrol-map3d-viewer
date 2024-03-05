@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Window
 import QtPositioning
 
+import Viewer3D
 import Viewer3D.Models3D.Drones
 import Viewer3D.Models3D
 import QGroundControl.Viewer3D
@@ -88,57 +89,15 @@ View3D {
         backgroundMode: SceneEnvironment.Color
     }
 
-    Rectangle{
-        id: progressBody
-
-        property real _progressValue: terrainTextureManager.textureDownloadProgress
-
-        QGCPalette { id: qgcPal; colorGroupEnabled: true }
-
+    Viewer3DProgressBar{
         anchors{
             top: parent.top
             horizontalCenter: parent.horizontalCenter
             margins: ScreenTools.defaultFontPixelWidth
         }
         width:          ScreenTools.screenWidth * 0.2
-        height: _progressCol.height + 2 * ScreenTools.defaultFontPixelWidth
-        radius: ScreenTools.defaultFontPixelWidth * 2
-        color: qgcPal.windowShadeDark
-
-        visible: _progressValue < 100.0
-        opacity:  (_progressValue < 100)?(1.0):(0.0)
-
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
-        }
-
-        Column{
-            id: _progressCol
-            anchors{
-                verticalCenter: parent.verticalCenter
-                right: parent.right
-                left: parent.left
-            }
-            ProgressBar {
-                id: _progressBar
-                anchors{
-                    right: parent.right
-                    left: parent.left
-                    margins: ScreenTools.defaultFontPixelWidth
-                }
-                from:           0
-                to:             100
-                value:          progressBody._progressValue
-            }
-            QGCLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:                qsTr("Loading Map: ") + Number(Math.floor(progressBody._progressValue)) + qsTr(" %")
-                color:              qgcPal.text
-                font.family:        ScreenTools.demiboldFontFamily
-                font.pointSize:     ScreenTools.mediumFontPointSize
-                horizontalAlignment:Text.AlignHCenter
-            }
-        }
+        progressValue: terrainTextureManager.textureDownloadProgress
+        progressText: "Loading Map: "
     }
 
     Model {
