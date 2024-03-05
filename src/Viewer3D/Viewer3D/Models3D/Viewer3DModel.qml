@@ -115,7 +115,7 @@ View3D {
         visible: true
         scale: Qt.vector3d(10, 10, 10)
 
-        geometry: EarthTerrain {
+        geometry: Viewer3DTerrainGeometry {
             id: earthSphere
             refCoordinate: viewer3DManager.qmlBackend.gpsRef
         }
@@ -131,7 +131,7 @@ View3D {
         }
     }
 
-    EarthTextureData {
+    Viewer3DTerrainTexture {
         id: earthTexture
         zoomLevel: 19
         osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)

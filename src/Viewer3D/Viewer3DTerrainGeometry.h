@@ -1,5 +1,5 @@
-#ifndef EARTHTERRAIN_H
-#define EARTHTERRAIN_H
+#ifndef VIEWER3DTERRAINGEOMETRY_H
+#define VIEWER3DTERRAINGEOMETRY_H
 
 #include <QObject>
 #include <QQuick3DGeometry>
@@ -11,7 +11,7 @@
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
-class EarthTerrain : public QQuick3DGeometry
+class Viewer3DTerrainGeometry : public QQuick3DGeometry
 {
     Q_OBJECT
 
@@ -23,7 +23,7 @@ class EarthTerrain : public QQuick3DGeometry
     Q_PROPERTY(QGeoCoordinate refCoordinate READ refCoordinate WRITE setRefCoordinate NOTIFY refCoordinateChanged)
 
 public:
-    explicit EarthTerrain();
+    explicit Viewer3DTerrainGeometry();
 
     Q_INVOKABLE void updateEarthData();
 
@@ -78,4 +78,4 @@ signals:
     void refCoordinateChanged();
 };
 
-#endif // EARTHTERRAIN_H
+#endif // VIEWER3DTERRAINGEOMETRY_H

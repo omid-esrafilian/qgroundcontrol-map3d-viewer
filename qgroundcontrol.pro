@@ -403,7 +403,6 @@ HEADERS += \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
-    src/Viewer3D/MapTileFetcher.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -413,7 +412,6 @@ HEADERS += \
 SOURCES += \
     src/QmlControls/CustomActionManager.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
-    src/Viewer3D/MapTileFetcher.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
@@ -620,10 +618,10 @@ HEADERS += \
     src/Viewer3D/Viewer3DUtils.h \
     src/Viewer3D/Viewer3DManager.h \
     src/Settings/Viewer3DSettings.h \
-    src/Viewer3D/earthterrain.h \
-    src/Viewer3D/earthtexturedata.h \
-    src/Viewer3D/maptileimageryloader.h \
-    src/Viewer3D/MapTileQuery.h \
+    src/Viewer3D/Viewer3DTileReply.h \
+    src/Viewer3D/Viewer3DTerrainGeometry.h \
+    src/Viewer3D/Viewer3DTerrainTexture.h \
+    src/Viewer3D/Viewer3DTileQuery.h \
 
 AndroidBuild {
     HEADERS += \
@@ -882,10 +880,10 @@ SOURCES += \
     src/Viewer3D/Viewer3DUtils.cc \
     src/Viewer3D/Viewer3DManager.cc \
     src/Settings/Viewer3DSettings.cc \
-    src/Viewer3D/earthterrain.cpp \
-    src/Viewer3D/earthtexturedata.cpp \
-    src/Viewer3D/maptileimageryloader.cpp \
-    src/Viewer3D/MapTileQuery.cpp \
+    src/Viewer3D/Viewer3DTileReply.cc \
+    src/Viewer3D/Viewer3DTerrainGeometry.cc \
+    src/Viewer3D/Viewer3DTerrainTexture.cc \
+    src/Viewer3D/Viewer3DTileQuery.cc \
 
 DebugBuild {
 SOURCES += \

@@ -1,3 +1,6 @@
+///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
+
+
 VARYING vec2 uv;
 
 // Ref:https://github.com/minus34/cesium1/blob/master/Cesium/Shaders/Builtin/Functions/saturation.glsl
@@ -12,5 +15,5 @@ vec3 czm_saturation(vec3 rgb, float adjustment)
 void MAIN()
 {
     vec4 textureColor = texture(someTextureMap, uv);
-    BASE_COLOR = vec4(czm_saturation(textureColor.xyz, 1.3), 1.0);
+    BASE_COLOR = vec4(czm_saturation(textureColor.xyz, 1.5), 1.0);
 }

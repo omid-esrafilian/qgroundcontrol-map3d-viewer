@@ -1,5 +1,5 @@
-#ifndef MAPTILEQUERY_H
-#define MAPTILEQUERY_H
+#ifndef VIEWER3DTILEQUERY_H
+#define VIEWER3DTILEQUERY_H
 
 #include "qvectornd.h"
 #include <QPixmap>
@@ -12,8 +12,7 @@
 #include <QDebug>
 #include <QGeoCoordinate>
 
-#include "FlightMapSettings.h"
-#include "MapTileFetcher.h"
+#include "Viewer3DTileReply.h"
 
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
@@ -105,10 +104,7 @@ public:
     Q_OBJECT
 public:
     explicit MapTileQuery(QObject *parent = nullptr);
-
-    void loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileMaxIndex);
-    TileStatistics_t findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
-    TileStatistics_t adaptiveMapTilesLoader(QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
+    TileStatistics_t adaptiveMapTilesLoader(QString mapType, int mapId, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
     int maxTileCount(int zoomLevel, QGeoCoordinate coordinateMin, QGeoCoordinate coordinateMax);
     QByteArray getMapData(){ return _mapToBeLoaded.getMapData();}
     QSize getMapSize(){ return QSize(_mapToBeLoaded.mapWidth, _mapToBeLoaded.mapHeight);}
@@ -116,23 +112,25 @@ public:
 private:
     int _mapTilesLoadStat;
     MapTileContainer_t _mapToBeLoaded;
-
-    FlightMapSettings* _flightMapSettings;
-    QString _mapType;
     int _mapId;
+    QString _mapType;
 
+
+    void loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileMaxIndex);
+    TileStatistics_t findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2);
     double valueClip(double n, double _minValue, double _maxValue);
     QPoint latLonToPixelXY(QGeoCoordinate pointCoordinate, int zoomLevel);
     QPoint pixelXYToTileXY(QPoint pixel);
     QPoint tileXYToPixelXY(QPoint tile);
     QGeoCoordinate pixelXYToLatLong(QPoint pixel, int zoomLevel);
     void tileDone(MapTileFetcher::tileInfo_t _tileData);
+    void tileGiveUp(MapTileFetcher::tileInfo_t _tileData);
     void httpReadyRead();
-    void mapTypeChangedEvent(QVariant value);
+    QString getTileKey(int mapId, int x, int y, int zoomLevel);
 
 signals:
     void loadingMapCompleted();
     void mapTileDownloaded();
 };
 
-#endif // MAPTILEQUERY_H
+#endif // VIEWER3DTILEQUERY_H

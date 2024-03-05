@@ -1,11 +1,6 @@
-#include "MapTileQuery.h"
+#include "Viewer3DTileQuery.h"
 
-#include "QGCApplication.h"
-#include "SettingsManager.h"
 #include "QGCMapEngine.h"
-#include "private/qgeotilespec_p.h"
-
-#include "MapTileFetcher.h"
 
 #define PI                  acos(-1.0f)
 #define DEG_TO_RAD          PI/180.0f
@@ -24,10 +19,6 @@ enum RequestStat{
 MapTileQuery::MapTileQuery(QObject *parent)
     : QObject{parent}
 {
-    _flightMapSettings = qgcApp()->toolbox()->settingsManager()->flightMapSettings();
-    mapTypeChangedEvent(_flightMapSettings->mapProvider()->rawValue());
-    connect(_flightMapSettings->mapProvider(), &Fact::rawValueChanged, this, &MapTileQuery::mapTypeChangedEvent);
-    connect(_flightMapSettings->mapType(), &Fact::rawValueChanged, this, &MapTileQuery::mapTypeChangedEvent);
 }
 
 void MapTileQuery::loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileMaxIndex)
@@ -41,11 +32,11 @@ void MapTileQuery::loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileM
 
     for (int x = tileMinIndex.x(); x <= tileMaxIndex.x(); x++) {
         for (int y = tileMinIndex.y(); y <= tileMaxIndex.y(); y++) {
-
-            QString tileKey = getQGCMapEngine()->getTileHash(_mapType, x, y, zoomLevel);
+            QString tileKey = getTileKey(_mapId, x, y, zoomLevel);
             _mapToBeLoaded.tileList.append(tileKey);
             MapTileFetcher* tReply = new MapTileFetcher(zoomLevel, x, y, _mapId, this);
             connect(tReply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
+            connect(tReply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
         }
     }
     qDebug() << _mapToBeLoaded.tileList.size() << "Tiles to be downloaded!!";
@@ -86,9 +77,11 @@ MapTileQuery::TileStatistics_t MapTileQuery::findAndLoadMapTiles(int zoomLevel, 
     return _output;
 }
 
-MapTileQuery::TileStatistics_t MapTileQuery::adaptiveMapTilesLoader(QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
+MapTileQuery::TileStatistics_t MapTileQuery::adaptiveMapTilesLoader(QString mapType, int mapId, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
 {
     int zoomLevel;
+    _mapId = mapId;
+    _mapType = mapType;
     for(zoomLevel=MAX_ZOOM_LEVEL; zoomLevel>0; zoomLevel--){
         if(maxTileCount(zoomLevel, coordinate_1, coordinate_2) < MAX_TILE_COUNTS){
             break;
@@ -173,33 +166,40 @@ void MapTileQuery::tileDone(MapTileFetcher::tileInfo_t _tileData)
 {
     MapTileFetcher* reply = qobject_cast<MapTileFetcher*>(QObject::sender());
 
-    _mapToBeLoaded.currentTileIndex = QPoint(_tileData.x, _tileData.y);
-    _mapToBeLoaded.currentTileData = _tileData.data;
-    _mapToBeLoaded.currentTileStat = RequestStat::FINISHED;
-    _mapToBeLoaded.setMapTile();
+    QString tileKey = getTileKey(_tileData.mapId, _tileData.x, _tileData.y, _tileData.zoomLevel);
+    qsizetype itemRemoved = _mapToBeLoaded.tileList.removeAll(tileKey);
 
-    QString tileKey = getQGCMapEngine()->getTileHash(_mapType, _tileData.x, _tileData.y, _tileData.zoomLevel);
-    _mapToBeLoaded.tileList.removeAll(tileKey);
+    if(itemRemoved > 0){
+        _mapToBeLoaded.currentTileIndex = QPoint(_tileData.x, _tileData.y);
+        _mapToBeLoaded.currentTileData = _tileData.data;
+        _mapToBeLoaded.currentTileStat = RequestStat::FINISHED;
+        _mapToBeLoaded.setMapTile();
 
-    // qDebug() << _tileData.x << _tileData.y << _tileData.zoomLevel << "tile downloaded!!!" << _mapToBeLoaded.tileList.size();
+        // qDebug() << _tileData.x << _tileData.y << _tileData.zoomLevel << "tile downloaded!!!" << _mapToBeLoaded.tileList.size();
 
-    if(_mapToBeLoaded.tileList.size() == 0){
-        _mapTilesLoadStat = RequestStat::FINISHED;
-        qDebug() << "All tiles downloaded ";
-        emit loadingMapCompleted();
+        if(_mapToBeLoaded.tileList.size() == 0){
+            _mapTilesLoadStat = RequestStat::FINISHED;
+            qDebug() << "All tiles downloaded ";
+            emit loadingMapCompleted();
+        }
+
+        emit mapTileDownloaded();
     }
-
-    emit mapTileDownloaded();
     disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
+    disconnect(reply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
     reply->deleteLater();
 }
 
-
-void MapTileQuery::mapTypeChangedEvent(QVariant value)
+void MapTileQuery::tileGiveUp(MapTileFetcher::tileInfo_t _tileData)
 {
-    _mapType.clear();
-    _mapType = _flightMapSettings->mapProvider()->rawValue().toString() + QString(" ");
-    _mapType += _flightMapSettings->mapType()->rawValue().toString();
-
-    _mapId = getQGCMapEngine()->urlFactory()->getQtMapIdFromProviderType(_mapType);
+    MapTileFetcher* reply = qobject_cast<MapTileFetcher*>(QObject::sender());
+    disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
+    disconnect(reply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
+    reply->deleteLater();
 }
+
+QString MapTileQuery::getTileKey(int mapId, int x, int y, int zoomLevel)
+{
+    return QString::asprintf("%010d%08d%08d%03d", mapId, x, y, zoomLevel);
+}
+

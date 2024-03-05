@@ -1,12 +1,8 @@
-VARYING vec2 uv;
+///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
-float getHeight(vec2 pos)
-{
-    return texture(someTextureMap, pos).g;
-}
+VARYING vec2 uv;
 
 void MAIN()
 {
     uv = UV0;
-    VERTEX += 100 * NORMAL * getHeight(UV0);
 }

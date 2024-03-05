@@ -1,4 +1,4 @@
-#include "earthterrain.h"
+#include "Viewer3DTerrainGeometry.h"
 #include <QRandomGenerator>
 #include <QVector3D>
 
@@ -12,17 +12,17 @@
 #define MaxLatitude         85.05112878
 #define EarthRadius         6378137
 
-EarthTerrain::EarthTerrain()
+Viewer3DTerrainGeometry::Viewer3DTerrainGeometry()
 {
     _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
     setSectorCount(0);
     setStackCount(0);
     setRadius(EarthRadius);
-    connect(_viewer3DSettings->osmFilePath(), &Fact::rawValueChanged, this, &EarthTerrain::clearScene);
-    connect(this, &EarthTerrain::refCoordinateChanged, this, &EarthTerrain::updateEarthData);
+    connect(_viewer3DSettings->osmFilePath(), &Fact::rawValueChanged, this, &Viewer3DTerrainGeometry::clearScene);
+    connect(this, &Viewer3DTerrainGeometry::refCoordinateChanged, this, &Viewer3DTerrainGeometry::updateEarthData);
 }
 
-void EarthTerrain::updateEarthData()
+void Viewer3DTerrainGeometry::updateEarthData()
 {
     clear();
     int stride = 3 * sizeof(float);
@@ -32,7 +32,6 @@ void EarthTerrain::updateEarthData()
     if(buildTerrain_2(roiMin(), roiMax(), refCoordinate(), 1) == 0){
         return;
     }
-    qDebug() << "Updating the Earth sphere with: " << roiMin() << roiMax();
 
     QByteArray vertexData;
     vertexData.resize(_vertices.size() * stride);
@@ -68,7 +67,7 @@ void EarthTerrain::updateEarthData()
     update();
 }
 
-QVector3D EarthTerrain::computeFaceNormal(QVector3D x1, QVector3D x2, QVector3D x3)
+QVector3D Viewer3DTerrainGeometry::computeFaceNormal(QVector3D x1, QVector3D x2, QVector3D x3)
 {
     const float EPSILON = 0.000001f;
 
@@ -102,7 +101,7 @@ QVector3D EarthTerrain::computeFaceNormal(QVector3D x1, QVector3D x2, QVector3D 
     return normal;
 }
 
-void EarthTerrain::changeUpAxis(int from, int to)
+void Viewer3DTerrainGeometry::changeUpAxis(int from, int to)
 {
     // initial transform matrix cols
     float tx[] = {1.0f, 0.0f, 0.0f};    // x-axis (left)
@@ -170,7 +169,7 @@ void EarthTerrain::changeUpAxis(int from, int to)
     }
 }
 
-void EarthTerrain::clearScene()
+void Viewer3DTerrainGeometry::clearScene()
 {
     clear();
     setSectorCount(0);
@@ -181,12 +180,12 @@ void EarthTerrain::clearScene()
     update();
 }
 
-int EarthTerrain::sectorCount() const
+int Viewer3DTerrainGeometry::sectorCount() const
 {
     return _sectorCount;
 }
 
-void EarthTerrain::setSectorCount(int newSectorCount)
+void Viewer3DTerrainGeometry::setSectorCount(int newSectorCount)
 {
     if (_sectorCount == newSectorCount)
         return;
@@ -194,12 +193,12 @@ void EarthTerrain::setSectorCount(int newSectorCount)
     emit sectorCountChanged();
 }
 
-int EarthTerrain::stackCount() const
+int Viewer3DTerrainGeometry::stackCount() const
 {
     return _stackCount;
 }
 
-void EarthTerrain::setStackCount(int newStackCount)
+void Viewer3DTerrainGeometry::setStackCount(int newStackCount)
 {
     if (_stackCount == newStackCount)
         return;
@@ -207,7 +206,7 @@ void EarthTerrain::setStackCount(int newStackCount)
     emit stackCountChanged();
 }
 
-void EarthTerrain::buildTerrain(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
+void Viewer3DTerrainGeometry::buildTerrain(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
 {
     float sectorLength = abs(roiMaxCoordinate.longitude() - roiMinCoordinate.longitude());
     float stackLength = abs(roiMaxCoordinate.latitude() - roiMinCoordinate.latitude());
@@ -351,7 +350,7 @@ void EarthTerrain::buildTerrain(QGeoCoordinate roiMinCoordinate, QGeoCoordinate 
     changeUpAxis(3, 2);
 }
 
-bool EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
+bool Viewer3DTerrainGeometry::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinate roiMaxCoordinate, QGeoCoordinate refCoordinate, bool scale)
 {
     if(_sectorCount == 0 || _stackCount == 0){
         return false;
@@ -421,7 +420,7 @@ bool EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinat
     _vertices.clear();
     _texCoords.clear();
     _normals.clear();
-    Vertex v1, v2, v3, v4;                          // 4 vertex positions and tex coords
+    Vertex v1, v2, v3, v4;                          // 4 vertex positions and texture coords
     int i, j, vi1, vi2;
     QVector3D _n;
     for(i = 0; i < _stackCount; ++i){
@@ -493,54 +492,58 @@ bool EarthTerrain::buildTerrain_2(QGeoCoordinate roiMinCoordinate, QGeoCoordinat
     return true;
 }
 
-int EarthTerrain::radius() const
+int Viewer3DTerrainGeometry::radius() const
 {
     return _radius;
 }
 
-void EarthTerrain::setRadius(int newRadius)
+void Viewer3DTerrainGeometry::setRadius(int newRadius)
 {
-    if (_radius == newRadius)
+    if (_radius == newRadius){
         return;
+    }
     _radius = newRadius;
     emit radiusChanged();
 }
 
-QGeoCoordinate EarthTerrain::roiMin() const
+QGeoCoordinate Viewer3DTerrainGeometry::roiMin() const
 {
     return _roiMin;
 }
 
-void EarthTerrain::setRoiMin(const QGeoCoordinate &newRoiMin)
+void Viewer3DTerrainGeometry::setRoiMin(const QGeoCoordinate &newRoiMin)
 {
-    if (_roiMin == newRoiMin)
+    if (_roiMin == newRoiMin){
         return;
+    }
     _roiMin = newRoiMin;
     emit roiMinChanged();
 }
 
-QGeoCoordinate EarthTerrain::roiMax() const
+QGeoCoordinate Viewer3DTerrainGeometry::roiMax() const
 {
     return _roiMax;
 }
 
-void EarthTerrain::setRoiMax(const QGeoCoordinate &newRoiMax)
+void Viewer3DTerrainGeometry::setRoiMax(const QGeoCoordinate &newRoiMax)
 {
-    if (_roiMax == newRoiMax)
+    if (_roiMax == newRoiMax){
         return;
+    }
     _roiMax = newRoiMax;
     emit roiMaxChanged();
 }
 
-QGeoCoordinate EarthTerrain::refCoordinate() const
+QGeoCoordinate Viewer3DTerrainGeometry::refCoordinate() const
 {
     return _refCoordinate;
 }
 
-void EarthTerrain::setRefCoordinate(const QGeoCoordinate &newRefCoordinate)
+void Viewer3DTerrainGeometry::setRefCoordinate(const QGeoCoordinate &newRefCoordinate)
 {
-    if (_refCoordinate == newRefCoordinate)
+    if (_refCoordinate == newRefCoordinate){
         return;
+    }
     _refCoordinate = newRefCoordinate;
     emit refCoordinateChanged();
 }

@@ -1,5 +1,5 @@
-#ifndef EARTHTEXTUREDATA_H
-#define EARTHTEXTUREDATA_H
+#ifndef VIEWER3DTERRAINTEXTURE_H
+#define VIEWER3DTERRAINTEXTURE_H
 
 #include <QObject>
 #include <QQuick3DTextureData>
@@ -8,14 +8,14 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-// #include "maptileimageryloader.h"
-#include "MapTileQuery.h"
+#include "Viewer3DTileQuery.h"
 #include "OsmParser.h"
+#include "FlightMapSettings.h"
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 
-class EarthTextureData : public QQuick3DTextureData
+class Viewer3DTerrainTexture : public QQuick3DTextureData
 {
     Q_PROPERTY(OsmParser* osmParser READ osmParser WRITE setOsmParser NOTIFY osmParserChanged)
     Q_PROPERTY(QGeoCoordinate roiMinCoordinate READ roiMinCoordinate WRITE setRoiMinCoordinate NOTIFY roiMinCoordinateChanged)
@@ -27,7 +27,7 @@ class EarthTextureData : public QQuick3DTextureData
 
     Q_OBJECT
 public:
-    explicit EarthTextureData();
+    explicit Viewer3DTerrainTexture();
 
     Q_INVOKABLE void loadTexture();
 
@@ -55,11 +55,14 @@ public:
 
 private:
 
-    // MapTileImageryLoader earthTileLoader;;
-    MapTileQuery earthTileLoader;
+    MapTileQuery _terrainTileLoader;
+    FlightMapSettings* _flightMapSettings;
+    QString _mapType;
+    int _mapId;
 
     void updateEarthTexture();
     void setTextureLoaded(bool laoded){_textureLoaded = laoded; emit textureLoadedChanged();}
+    void mapTypeChangedEvent(void);
 
     QGeoCoordinate _roiMinCoordinate;
     QGeoCoordinate _roiMaxCoordinate;
@@ -82,6 +85,7 @@ signals:
     void osmParserChanged();
     void tileCountChanged();
     void textureGeometryDoneChanged();
+    void mapProviderIdChanged();
 };
 
-#endif // EARTHTEXTUREDATA_H
+#endif // VIEWER3DTERRAINTEXTURE_H

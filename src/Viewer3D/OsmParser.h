@@ -57,6 +57,7 @@ class OsmParser : public QObject
 public:
     explicit OsmParser(QObject *parent = nullptr);
 
+    bool mapLoaded(){return _mapLoadedFlag;}
     void setGpsRef(QGeoCoordinate gpsRef);
     void resetGpsRef();
     QGeoCoordinate getGpsRef(){ return _gpsRefPoint;}
