@@ -88,6 +88,59 @@ View3D {
         backgroundMode: SceneEnvironment.Color
     }
 
+    Rectangle{
+        id: progressBody
+
+        property real _progressValue: terrainTextureManager.textureDownloadProgress
+
+        QGCPalette { id: qgcPal; colorGroupEnabled: true }
+
+        anchors{
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+            margins: ScreenTools.defaultFontPixelWidth
+        }
+        width:          ScreenTools.screenWidth * 0.2
+        height: _progressCol.height + 2 * ScreenTools.defaultFontPixelWidth
+        radius: ScreenTools.defaultFontPixelWidth * 2
+        color: qgcPal.windowShadeDark
+
+        visible: _progressValue < 100.0
+        opacity:  (_progressValue < 100)?(1.0):(0.0)
+
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+
+        Column{
+            id: _progressCol
+            anchors{
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                left: parent.left
+            }
+            ProgressBar {
+                id: _progressBar
+                anchors{
+                    right: parent.right
+                    left: parent.left
+                    margins: ScreenTools.defaultFontPixelWidth
+                }
+                from:           0
+                to:             100
+                value:          progressBody._progressValue
+            }
+            QGCLabel {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:                qsTr("Loading Map: ") + Number(Math.floor(progressBody._progressValue)) + qsTr(" %")
+                color:              qgcPal.text
+                font.family:        ScreenTools.demiboldFontFamily
+                font.pointSize:     ScreenTools.mediumFontPointSize
+                horizontalAlignment:Text.AlignHCenter
+            }
+        }
+    }
+
     Model {
         id: cityMapModel
         visible: true
@@ -116,7 +169,7 @@ View3D {
         scale: Qt.vector3d(10, 10, 10)
 
         geometry: Viewer3DTerrainGeometry {
-            id: earthSphere
+            id: terrainGeometryManager
             refCoordinate: viewer3DManager.qmlBackend.gpsRef
         }
 
@@ -125,24 +178,24 @@ View3D {
             fragmentShader: "/ShaderFragment/earthMaterial.frag"
             property TextureInput someTextureMap: TextureInput {
                 texture: Texture {
-                    textureData: earthTexture
+                    textureData: terrainTextureManager
                 }
             }
         }
     }
 
     Viewer3DTerrainTexture {
-        id: earthTexture
+        id: terrainTextureManager
         zoomLevel: 19
         osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
 
         onTextureGeometryDoneChanged: {
             if(textureGeometryDone === true){
-                earthSphere.sectorCount = tileCount.width
-                earthSphere.stackCount = tileCount.height
-                earthSphere.roiMin = roiMinCoordinate;
-                earthSphere.roiMax = roiMaxCoordinate;
-                earthSphere.updateEarthData();
+                terrainGeometryManager.sectorCount = tileCount.width
+                terrainGeometryManager.stackCount = tileCount.height
+                terrainGeometryManager.roiMin = roiMinCoordinate;
+                terrainGeometryManager.roiMax = roiMaxCoordinate;
+                terrainGeometryManager.updateEarthData();
             }
         }
     }

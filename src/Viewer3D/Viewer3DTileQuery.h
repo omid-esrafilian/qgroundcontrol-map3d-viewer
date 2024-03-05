@@ -112,6 +112,7 @@ public:
 private:
     int _mapTilesLoadStat;
     MapTileContainer_t _mapToBeLoaded;
+    int totalTilesCount, downloadedTilesCount;
     int _mapId;
     QString _mapType;
 
@@ -130,7 +131,7 @@ private:
 
 signals:
     void loadingMapCompleted();
-    void mapTileDownloaded();
+    void mapTileDownloaded(float progress);
 };
 
 #endif // VIEWER3DTILEQUERY_H

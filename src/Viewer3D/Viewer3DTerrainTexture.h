@@ -24,6 +24,8 @@ class Viewer3DTerrainTexture : public QQuick3DTextureData
     Q_PROPERTY(bool textureLoaded READ textureLoaded NOTIFY textureLoadedChanged)
     Q_PROPERTY(bool textureGeometryDone READ textureGeometryDone NOTIFY textureGeometryDoneChanged)
     Q_PROPERTY(int zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
+    Q_PROPERTY(float textureDownloadProgress READ textureDownloadProgress NOTIFY textureDownloadProgressChanged)
+
 
     Q_OBJECT
 public:
@@ -53,6 +55,9 @@ public:
     bool textureGeometryDone() const;
     void setTextureGeometryDone(bool newTextureGeometryDone);
 
+    float textureDownloadProgress() const;
+    void setTextureDownloadProgress(float newTextureDownloadProgress);
+
 private:
 
     MapTileQuery _terrainTileLoader;
@@ -60,7 +65,7 @@ private:
     QString _mapType;
     int _mapId;
 
-    void updateEarthTexture();
+    void updateTexture();
     void setTextureLoaded(bool laoded){_textureLoaded = laoded; emit textureLoadedChanged();}
     void mapTypeChangedEvent(void);
 
@@ -77,6 +82,8 @@ private:
 
     bool _textureGeometryDone;
 
+    float _textureDownloadProgress;
+
 signals:
     void roiMinCoordinateChanged();
     void roiMaxCoordinateChanged();
@@ -86,6 +93,7 @@ signals:
     void tileCountChanged();
     void textureGeometryDoneChanged();
     void mapProviderIdChanged();
+    void textureDownloadProgressChanged();
 };
 
 #endif // VIEWER3DTERRAINTEXTURE_H

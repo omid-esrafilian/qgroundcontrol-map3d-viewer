@@ -26,7 +26,7 @@ void Viewer3DTerrainGeometry::updateEarthData()
 {
     clear();
     int stride = 3 * sizeof(float);
-    stride += 3 * sizeof(float); // for for normals
+    stride += 3 * sizeof(float); // for normals
     stride += 2 * sizeof(float); // for UV
 
     if(buildTerrain_2(roiMin(), roiMax(), refCoordinate(), 1) == 0){

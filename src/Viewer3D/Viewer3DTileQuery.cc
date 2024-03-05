@@ -39,7 +39,9 @@ void MapTileQuery::loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileM
             connect(tReply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
         }
     }
-    qDebug() << _mapToBeLoaded.tileList.size() << "Tiles to be downloaded!!";
+    totalTilesCount = _mapToBeLoaded.tileList.size();
+    downloadedTilesCount = 0;
+    qDebug() << totalTilesCount << "Tiles to be downloaded!!";
 }
 
 MapTileQuery::TileStatistics_t MapTileQuery::findAndLoadMapTiles(int zoomLevel, QGeoCoordinate coordinate_1, QGeoCoordinate coordinate_2)
@@ -174,16 +176,18 @@ void MapTileQuery::tileDone(MapTileFetcher::tileInfo_t _tileData)
         _mapToBeLoaded.currentTileData = _tileData.data;
         _mapToBeLoaded.currentTileStat = RequestStat::FINISHED;
         _mapToBeLoaded.setMapTile();
+        downloadedTilesCount++;
+        emit mapTileDownloaded(100.0 * ((float) downloadedTilesCount/ (float)totalTilesCount));
 
         // qDebug() << _tileData.x << _tileData.y << _tileData.zoomLevel << "tile downloaded!!!" << _mapToBeLoaded.tileList.size();
 
         if(_mapToBeLoaded.tileList.size() == 0){
             _mapTilesLoadStat = RequestStat::FINISHED;
             qDebug() << "All tiles downloaded ";
+            downloadedTilesCount = totalTilesCount;
             emit loadingMapCompleted();
         }
 
-        emit mapTileDownloaded();
     }
     disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
     disconnect(reply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);

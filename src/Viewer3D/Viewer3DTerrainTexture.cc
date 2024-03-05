@@ -15,16 +15,19 @@ Viewer3DTerrainTexture::Viewer3DTerrainTexture()
 
     setTextureGeometryDone(false);
     setTextureLoaded(false);
+    setTextureDownloadProgress(100.0);
 
     // connect(_flightMapSettings->mapProvider(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);
     connect(_flightMapSettings->mapType(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);
-    connect(&_terrainTileLoader, &MapTileQuery::loadingMapCompleted, this, &Viewer3DTerrainTexture::updateEarthTexture);
     connect(this, &Viewer3DTerrainTexture::mapProviderIdChanged, this, &Viewer3DTerrainTexture::loadTexture);
+    connect(&_terrainTileLoader, &MapTileQuery::loadingMapCompleted, this, &Viewer3DTerrainTexture::updateTexture);
 }
 
 void Viewer3DTerrainTexture::loadTexture()
 {
     setTextureLoaded(false);
+    setTextureGeometryDone(false);
+    setTextureDownloadProgress(0.0);
     if(_osmParser->mapLoaded()){
         MapTileQuery::TileStatistics_t tileInfo = _terrainTileLoader.adaptiveMapTilesLoader(_mapType, _mapId,
                                                                                             _osmParser->getMapBoundingBoxCoordinate().first,
@@ -32,10 +35,11 @@ void Viewer3DTerrainTexture::loadTexture()
         setRoiMinCoordinate(tileInfo.coordinateMin);
         setRoiMaxCoordinate(tileInfo.coordinateMax);
         setTileCount(tileInfo.tileCounts);
+        connect(&_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
     }
 }
 
-void Viewer3DTerrainTexture::updateEarthTexture()
+void Viewer3DTerrainTexture::updateTexture()
 {
     setSize(_terrainTileLoader.getMapSize());
     setFormat(QQuick3DTextureData::RGBA32F);
@@ -44,6 +48,8 @@ void Viewer3DTerrainTexture::updateEarthTexture()
     setTextureData(_terrainTileLoader.getMapData());
     setTextureLoaded(true);
     setTextureGeometryDone(true);
+    disconnect(&_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
+    setTextureDownloadProgress(100.0);
 }
 
 void Viewer3DTerrainTexture::mapTypeChangedEvent(void)
@@ -154,4 +160,18 @@ void Viewer3DTerrainTexture::setTextureGeometryDone(bool newTextureGeometryDone)
     }
     _textureGeometryDone = newTextureGeometryDone;
     emit textureGeometryDoneChanged();
+}
+
+float Viewer3DTerrainTexture::textureDownloadProgress() const
+{
+    return _textureDownloadProgress;
+}
+
+void Viewer3DTerrainTexture::setTextureDownloadProgress(float newTextureDownloadProgress)
+{
+    if (qFuzzyCompare(_textureDownloadProgress, newTextureDownloadProgress)){
+        return;
+    }
+    _textureDownloadProgress = newTextureDownloadProgress;
+    emit textureDownloadProgressChanged();
 }
