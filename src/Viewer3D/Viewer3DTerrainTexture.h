@@ -23,7 +23,6 @@ class Viewer3DTerrainTexture : public QQuick3DTextureData
     Q_PROPERTY(QSize tileCount READ tileCount NOTIFY tileCountChanged)
     Q_PROPERTY(bool textureLoaded READ textureLoaded NOTIFY textureLoadedChanged)
     Q_PROPERTY(bool textureGeometryDone READ textureGeometryDone NOTIFY textureGeometryDoneChanged)
-    Q_PROPERTY(int zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
     Q_PROPERTY(float textureDownloadProgress READ textureDownloadProgress NOTIFY textureDownloadProgressChanged)
 
 
@@ -42,9 +41,6 @@ public:
     void setRoiMaxCoordinate(const QGeoCoordinate &newRoiMaxCoordinate);
 
     bool textureLoaded() const;
-
-    int zoomLevel() const;
-    void setZoomLevel(int newZoomLevel);
 
     OsmParser *osmParser() const;
     void setOsmParser(OsmParser *newOsmParser);
@@ -74,7 +70,6 @@ private:
 
     bool _textureLoaded;
 
-    int _zoomLevel;
 
     OsmParser *_osmParser = nullptr;
 
@@ -88,7 +83,6 @@ signals:
     void roiMinCoordinateChanged();
     void roiMaxCoordinateChanged();
     void textureLoadedChanged();
-    void zoomLevelChanged();
     void osmParserChanged();
     void tileCountChanged();
     void textureGeometryDoneChanged();

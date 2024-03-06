@@ -30,7 +30,7 @@ Rectangle{
     opacity:  (progressValue < 100)?(1.0):(0.0)
 
     Behavior on opacity {
-        NumberAnimation { duration: 500 }
+        NumberAnimation { duration: 300 }
     }
 
     Column{

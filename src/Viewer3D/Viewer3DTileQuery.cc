@@ -59,7 +59,7 @@ MapTileQuery::TileStatistics_t MapTileQuery::findAndLoadMapTiles(int zoomLevel, 
     QPoint maxTile = pixelXYToTileXY(maxPixel);
 
     minPixel = tileXYToPixelXY(minTile);
-    maxPixel = tileXYToPixelXY(QPoint(maxTile.x() + 1, maxTile.y() + 1));
+    maxPixel = tileXYToPixelXY(QPoint(maxTile.x() + 1, maxTile.y() + 1)); //since the coordinate is for the top left corner of each tile
 
     minCoordinate = pixelXYToLatLong(minPixel, zoomLevel);
     maxCoordinate = pixelXYToLatLong(maxPixel, zoomLevel);

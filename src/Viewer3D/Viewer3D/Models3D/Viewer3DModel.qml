@@ -91,7 +91,7 @@ View3D {
 
     Viewer3DProgressBar{
         anchors{
-            top: parent.top
+            bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
             margins: ScreenTools.defaultFontPixelWidth
         }
@@ -145,7 +145,6 @@ View3D {
 
     Viewer3DTerrainTexture {
         id: terrainTextureManager
-        zoomLevel: 19
         osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
 
         onTextureGeometryDoneChanged: {

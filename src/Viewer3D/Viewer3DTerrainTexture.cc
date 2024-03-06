@@ -101,20 +101,6 @@ bool Viewer3DTerrainTexture::textureLoaded() const
     return _textureLoaded;
 }
 
-int Viewer3DTerrainTexture::zoomLevel() const
-{
-    return _zoomLevel;
-}
-
-void Viewer3DTerrainTexture::setZoomLevel(int newZoomLevel)
-{
-    if (_zoomLevel == newZoomLevel){
-        return;
-    }
-    _zoomLevel = newZoomLevel;
-    emit zoomLevelChanged();
-}
-
 OsmParser *Viewer3DTerrainTexture::osmParser() const
 {
     return _osmParser;
