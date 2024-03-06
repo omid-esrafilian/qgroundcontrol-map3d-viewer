@@ -34,13 +34,14 @@ Node {
         for (var i = 1; i < _missionController.visualItems.count; i++) {
             var _missionItem = _missionController.visualItems.get(i); // list of all properties in VisualMissionItem.h and SimpleMissionItem.h
             if(_missionItem.specifiesCoordinate){
+                let _abbreviation = (_missionItem.isTakeoffItem)?(qsTr("Takeoff")):(_missionItem.abbreviation);
                 _geo2EnuCopy.coordinate = _missionItem.coordinate;
                 _geo2EnuCopy.coordinate.altitude = 0;
                 missionWaypointListModel.append({
                                                     "x": _geo2EnuCopy.localCoordinate.x,
                                                     "y": _geo2EnuCopy.localCoordinate.y,
                                                     "z": _missionItem.altitude.value,
-                                                    "abbreviation": _missionItem.abbreviation,
+                                                    "abbreviation": _abbreviation,
                                                     "index": _missionItem.sequenceNumber,
                                                 });
             }
@@ -63,7 +64,7 @@ Node {
             }
 
             var _missionItem = _missionController.visualItems.get(i);
-            if(_missionItem.abbreviation !== "ROI" && _missionItem.specifiesCoordinate){
+            if(_missionItem.abbreviation === "" && _missionItem.specifiesCoordinate){
                 _geo2EnuCopy.coordinate = _missionItemPrevious.coordinate;
                 _geo2EnuCopy.coordinate.altitude = 0;
                 var p1 = Qt.vector3d(_geo2EnuCopy.localCoordinate.x, _geo2EnuCopy.localCoordinate.y, _missionItemPrevious.altitude.value);
