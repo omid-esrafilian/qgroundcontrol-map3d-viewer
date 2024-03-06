@@ -124,8 +124,8 @@ private:
     QPoint pixelXYToTileXY(QPoint pixel);
     QPoint tileXYToPixelXY(QPoint tile);
     QGeoCoordinate pixelXYToLatLong(QPoint pixel, int zoomLevel);
-    void tileDone(MapTileFetcher::tileInfo_t _tileData);
-    void tileGiveUp(MapTileFetcher::tileInfo_t _tileData);
+    void tileDone(Viewer3DTileReply::tileInfo_t _tileData);
+    void tileGiveUp(Viewer3DTileReply::tileInfo_t _tileData);
     void httpReadyRead();
     QString getTileKey(int mapId, int x, int y, int zoomLevel);
 

@@ -9,7 +9,7 @@
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
-class MapTileFetcher : public QObject
+class Viewer3DTileReply : public QObject
 {
 public:
 
@@ -21,8 +21,8 @@ public:
 
     Q_OBJECT
 public:
-    explicit MapTileFetcher(int zoomLevel, int tileX, int tileY, int mapId, QObject *parent = nullptr);
-    ~MapTileFetcher();
+    explicit Viewer3DTileReply(int zoomLevel, int tileX, int tileY, int mapId, QObject *parent = nullptr);
+    ~Viewer3DTileReply();
 
 private:
 

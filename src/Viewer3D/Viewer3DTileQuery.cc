@@ -34,9 +34,9 @@ void MapTileQuery::loadMapTiles(int zoomLevel, QPoint tileMinIndex, QPoint tileM
         for (int y = tileMinIndex.y(); y <= tileMaxIndex.y(); y++) {
             QString tileKey = getTileKey(_mapId, x, y, zoomLevel);
             _mapToBeLoaded.tileList.append(tileKey);
-            MapTileFetcher* tReply = new MapTileFetcher(zoomLevel, x, y, _mapId, this);
-            connect(tReply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
-            connect(tReply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
+            Viewer3DTileReply* _reply = new Viewer3DTileReply(zoomLevel, x, y, _mapId, this);
+            connect(_reply, &Viewer3DTileReply::tileDone, this, &MapTileQuery::tileDone);
+            connect(_reply, &Viewer3DTileReply::tileGiveUp, this, &MapTileQuery::tileGiveUp);
         }
     }
     totalTilesCount = _mapToBeLoaded.tileList.size();
@@ -164,9 +164,9 @@ QGeoCoordinate MapTileQuery::pixelXYToLatLong(QPoint pixel, int zoomLevel)
     return QGeoCoordinate(latitude, longitude, 0);
 }
 
-void MapTileQuery::tileDone(MapTileFetcher::tileInfo_t _tileData)
+void MapTileQuery::tileDone(Viewer3DTileReply::tileInfo_t _tileData)
 {
-    MapTileFetcher* reply = qobject_cast<MapTileFetcher*>(QObject::sender());
+    Viewer3DTileReply* reply = qobject_cast<Viewer3DTileReply*>(QObject::sender());
 
     QString tileKey = getTileKey(_tileData.mapId, _tileData.x, _tileData.y, _tileData.zoomLevel);
     qsizetype itemRemoved = _mapToBeLoaded.tileList.removeAll(tileKey);
@@ -189,16 +189,16 @@ void MapTileQuery::tileDone(MapTileFetcher::tileInfo_t _tileData)
         }
 
     }
-    disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
-    disconnect(reply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
+    disconnect(reply, &Viewer3DTileReply::tileDone, this, &MapTileQuery::tileDone);
+    disconnect(reply, &Viewer3DTileReply::tileGiveUp, this, &MapTileQuery::tileGiveUp);
     reply->deleteLater();
 }
 
-void MapTileQuery::tileGiveUp(MapTileFetcher::tileInfo_t _tileData)
+void MapTileQuery::tileGiveUp(Viewer3DTileReply::tileInfo_t _tileData)
 {
-    MapTileFetcher* reply = qobject_cast<MapTileFetcher*>(QObject::sender());
-    disconnect(reply, &MapTileFetcher::tileDone, this, &MapTileQuery::tileDone);
-    disconnect(reply, &MapTileFetcher::tileGiveUp, this, &MapTileQuery::tileGiveUp);
+    Viewer3DTileReply* reply = qobject_cast<Viewer3DTileReply*>(QObject::sender());
+    disconnect(reply, &Viewer3DTileReply::tileDone, this, &MapTileQuery::tileDone);
+    disconnect(reply, &Viewer3DTileReply::tileGiveUp, this, &MapTileQuery::tileGiveUp);
     reply->deleteLater();
 }
 

@@ -1,7 +1,4 @@
 #include "Viewer3DTerrainTexture.h"
-#include <QImage>
-#include <QUrl>
-#include <unistd.h>
 
 #include "QGCApplication.h"
 #include "SettingsManager.h"
@@ -10,6 +7,7 @@
 
 Viewer3DTerrainTexture::Viewer3DTerrainTexture()
 {
+    _terrainTileLoader = nullptr;
     _flightMapSettings = qgcApp()->toolbox()->settingsManager()->flightMapSettings();
     mapTypeChangedEvent();
 
@@ -20,7 +18,11 @@ Viewer3DTerrainTexture::Viewer3DTerrainTexture()
     // connect(_flightMapSettings->mapProvider(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);
     connect(_flightMapSettings->mapType(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);
     connect(this, &Viewer3DTerrainTexture::mapProviderIdChanged, this, &Viewer3DTerrainTexture::loadTexture);
-    connect(&_terrainTileLoader, &MapTileQuery::loadingMapCompleted, this, &Viewer3DTerrainTexture::updateTexture);
+}
+
+Viewer3DTerrainTexture::~Viewer3DTerrainTexture()
+{
+    delete _terrainTileLoader;
 }
 
 void Viewer3DTerrainTexture::loadTexture()
@@ -29,27 +31,36 @@ void Viewer3DTerrainTexture::loadTexture()
     setTextureGeometryDone(false);
     setTextureDownloadProgress(0.0);
     if(_osmParser->mapLoaded()){
-        MapTileQuery::TileStatistics_t tileInfo = _terrainTileLoader.adaptiveMapTilesLoader(_mapType, _mapId,
-                                                                                            _osmParser->getMapBoundingBoxCoordinate().first,
-                                                                                            _osmParser->getMapBoundingBoxCoordinate().second);
+        if(!_terrainTileLoader){
+            _terrainTileLoader = new MapTileQuery(this);
+            connect(_terrainTileLoader, &MapTileQuery::loadingMapCompleted, this, &Viewer3DTerrainTexture::updateTexture);
+        }
+        MapTileQuery::TileStatistics_t tileInfo = _terrainTileLoader->adaptiveMapTilesLoader(_mapType, _mapId,
+                                                                                             _osmParser->getMapBoundingBoxCoordinate().first,
+                                                                                             _osmParser->getMapBoundingBoxCoordinate().second);
         setRoiMinCoordinate(tileInfo.coordinateMin);
         setRoiMaxCoordinate(tileInfo.coordinateMax);
         setTileCount(tileInfo.tileCounts);
-        connect(&_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
+        connect(_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
     }
 }
 
 void Viewer3DTerrainTexture::updateTexture()
 {
-    setSize(_terrainTileLoader.getMapSize());
+    MapTileQuery* _extureQuery = qobject_cast<MapTileQuery*>(QObject::sender());
+
+    setSize(_terrainTileLoader->getMapSize());
     setFormat(QQuick3DTextureData::RGBA32F);
     setHasTransparency(false);
 
-    setTextureData(_terrainTileLoader.getMapData());
+    setTextureData(_terrainTileLoader->getMapData());
     setTextureLoaded(true);
     setTextureGeometryDone(true);
-    disconnect(&_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
+    disconnect(_terrainTileLoader, &MapTileQuery::mapTileDownloaded, this, &Viewer3DTerrainTexture::setTextureDownloadProgress);
+    disconnect(_terrainTileLoader, &MapTileQuery::loadingMapCompleted, this, &Viewer3DTerrainTexture::updateTexture);
+    _terrainTileLoader = nullptr;
     setTextureDownloadProgress(100.0);
+    _extureQuery->deleteLater();
 }
 
 void Viewer3DTerrainTexture::mapTypeChangedEvent(void)

@@ -29,6 +29,7 @@ class Viewer3DTerrainTexture : public QQuick3DTextureData
     Q_OBJECT
 public:
     explicit Viewer3DTerrainTexture();
+    ~Viewer3DTerrainTexture();
 
     Q_INVOKABLE void loadTexture();
 
@@ -56,7 +57,7 @@ public:
 
 private:
 
-    MapTileQuery _terrainTileLoader;
+    MapTileQuery* _terrainTileLoader;
     FlightMapSettings* _flightMapSettings;
     QString _mapType;
     int _mapId;
