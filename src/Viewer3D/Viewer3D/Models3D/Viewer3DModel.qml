@@ -23,11 +23,14 @@ import QGroundControl.Vehicle
 View3D {
     id: topView
     property var viewer3DManager: null
-    readonly property var _gpsRef: viewer3DManager.qmlBackend.gpsRef
+    readonly property var _gpsRef: (viewer3DManager)?(viewer3DManager.qmlBackend.gpsRef):(null)
     property bool isViewer3DOpen: false
     property real rotationSpeed: 0.1
     property real movementSpeed: 1
     property real zoomSpeed: 0.3
+    property bool _viewer3DEnabled:        QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
+
+
 
     function rotateCamera(newPose: vector2d, lastPose: vector2d) {
         let rotation_vec = Qt.vector2d(newPose.y - lastPose.y, newPose.x - lastPose.x);
@@ -73,6 +76,14 @@ View3D {
         standAloneScene.cameraTwoPosition.z += dz
     }
 
+    on_Viewer3DEnabledChanged: {
+        if(_viewer3DEnabled === false){
+            vehicle3DLoader.active = false;
+            buildingsGeometryLoader.active = false;
+            console.log("HEREEEEEEEEEE 3333333333!")
+        }
+    }
+
     on_GpsRefChanged:{
         standAloneScene.resetCamera();
     }
@@ -89,74 +100,85 @@ View3D {
         backgroundMode: SceneEnvironment.Color
     }
 
-    Viewer3DProgressBar{
-        anchors{
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-            margins: ScreenTools.defaultFontPixelWidth
-        }
-        width:          ScreenTools.screenWidth * 0.2
-        progressValue: terrainTextureManager.textureDownloadProgress
-        progressText: "Loading Map: "
-    }
+    //    Viewer3DProgressBar{
+    //        anchors{
+    //            bottom: parent.bottom
+    //            horizontalCenter: parent.horizontalCenter
+    //            margins: ScreenTools.defaultFontPixelWidth
+    //        }
+    //        width:          ScreenTools.screenWidth * 0.2
+    //        progressValue: terrainTextureManager.textureDownloadProgress
+    //        progressText: "Loading Map: "
+    //    }
 
-    Model {
-        id: cityMapModel
-        visible: true
-        scale: Qt.vector3d(10, 10, 10)
-        geometry: CityMapGeometry {
-            id: cityMapGeometry
-            modelName: "city_map"
-            osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
-        }
+    Component{
+        id: buildingsGeometryComponent
+        Node{
+            Model {
+                id: cityMapModel
+                visible: true
+                scale: Qt.vector3d(10, 10, 10)
+                geometry: CityMapGeometry {
+                    id: cityMapGeometry
+                    modelName: "city_map"
+                    osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
+                }
 
-        materials: [
-            PrincipledMaterial {
-                baseColor: "gray"
-                metalness: 0.1
-                roughness: 0.5
-                specularAmount: 1.0
-                indexOfRefraction: 4.0
-                opacity: 1.0
+                materials: [
+                    PrincipledMaterial {
+                        baseColor: "gray"
+                        metalness: 0.1
+                        roughness: 0.5
+                        specularAmount: 1.0
+                        indexOfRefraction: 4.0
+                        opacity: 1.0
+                    }
+                ]
             }
-        ]
-    }
 
-    Model {
-        id: pointModel
-        visible: true
-        scale: Qt.vector3d(10, 10, 10)
+            Model {
+                id: pointModel
+                visible: true
+                scale: Qt.vector3d(10, 10, 10)
 
-        geometry: Viewer3DTerrainGeometry {
-            id: terrainGeometryManager
-            refCoordinate: viewer3DManager.qmlBackend.gpsRef
-        }
+                geometry: Viewer3DTerrainGeometry {
+                    id: terrainGeometryManager
+                    refCoordinate: viewer3DManager.qmlBackend.gpsRef
+                }
 
-        materials: CustomMaterial {
-            vertexShader: "/ShaderVertex/earthMaterial.vert"
-            fragmentShader: "/ShaderFragment/earthMaterial.frag"
-            property TextureInput someTextureMap: TextureInput {
-                texture: Texture {
-                    textureData: terrainTextureManager
+                materials: CustomMaterial {
+                    vertexShader: "/ShaderVertex/earthMaterial.vert"
+                    fragmentShader: "/ShaderFragment/earthMaterial.frag"
+                    property TextureInput someTextureMap: TextureInput {
+                        texture: Texture {
+                            textureData: terrainTextureManager
+                        }
+                    }
+                }
+            }
+
+            Viewer3DTerrainTexture {
+                id: terrainTextureManager
+                osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
+
+                onTextureGeometryDoneChanged: {
+                    if(textureGeometryDone === true){
+                        terrainGeometryManager.sectorCount = tileCount.width
+                        terrainGeometryManager.stackCount = tileCount.height
+                        terrainGeometryManager.roiMin = roiMinCoordinate;
+                        terrainGeometryManager.roiMax = roiMaxCoordinate;
+                        terrainGeometryManager.updateEarthData();
+                    }
                 }
             }
         }
     }
 
-    Viewer3DTerrainTexture {
-        id: terrainTextureManager
-        osmParser: (viewer3DManager)?(viewer3DManager.osmParser):(null)
-
-        onTextureGeometryDoneChanged: {
-            if(textureGeometryDone === true){
-                terrainGeometryManager.sectorCount = tileCount.width
-                terrainGeometryManager.stackCount = tileCount.height
-                terrainGeometryManager.roiMin = roiMinCoordinate;
-                terrainGeometryManager.roiMax = roiMaxCoordinate;
-                terrainGeometryManager.updateEarthData();
-            }
-        }
+    Loader3D{
+        id: buildingsGeometryLoader
     }
+
+
 
     Component{
         id: vehicle3DComponent
@@ -182,6 +204,9 @@ View3D {
 
     onViewer3DManagerChanged: {
         vehicle3DLoader.sourceComponent = vehicle3DComponent
+        buildingsGeometryLoader.sourceComponent =buildingsGeometryComponent
+        vehicle3DLoader.active = true;
+        buildingsGeometryLoader.active = true;
     }
 
     DragHandler {

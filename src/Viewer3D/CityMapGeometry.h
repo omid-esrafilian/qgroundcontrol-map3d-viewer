@@ -20,6 +20,7 @@ class CityMapGeometry : public QQuick3DGeometry
 public:
 
     CityMapGeometry();
+    ~CityMapGeometry();
 
     QString modelName() const { return _modelName; }
     void setModelName(QString modelName);
