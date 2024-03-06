@@ -51,9 +51,18 @@ Node {
         missionPathModel.clear()
         var _geo2EnuCopy = goe2Enu
 
-        var _missionItemPrevious = _missionController.visualItems.get(1)
-        for (var i = 2; i < _missionController.visualItems.count; i++) {
-            var _missionItem = _missionController.visualItems.get(i)
+        var _missionItemPrevious = null
+
+        for (var i = 1; i < _missionController.visualItems.count; i++) {
+            if(_missionController.visualItems.get(i).isTakeoffItem){
+                _missionItemPrevious = _missionController.visualItems.get(i);
+                continue;
+            }
+            if(_missionItemPrevious === null){
+                continue;
+            }
+
+            var _missionItem = _missionController.visualItems.get(i);
             if(_missionItem.abbreviation !== "ROI" && _missionItem.specifiesCoordinate){
                 _geo2EnuCopy.coordinate = _missionItemPrevious.coordinate;
                 _geo2EnuCopy.coordinate.altitude = 0;
