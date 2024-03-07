@@ -29,9 +29,6 @@ Item{
     function open(){
         if(_viewer3DEnabled === true){
             view3DManagerLoader.active = true;
-//            if(_loaderSourceSet === false){
-//                view3DManagerLoader.sourceComponent = viewer3DManagerComponent
-//            }
             isOpen = true;
         }
     }
@@ -46,7 +43,6 @@ Item{
     on_Viewer3DEnabledChanged: {
         if(_viewer3DEnabled === false){
             viewer3DBody.close();
-//            view3DLoader.active = false;
             view3DManagerLoader.active = false;
         }
     }
@@ -65,19 +61,11 @@ Item{
         sourceComponent: viewer3DManagerComponent
 
         onLoaded: {
-            console.log("HEREEEEEEEEEEEEEEEEE 11111111!")
             if(view3DLoader.active === true){
                 view3DLoader.item.viewer3DManager = view3DManagerLoader.item
             }else{
                 view3DLoader.active = true
             }
-
-//            if(_loaderSourceSet === false){
-//                view3DLoader.source = "Models3D/Viewer3DModel.qml"
-//                _loaderSourceSet = true
-//            }else{
-//                view3DLoader.active = true;
-//            }
         }
     }
 
@@ -88,7 +76,6 @@ Item{
         source: "Models3D/Viewer3DModel.qml"
 
         onLoaded: {
-            console.log("HEREEEEEEEEEEEEEEEEE 222222222222!")
             item.viewer3DManager = view3DManagerLoader.item
         }
     }

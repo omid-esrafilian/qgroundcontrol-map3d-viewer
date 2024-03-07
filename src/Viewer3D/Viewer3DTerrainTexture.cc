@@ -13,7 +13,7 @@ Viewer3DTerrainTexture::Viewer3DTerrainTexture()
 
     setTextureGeometryDone(false);
     setTextureLoaded(false);
-    setTextureDownloadProgress(100.0);
+    setTextureDownloadProgress(0.0);
 
     // connect(_flightMapSettings->mapProvider(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);
     connect(_flightMapSettings->mapType(), &Fact::rawValueChanged, this, &Viewer3DTerrainTexture::mapTypeChangedEvent);

@@ -19,12 +19,6 @@ CityMapGeometry::CityMapGeometry()
     connect(_viewer3DSettings->osmFilePath(), &Fact::rawValueChanged, this, &CityMapGeometry::setOsmFilePath);
 }
 
-CityMapGeometry::~CityMapGeometry()
-{
-    clearViewer();
-    qDebug("Building Geo deleted!!");
-}
-
 void CityMapGeometry::setModelName(QString modelName)
 {
     _modelName = modelName;
