@@ -1,3 +1,4 @@
+add_subdirectory(Viewer3DQml)
 
 qt_add_library(Viewer3D STATIC
     CityMapGeometry.cc
